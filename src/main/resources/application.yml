@@ -1,0 +1,32 @@
+spring:
+  mail:
+    host: your-email-smtp-server.com
+    port: 587
+    username: your-email@example.com
+    password: your-email-password
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+  datasource:
+    username: sa
+    url: jdbc:h2:tcp://localhost/~/test
+  profiles:
+    active: local
+
+logging:
+  level:
+    hello:
+      itemservice:
+        repository:
+          mybatis: trace
+    org:
+      springfrspringframeworkamework:
+        jdbc: debug
+
+mybatis:
+  type-aliases-package: hello.member.domain
+  configuration:
+    map-underscore-to-camel-case: 'true'
