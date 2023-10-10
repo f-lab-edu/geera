@@ -31,11 +31,15 @@ public class MemberController {
             return handleValidationErrors(bindingResult);
         }
 
-        if (!validateEmail(memberRequest.getSecurityCode(), memberRequest.getId())) {
+        if (!securityCodeCheck(memberRequest.getSecurityCode(), memberRequest.getId())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
 
-        Member member = createMember(memberRequest);
+        Member member = memberRequestToMember(memberRequest);
+        Member selectMember = memberService.findMemberById(member.getId());
+
+        if (selectMember != null) { return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이미 가입된 이메일 입니다."); }
+
         Member registeredMember = memberService.registerMember(member);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(registeredMember);
@@ -64,12 +68,12 @@ public class MemberController {
         return ResponseEntity.badRequest().body(errorMessages);
     }
 
-    private boolean validateEmail(String securityCode, String email) {
+    private boolean securityCodeCheck(String securityCode, String email) {
         String storedEmail = (String) sessionManager.getAttribute(securityCode);
         return storedEmail != null && storedEmail.equals(email);
     }
 
-    private Member createMember(MemberRequest memberRequest) {
+    private Member memberRequestToMember(MemberRequest memberRequest) {
         Member member = new Member();
         member.setId(memberRequest.getId());
         member.setPassword(memberRequest.getPassword());

@@ -27,6 +27,8 @@ logging:
         jdbc: debug
 
 mybatis:
-  type-aliases-package: hello.member.domain
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.seungminyi.geera
   configuration:
     map-underscore-to-camel-case: 'true'
+
