@@ -1,13 +1,17 @@
 package com.seungminyi.geera.member;
 
+import com.fasterxml.jackson.databind.node.TextNode;
 import com.seungminyi.geera.utill.session.SessionManager;
 import jakarta.validation.constraints.Email;
+import org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -27,37 +31,36 @@ public class MemberController {
     @PostMapping()
     public ResponseEntity<?> register(@Validated @RequestBody MemberRequest memberRequest,
                                       BindingResult bindingResult) {
+        try {
+            if (bindingResult.hasErrors()) {
+                return handleValidationErrors(bindingResult);
+            }
+
+            if (!securityCodeCheck(memberRequest.getId(), memberRequest.getSecurityCode())) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("인증코드가 일치하지 않습니다.");
+            }
+            Member member = memberRequestToMember(memberRequest);
+            Member registeredMember = memberService.registerMember(member);
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(registeredMember);
+        } catch (DataIntegrityViolationException e) {
+
+            if (e.getCause() instanceof JdbcSQLIntegrityConstraintViolationException) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이미 가입된 이메일 입니다.");
+            }
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("회원 가입 중 오류가 발생했습니다.");
+
+        }
+    }
+
+    @PostMapping(value = "/verify-email")
+    public ResponseEntity<?> verifyEmail(@Validated @RequestBody VerifyEmailRequest verifyEmailRequest,
+                                              BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return handleValidationErrors(bindingResult);
         }
-
-        if (!securityCodeCheck(memberRequest.getSecurityCode(), memberRequest.getId())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
-
-        Member member = memberRequestToMember(memberRequest);
-        Member selectMember = memberService.findMemberById(member.getId());
-
-        if (selectMember != null) { return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이미 가입된 이메일 입니다."); }
-
-        Member registeredMember = memberService.registerMember(member);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(registeredMember);
-    }
-
-    @PostMapping("/verify-email")
-    public ResponseEntity<String> verifyEmail(@Email @RequestBody Map<String, String> requestBody) {
-        String emailAddress = requestBody.get("email_address");
-        String randomSecurityCode = generateRandomNumber();
-
-        while (sessionManager.getAttribute(randomSecurityCode) != null) {
-            randomSecurityCode = generateRandomNumber();
-        }
-
-        sessionManager.setAttribute(randomSecurityCode, emailAddress);
-
-        // TODO 6자리 코드 메일 전송
-
+        sessionManager.setAttribute(verifyEmailRequest.getEmailAddress(), generateRandomNumber());
+        System.out.println(sessionManager.getAttribute(verifyEmailRequest.getEmailAddress()));
         return ResponseEntity.ok("이메일 인증코드를 발송했습니다.");
     }
 
@@ -68,9 +71,9 @@ public class MemberController {
         return ResponseEntity.badRequest().body(errorMessages);
     }
 
-    private boolean securityCodeCheck(String securityCode, String email) {
-        String storedEmail = (String) sessionManager.getAttribute(securityCode);
-        return storedEmail != null && storedEmail.equals(email);
+    private boolean securityCodeCheck(String email, String securityCode) {
+        String storedSecurityCode = (String) sessionManager.getAttribute(email);
+        return storedSecurityCode != null && storedSecurityCode.equals(securityCode);
     }
 
     private Member memberRequestToMember(MemberRequest memberRequest) {
