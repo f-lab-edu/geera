@@ -6,12 +6,11 @@ import org.springframework.stereotype.Component;
 
 import java.text.MessageFormat;
 
-@Component
 public class PasswordValidator implements ConstraintValidator<Password, String> {
 
     private static final int MIN_SIZE = 8;
     private static final int MAX_SIZE = 50;
-    private static final String regexPassword = "^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[$@$!%*#?&])[A-Za-z[0-9]$@$!%*#?&]{" + MIN_SIZE
+    private static final String REGEX_PASSWORD = "^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[$@$!%*#?&])[A-Za-z[0-9]$@$!%*#?&]{" + MIN_SIZE
             + "," + MAX_SIZE + "}$";
 
     @Override
@@ -20,7 +19,7 @@ public class PasswordValidator implements ConstraintValidator<Password, String> 
 
     @Override
     public boolean isValid(String password, ConstraintValidatorContext context) {
-        boolean isValidPassword = password.matches(regexPassword);
+        boolean isValidPassword = password.matches(REGEX_PASSWORD);
         if (!isValidPassword) {
             context.disableDefaultConstraintViolation();
             context.buildConstraintViolationWithTemplate(
@@ -31,6 +30,7 @@ public class PasswordValidator implements ConstraintValidator<Password, String> 
     }
 
     public boolean isValid(String password) {
-        return password.matches(regexPassword);
+        return password.matches(REGEX_PASSWORD);
     }
+
 }

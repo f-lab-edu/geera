@@ -4,13 +4,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.seungminyi.geera.utill.validator.Password;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import org.springframework.validation.annotation.Validated;
 
 @Validated
-@Getter
-@Setter
+@Data
 public class MemberRequest {
     @Email
     private String id;
@@ -21,4 +19,12 @@ public class MemberRequest {
     private String name;
     @NotNull @JsonProperty("security_code")
     private String securityCode;
+
+    public Member toMember() {
+        Member member = new Member();
+        member.setId(this.id);
+        member.setPassword(this.password);
+        member.setName(this.name);
+        return member;
+    }
 }

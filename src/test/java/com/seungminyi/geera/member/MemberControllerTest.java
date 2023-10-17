@@ -40,7 +40,7 @@ public class MemberControllerTest {
 
         Mockito.when(sessionManager.getAttribute(emailAddress)).thenReturn(securityCode);
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/member/verify-email")
+        mockMvc.perform(MockMvcRequestBuilders.post("/members/verify-email")
                         .content("{\n" +
                                 "    \"email_address\" : \"test@example.com\"\n" +
                                 "}")
@@ -58,7 +58,7 @@ public class MemberControllerTest {
 
         Mockito.when(memberService.registerMember(Mockito.any())).thenReturn(new Member());
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/member")
+        mockMvc.perform(MockMvcRequestBuilders.post("/members")
                         .content("{\n" +
                                 "    \"id\" : \"test@example.com\",\n" +
                                 "    \"password\" : \"password1!\",\n" +
@@ -76,7 +76,7 @@ public class MemberControllerTest {
 
         Mockito.when(sessionManager.getAttribute(emailAddress)).thenReturn(incorrectSecurityCode);
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/member")
+        mockMvc.perform(MockMvcRequestBuilders.post("/members")
                         .content("{\n" +
                                 "    \"id\" : \"test@example.com\",\n" +
                                 "    \"password\" : \"password1!\",\n" +
