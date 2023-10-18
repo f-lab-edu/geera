@@ -19,8 +19,7 @@ public class MemberService {
     public Member registerMember(Member member) {
         String encodedPassword = passwordEncoder.encode(member.getPassword());
         member.setPassword(encodedPassword);
-        memberRepository.insert(member);
-        return member;
+        return memberRepository.insert(member);
     }
 
     public Member findMemberById(String email) {
