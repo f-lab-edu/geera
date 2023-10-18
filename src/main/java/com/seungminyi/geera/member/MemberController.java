@@ -69,6 +69,7 @@ public class MemberController {
     }
 
 
+
     private boolean securityCodeCheck(String email, String securityCode) {
         String storedSecurityCode = (String) sessionManager.getAttribute(email);
         return storedSecurityCode != null && storedSecurityCode.equals(securityCode);

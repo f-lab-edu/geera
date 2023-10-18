@@ -30,3 +30,9 @@ jobs:
 
       - name: Test
         run: ./gradlew test
+
+      - name: Checkstyle (Code Style Checker)
+        run: ./gradlew checkstyleMain checkstyleTest
+
+      - name: PMD (Linter)
+        run: ./gradlew pmdMain pmdTest
