@@ -25,7 +25,7 @@ class MemberServiceTest {
     @Test
     public void registerMemberTest() {
         Member member = new Member();
-        member.setId("test@example.com");
+        member.setEmail("test@example.com");
         member.setPassword("password1!");
         member.setName("Test User");
         when(passwordEncoder.encode(member.getPassword())).thenReturn("encodedPassword");
@@ -39,14 +39,14 @@ class MemberServiceTest {
     @Test
     public void testFindMemberById() {
         Member member = new Member();
-        member.setId("test@example.com");
+        member.setEmail("test@example.com");
         member.setPassword("password1!");
         member.setName("Test User");
 
-        when(memberRepository.findMemberById(member.getId())).thenReturn(member);
-        Member findMember = memberService.findMemberById(member.getId());
+        when(memberRepository.findMemberById(member.getEmail())).thenReturn(member);
+        Member findMember = memberService.findMemberById(member.getEmail());
 
         assertEquals(member, findMember);
-        verify(memberRepository).findMemberById(member.getId());
+        verify(memberRepository).findMemberById(member.getEmail());
     }
 }

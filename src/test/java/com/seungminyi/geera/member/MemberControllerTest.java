@@ -58,7 +58,7 @@ public class MemberControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.post("/members")
                         .content("{\n" +
-                                "    \"id\" : \"test@example.com\",\n" +
+                                "    \"email\" : \"test@example.com\",\n" +
                                 "    \"password\" : \"password1!\",\n" +
                                 "    \"name\" : \"Test User\",\n" +
                                 "    \"security_code\" : \"123456\"\n" +
@@ -76,7 +76,7 @@ public class MemberControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.post("/members")
                         .content("{\n" +
-                                "    \"id\" : \"test@example.com\",\n" +
+                                "    \"email\" : \"test@example.com\",\n" +
                                 "    \"password\" : \"password1!\",\n" +
                                 "    \"name\" : \"Test User\",\n" +
                                 "    \"security_code\" : \"654321\"\n" +

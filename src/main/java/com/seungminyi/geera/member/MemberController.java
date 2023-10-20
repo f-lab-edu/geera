@@ -39,7 +39,7 @@ public class MemberController {
                 return handleBindingErrors(bindingResult);
             }
 
-            if (!securityCodeCheck(memberRequest.getId(), memberRequest.getSecurityCode())) {
+            if (!securityCodeCheck(memberRequest.getEmail(), memberRequest.getSecurityCode())) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("인증코드가 일치하지 않습니다.");
             }
 

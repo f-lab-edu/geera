@@ -5,12 +5,12 @@ import org.junit.jupiter.api.Test;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@MybatisTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@SpringBootTest
 @ActiveProfiles("test")
 public class MemberRepositoryTest {
 
@@ -21,7 +21,7 @@ public class MemberRepositoryTest {
     @DisplayName("회원가입 성공")
     public void testInsertAndFindMember() {
         Member member = new Member();
-        member.setId("test@example.com");
+        member.setEmail("test@example.com");
         member.setName("Test User");
         member.setPassword("EncodedPassword");
 
@@ -29,7 +29,7 @@ public class MemberRepositoryTest {
 
         Member foundMember = memberRepository.findMemberById("test@example.com");
 
-        assertEquals("test@example.com", foundMember.getId());
+        assertEquals("test@example.com", foundMember.getEmail());
         assertEquals("Test User", foundMember.getName());
     }
 

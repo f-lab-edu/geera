@@ -5,7 +5,13 @@ spring:
     active: test
   datasource:
     username: sa
-    url: jdbc:h2:tcp://localhost/~/testcase
+    url: jdbc:h2:mem:testcase
+  initialization-mode: always
+  data-source: classpath:schema/*.sql
+  jpa:
+    hibernate:
+      ddl-auto: create
+      show-sql: true # DDL 출력
 
 # 테스트용 매퍼 위치 설정
 mybatis:
