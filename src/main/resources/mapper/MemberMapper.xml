@@ -7,6 +7,6 @@
     </insert>
 
     <select id="findMemberById" parameterType="String">
-        SELECT ID FROM MEMBER WHERE ID = #{email}
+        SELECT ID, NAME FROM MEMBER WHERE ID = #{email}
     </select>
 </mapper>

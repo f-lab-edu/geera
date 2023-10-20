@@ -1,0 +1,12 @@
+# src/test/resources/application.yml
+
+spring:
+  profiles:
+    active: test
+  datasource:
+    username: sa
+    url: jdbc:h2:tcp://localhost/~/testcase
+
+# 테스트용 매퍼 위치 설정
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
