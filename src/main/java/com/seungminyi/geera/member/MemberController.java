@@ -44,10 +44,9 @@ public class MemberController {
             }
 
             Member member = memberRequest.toMember();
-            Member registeredMember;
 
             try {
-                registeredMember = memberService.registerMember(member);
+                memberService.registerMember(member);
             } catch (DataIntegrityViolationException e) {
                 if (e.getCause() instanceof JdbcSQLIntegrityConstraintViolationException) {
                     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이미 가입된 이메일 입니다.");
@@ -55,7 +54,7 @@ public class MemberController {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("회원 가입 중 오류가 발생했습니다.");
             }
 
-            return ResponseEntity.status(HttpStatus.CREATED).body(registeredMember);
+            return ResponseEntity.status(HttpStatus.CREATED).body("회원 가입이 완료 되었습니다");
     }
 
     @PostMapping(value = "/verify-email")
@@ -65,6 +64,7 @@ public class MemberController {
             return handleBindingErrors(bindingResult);
         }
         sessionManager.setAttribute(verifyEmailRequest.getEmailAddress(), generateRandomNumber());
+        System.out.println(sessionManager.getAttribute(verifyEmailRequest.getEmailAddress()));
         return ResponseEntity.ok("이메일 인증코드를 발송했습니다.");
     }
 
