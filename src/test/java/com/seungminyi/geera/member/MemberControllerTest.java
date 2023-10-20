@@ -56,8 +56,6 @@ public class MemberControllerTest {
 
         Mockito.when(sessionManager.getAttribute(emailAddress)).thenReturn(securityCode);
 
-        Mockito.when(memberService.registerMember(Mockito.any())).thenReturn(new Member());
-
         mockMvc.perform(MockMvcRequestBuilders.post("/members")
                         .content("{\n" +
                                 "    \"id\" : \"test@example.com\",\n" +

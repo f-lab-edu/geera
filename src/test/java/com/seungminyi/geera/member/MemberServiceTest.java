@@ -29,11 +29,9 @@ class MemberServiceTest {
         member.setPassword("password1!");
         member.setName("Test User");
         when(passwordEncoder.encode(member.getPassword())).thenReturn("encodedPassword");
-        when(memberRepository.insert(member)).thenReturn(member);
 
-        Member registeredMember = memberService.registerMember(member);
+        memberService.registerMember(member);
 
-        assertEquals("encodedPassword", registeredMember.getPassword());
         verify(passwordEncoder).encode("password1!");
         verify(memberRepository).insert(member);
     }
