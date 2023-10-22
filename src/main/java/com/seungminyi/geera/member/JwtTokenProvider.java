@@ -50,7 +50,7 @@ public class JwtTokenProvider {
                 .setSigningKey(secretKey)
                 .parseClaimsJws(token)
                 .getBody();
-        return claims.getSubject();
+        return (String) claims.get("id");
     }
 
     public boolean validateToken(String token) {

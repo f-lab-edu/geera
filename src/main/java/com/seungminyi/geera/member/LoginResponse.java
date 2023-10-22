@@ -1,9 +1,11 @@
 package com.seungminyi.geera.member;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 @AllArgsConstructor
+@Getter
 public class LoginResponse {
-    private final String token;
-    private final String username;
+    private String token;
+    private String username;
 }

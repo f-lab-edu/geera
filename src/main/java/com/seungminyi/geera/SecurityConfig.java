@@ -34,6 +34,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests((authz) -> authz
                                 .requestMatchers(HttpMethod.POST,"/members/**").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/login/**").permitAll()
+                                .anyRequest().authenticated()
                         )
                 .formLogin(form -> form.disable())
                 .build();
