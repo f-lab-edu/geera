@@ -23,7 +23,7 @@ public class MemberService {
         return member;
     }
 
-    public Member findMemberById(String email) {
-        return memberRepository.findMemberById(email);
+    public Member findMemberByEmail(String email) {
+        return memberRepository.findMemberByEmail(email);
     }
 }

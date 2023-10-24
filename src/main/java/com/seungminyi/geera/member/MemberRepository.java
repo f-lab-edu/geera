@@ -7,5 +7,5 @@ import org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException;
 public interface MemberRepository {
     void insert(Member member);
 
-    Member findMemberById(String id);
+    Member findMemberByEmail(String id);
 }

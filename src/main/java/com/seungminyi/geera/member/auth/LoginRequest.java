@@ -1,9 +1,9 @@
-package com.seungminyi.geera.member;
+package com.seungminyi.geera.member.auth;
 
 import lombok.Data;
 
 @Data
 public class LoginRequest {
-    String Id;
+    String email;
     String Password;
 }

@@ -1,4 +1,4 @@
-package com.seungminyi.geera.member;
+package com.seungminyi.geera.member.auth;
 
 import io.jsonwebtoken.*;
 import jakarta.servlet.http.HttpServletRequest;

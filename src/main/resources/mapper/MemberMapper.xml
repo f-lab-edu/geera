@@ -3,10 +3,13 @@
 
 <mapper namespace="com.seungminyi.geera.member.MemberRepository">
     <insert id="insert" parameterType="com.seungminyi.geera.member.Member">
-        INSERT INTO MEMBER (id, password, name) VALUES (#{id}, #{password}, #{name})
+        INSERT INTO MEMBER (email, password, name)
+        VALUES (#{email}, #{password}, #{name})
     </insert>
 
-    <select id="findMemberById" parameterType="String">
-        SELECT ID, PASSWORD FROM MEMBER WHERE ID = #{id}
+    <select id="findMemberByEmail" parameterType="String">
+        SELECT ID, EMAIL, PASSWORD
+        FROM MEMBER
+        WHERE ID = #{id}
     </select>
 </mapper>

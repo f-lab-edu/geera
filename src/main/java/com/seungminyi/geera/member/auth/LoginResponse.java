@@ -1,4 +1,4 @@
-package com.seungminyi.geera.member;
+package com.seungminyi.geera.member.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

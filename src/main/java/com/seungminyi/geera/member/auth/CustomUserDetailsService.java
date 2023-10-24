@@ -1,5 +1,7 @@
-package com.seungminyi.geera.member;
+package com.seungminyi.geera.member.auth;
 
+import com.seungminyi.geera.member.Member;
+import com.seungminyi.geera.member.MemberRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -15,10 +17,10 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
-        Member member = userRepository.findMemberById(id);
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        Member member = userRepository.findMemberByEmail(email);
         if (member == null) {
-            throw new UsernameNotFoundException("아이디를 찾을수 없습니다 : " + id);
+            throw new UsernameNotFoundException("아이디를 찾을수 없습니다 : " + email);
         }
         return new CustomUserDetails(member);
     }

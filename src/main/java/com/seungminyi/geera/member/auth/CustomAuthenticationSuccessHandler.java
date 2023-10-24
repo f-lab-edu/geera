@@ -1,4 +1,4 @@
-package com.seungminyi.geera.member;
+package com.seungminyi.geera.member.auth;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -22,6 +22,6 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         response.setStatus(HttpServletResponse.SC_OK);
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-        response.getWriter().write("{ message : \"로그인 성공\" }");
+        response.getWriter().write("로그인 성공");
     }
 }

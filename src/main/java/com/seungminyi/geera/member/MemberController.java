@@ -65,6 +65,7 @@ public class MemberController {
             return handleBindingErrors(bindingResult);
         }
         sessionManager.setAttribute(verifyEmailRequest.getEmailAddress(), generateRandomNumber());
+        System.out.println(sessionManager.getAttribute(verifyEmailRequest.getEmailAddress()));
         return ResponseEntity.ok("이메일 인증코드를 발송했습니다.");
     }
 

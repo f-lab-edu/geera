@@ -1,5 +1,6 @@
-package com.seungminyi.geera.member;
+package com.seungminyi.geera.member.auth;
 
+import com.seungminyi.geera.member.Member;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
