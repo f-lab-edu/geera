@@ -34,7 +34,7 @@ public class JwtTokenProvider {
         Date validity = new Date(now.getTime() + validityInMilliseconds);
 
         Map<String, Object> claims = new HashMap<>();
-        claims.put("id", userDetails.getId());
+        claims.put("email", userDetails.getEmail());
         return Jwts.builder()
                 .setHeaderParam("typ","JWT")
                 .setClaims(claims)
@@ -50,7 +50,7 @@ public class JwtTokenProvider {
                 .setSigningKey(secretKey)
                 .parseClaimsJws(token)
                 .getBody();
-        return (String) claims.get("id");
+        return (String) claims.get("email");
     }
 
     public boolean validateToken(String token) {

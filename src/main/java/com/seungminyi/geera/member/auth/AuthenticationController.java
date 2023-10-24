@@ -1,8 +1,10 @@
 package com.seungminyi.geera.member.auth;
 
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,7 +19,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/api/login")
-    public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<?> authenticateUser(@RequestBody @Valid LoginRequest loginRequest) {
         try {
             String jwtToken = authService.login(loginRequest.getEmail(), loginRequest.getPassword());
             return ResponseEntity.ok(new LoginResponse(jwtToken, loginRequest.getEmail()));

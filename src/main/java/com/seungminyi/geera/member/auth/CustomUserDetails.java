@@ -7,12 +7,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 
 public class CustomUserDetails implements UserDetails {
-    private String id;
+    private Long id;
+    private String email;
     private String name;
     private String password;
 
     public CustomUserDetails(Member member) {
-        this.id = member.getId();
+        this.id = member.getMemberId();
+        this.email = member.getEmail();
         this.name = member.getName();
         this.password = member.getPassword();
     }
@@ -32,7 +34,11 @@ public class CustomUserDetails implements UserDetails {
         return name;
     }
 
-    public String getId() {
+    public String getEmail() {
+        return email;
+    }
+
+    public Long getId() {
         return id;
     }
 
