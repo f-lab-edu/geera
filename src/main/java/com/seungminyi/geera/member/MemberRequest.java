@@ -10,8 +10,9 @@ import org.springframework.validation.annotation.Validated;
 @Validated
 @Data
 public class MemberRequest {
+    private Long id;
     @Email
-    private String id;
+    private String email;
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Password
     private String password;
@@ -22,7 +23,7 @@ public class MemberRequest {
 
     public Member toMember() {
         Member member = new Member();
-        member.setId(this.id);
+        member.setEmail(this.email);
         member.setPassword(this.password);
         member.setName(this.name);
         return member;

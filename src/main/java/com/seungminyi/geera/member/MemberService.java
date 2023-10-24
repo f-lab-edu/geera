@@ -16,11 +16,10 @@ public class MemberService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public Member registerMember(Member member) {
+    public void registerMember(Member member) {
         String encodedPassword = passwordEncoder.encode(member.getPassword());
         member.setPassword(encodedPassword);
         memberRepository.insert(member);
-        return member;
     }
 
     public Member findMemberById(String email) {

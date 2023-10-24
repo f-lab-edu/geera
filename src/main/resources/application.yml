@@ -1,13 +1,19 @@
 spring:
+  config:
+    activate:
+      on-profile: local
   datasource:
     username: sa
     url: jdbc:h2:tcp://localhost/~/test
   profiles:
     active: local
 
+
 mybatis:
   mapper-locations: classpath:mapper/*.xml
   type-aliases-package: com.seungminyi.geera
   configuration:
     map-underscore-to-camel-case: 'true'
+
+
 
