@@ -29,7 +29,8 @@ public class SecurityConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() throws Exception {
         return (web) -> web.ignoring().requestMatchers(
-                "/api/login"
+                "/api/login",
+                "/members/**"
         );
     }
 
@@ -55,19 +56,19 @@ public class SecurityConfig {
         return http.build();
     }
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        return httpSecurity
-                .csrf(csrf -> csrf.disable())
-                .exceptionHandling(exch -> exch
-                        .authenticationEntryPoint(new Http403ForbiddenEntryPoint()))
-                .authorizeHttpRequests(authz -> authz
-                        .anyRequest().authenticated())
-                .formLogin(form -> form
-                        .successHandler(authenticationSuccessHandler))
-                .logout(logout -> logout
-                        .logoutUrl("/logout"))
-                .build();
-    }
+//    @Bean
+//    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+//        return httpSecurity
+//                .csrf(csrf -> csrf.disable())
+//                .exceptionHandling(exch -> exch
+//                        .authenticationEntryPoint(new Http403ForbiddenEntryPoint()))
+//                .authorizeHttpRequests(authz -> authz
+//                        .anyRequest().authenticated())
+//                .formLogin(form -> form
+//                        .successHandler(authenticationSuccessHandler))
+//                .logout(logout -> logout
+//                        .logoutUrl("/logout"))
+//                .build();
+//    }
 
 }

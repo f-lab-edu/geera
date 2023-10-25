@@ -22,8 +22,15 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         String token = jwtTokenProvider.resolveToken(request);
 
-        if (token != null && jwtTokenProvider.validateToken(token)) {
-            SecurityContextHolder.getContext().setAuthentication(jwtTokenProvider.getAuthentication(token));
+        if (token != null) {
+            if (jwtTokenProvider.validateToken(token)) {
+                SecurityContextHolder.getContext().setAuthentication(jwtTokenProvider.getAuthentication(token));
+            } else {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().write("유효하지 않은 토큰입니다.");
+                return;
+            }
         }
 
         filterChain.doFilter(request, response);
