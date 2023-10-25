@@ -1,11 +1,13 @@
 package com.seungminyi.geera.member.auth;
 
 import com.seungminyi.geera.member.Member;
+import lombok.EqualsAndHashCode;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
+@EqualsAndHashCode
 public class CustomUserDetails implements UserDetails {
     private Long id;
     private String email;
