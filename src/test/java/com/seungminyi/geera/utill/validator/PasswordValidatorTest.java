@@ -1,7 +1,7 @@
 package com.seungminyi.geera.utill.validator;
 
-
 import jakarta.validation.ConstraintValidatorContext;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -15,36 +15,35 @@ import static org.mockito.Mockito.*;
 
 public class PasswordValidatorTest {
 
-    private PasswordValidator passwordValidator;
-    private ConstraintValidatorContext context;
-    private ConstraintValidatorContext.ConstraintViolationBuilder builder;
+	private PasswordValidator passwordValidator;
+	private ConstraintValidatorContext context;
+	private ConstraintValidatorContext.ConstraintViolationBuilder builder;
 
-    @BeforeEach
-    public void setUp() {
-        passwordValidator = new PasswordValidator();
-        context = mock(ConstraintValidatorContext.class);
-        builder = mock(ConstraintValidatorContext.ConstraintViolationBuilder.class);
-        when(context.buildConstraintViolationWithTemplate(Mockito.anyString()))
-                .thenReturn(builder);
-    }
+	@BeforeEach
+	public void setUp() {
+		passwordValidator = new PasswordValidator();
+		context = mock(ConstraintValidatorContext.class);
+		builder = mock(ConstraintValidatorContext.ConstraintViolationBuilder.class);
+		when(context.buildConstraintViolationWithTemplate(Mockito.anyString())).thenReturn(builder);
+	}
 
-    @Test
-    public void testValidPassword() {
-        String validPassword = "password1!";
+	@Test
+	public void testValidPassword() {
+		String validPassword = "password1!";
 
-        boolean isValid = passwordValidator.isValid(validPassword, context);
+		boolean isValid = passwordValidator.isValid(validPassword, context);
 
-        assertTrue(isValid);
-    }
+		assertTrue(isValid);
+	}
 
-    @Test
-    public void testInvalidPassword() {
-        String invalidPassword = "password";
+	@Test
+	public void testInvalidPassword() {
+		String invalidPassword = "password";
 
-        boolean isValid = passwordValidator.isValid(invalidPassword, context);
+		boolean isValid = passwordValidator.isValid(invalidPassword, context);
 
-        assertFalse(isValid);
-        verify(context).disableDefaultConstraintViolation();
-        verify(builder).addConstraintViolation();
-    }
+		assertFalse(isValid);
+		verify(context).disableDefaultConstraintViolation();
+		verify(builder).addConstraintViolation();
+	}
 }
