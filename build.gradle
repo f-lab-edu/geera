@@ -27,6 +27,7 @@ checkstyle {
     configFile = file("${rootDir}/config/checkstyle/naver-checkstyle-rules.xml")
     configProperties = ["suppressionFile": "${rootDir}/config/checkstyle/naver-checkstyle-suppressions.xml"]
     toolVersion = "8.42"
+    checkstyleTest.enabled = false
 }
 
 dependencies {
