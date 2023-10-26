@@ -6,5 +6,5 @@ import org.apache.ibatis.annotations.Mapper;
 public interface MemberRepository {
 	void insert(Member member);
 
-	Member findMemberByEmail(String email);
+	Member findByEmail(String email);
 }

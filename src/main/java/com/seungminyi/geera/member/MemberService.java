@@ -1,5 +1,7 @@
 package com.seungminyi.geera.member;
 
+import org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -14,13 +16,13 @@ public class MemberService {
 		this.passwordEncoder = passwordEncoder;
 	}
 
-	public void registerMember(Member member) {
+	public void registerMember(Member member) throws DataIntegrityViolationException {
 		String encodedPassword = passwordEncoder.encode(member.getPassword());
 		member.setPassword(encodedPassword);
 		memberRepository.insert(member);
 	}
 
 	public Member findMemberByEmail(String email) {
-		return memberRepository.findMemberByEmail(email);
+		return memberRepository.findByEmail(email);
 	}
 }

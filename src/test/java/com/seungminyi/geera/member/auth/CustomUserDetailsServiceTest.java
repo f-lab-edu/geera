@@ -28,7 +28,7 @@ class CustomUserDetailsServiceTest {
     void loadUserByUsernameSuccess() {
         Member member = TestUtil.createTestMember();
 
-        Mockito.when(memberRepository.findMemberByEmail(member.getEmail())).thenReturn(member);
+        Mockito.when(memberRepository.findByEmail(member.getEmail())).thenReturn(member);
         UserDetails userDetails = customUserDetailsService.loadUserByUsername(member.getEmail());
 
         assertEquals(userDetails, new CustomUserDetails(member));
@@ -38,7 +38,7 @@ class CustomUserDetailsServiceTest {
     void loadUserByUsernameFailure() {
         Member member = TestUtil.createTestMember();
 
-        Mockito.when(memberRepository.findMemberByEmail(member.getEmail())).thenReturn(null);
+        Mockito.when(memberRepository.findByEmail(member.getEmail())).thenReturn(null);
 
         assertThrows(UsernameNotFoundException.class,
                 () -> customUserDetailsService.loadUserByUsername(member.getEmail()));

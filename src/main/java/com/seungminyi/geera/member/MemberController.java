@@ -1,6 +1,7 @@
 package com.seungminyi.geera.member;
 
-import static com.seungminyi.geera.utill.validator.ValidationUtil.*;
+
+import static com.seungminyi.geera.utill.validator.ValidationUtil.handleBindingErrors;
 
 import org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -44,7 +45,7 @@ public class MemberController {
 			memberService.registerMember(member);
 		} catch (DataIntegrityViolationException e) {
 			if (e.getCause() instanceof JdbcSQLIntegrityConstraintViolationException) {
-				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이미 가입된 이메일 입니다.");
+				return ResponseEntity.status(HttpStatus.CONFLICT).body("이미 가입된 이메일 입니다.");
 			}
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("회원 가입 중 오류가 발생했습니다.");
 		}

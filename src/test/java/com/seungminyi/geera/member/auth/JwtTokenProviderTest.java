@@ -2,8 +2,6 @@ package com.seungminyi.geera.member.auth;
 
 import com.seungminyi.geera.TestUtil;
 import com.seungminyi.geera.member.Member;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,20 +22,8 @@ class JwtTokenProviderTest {
         CustomUserDetails userDetails = new CustomUserDetails(testMember);
 
         String token = jwtTokenProvider.generateToken(userDetails);
-        String usernameFromToken = jwtTokenProvider.getUsernameFromToken(token);
 
-        assertEquals(testMember.getEmail(), usernameFromToken);
-    }
-
-    @Test
-    @DisplayName("토큰 payload 가져오기")
-    void getUsernameFromTokenTest() {
-        Member testMember = TestUtil.createTestMember();
-        String token = TestUtil.generateToken();
-
-        String usernameFromToken = jwtTokenProvider.getUsernameFromToken(token);
-
-        assertEquals(usernameFromToken, testMember.getEmail());
+        assertNotNull(token);
     }
 
     @Test

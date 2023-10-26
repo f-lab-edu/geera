@@ -52,7 +52,7 @@ public class JwtTokenProvider {
 			.compact();
 	}
 
-	public String getUsernameFromToken(String token) {
+	private String getUsernameFromToken(String token) {
 		Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
 		return (String)claims.get("email");
 	}

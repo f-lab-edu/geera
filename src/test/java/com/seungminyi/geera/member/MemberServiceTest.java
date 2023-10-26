@@ -48,10 +48,10 @@ class MemberServiceTest {
         member.setPassword("password1!");
         member.setName("Test User");
 
-        when(memberRepository.findMemberByEmail(member.getEmail())).thenReturn(member);
+        when(memberRepository.findByEmail(member.getEmail())).thenReturn(member);
         Member findMember = memberService.findMemberByEmail(member.getEmail());
 
         assertEquals(member, findMember);
-        verify(memberRepository).findMemberByEmail(member.getEmail());
+        verify(memberRepository).findByEmail(member.getEmail());
     }
 }

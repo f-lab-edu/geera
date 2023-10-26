@@ -16,7 +16,7 @@ import jakarta.validation.Payload;
 @Retention(RUNTIME)
 public @interface Password {
 
-	String message() default "Password is not allow";
+	String message() default "Invalid password format";
 
 	Class<?>[] groups() default {};
 
