@@ -6,12 +6,15 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.test.context.annotation.SecurityTestExecutionListeners;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
+@ComponentScan
 class MemberServiceTest {
 
     @Mock
@@ -45,10 +48,10 @@ class MemberServiceTest {
         member.setPassword("password1!");
         member.setName("Test User");
 
-        when(memberRepository.findMemberById(member.getEmail())).thenReturn(member);
-        Member findMember = memberService.findMemberById(member.getEmail());
+        when(memberRepository.findByEmail(member.getEmail())).thenReturn(member);
+        Member findMember = memberService.findMemberByEmail(member.getEmail());
 
         assertEquals(member, findMember);
-        verify(memberRepository).findMemberById(member.getEmail());
+        verify(memberRepository).findByEmail(member.getEmail());
     }
 }

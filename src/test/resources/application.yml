@@ -16,3 +16,7 @@ spring:
 # 테스트용 매퍼 위치 설정
 mybatis:
   mapper-locations: classpath:mapper/*.xml
+
+jwt:
+  secret: 1234
+  expiration: 3600000
