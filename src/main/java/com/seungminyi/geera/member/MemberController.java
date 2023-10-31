@@ -3,15 +3,20 @@ package com.seungminyi.geera.member;
 
 import static com.seungminyi.geera.utill.validator.ValidationUtil.handleBindingErrors;
 
+import java.util.Collections;
+import java.util.Optional;
+
 import org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.seungminyi.geera.utill.session.SessionManager;
@@ -54,13 +59,19 @@ public class MemberController {
 	}
 
 	@PostMapping(value = "/verify-email")
-	public ResponseEntity<?> verifyEmail(@Validated @RequestBody VerifyEmailRequest verifyEmailRequest,
+	public ResponseEntity<?> verifyEmail(@Validated @RequestBody EmailRequest EmailRequest,
 		BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			return handleBindingErrors(bindingResult);
 		}
-		sessionManager.setAttribute(verifyEmailRequest.getEmailAddress(), generateRandomNumber());
+		sessionManager.setAttribute(EmailRequest.getEmailAddress(), generateRandomNumber());
 		return ResponseEntity.ok("이메일 인증코드를 발송했습니다.");
+	}
+
+	@GetMapping()
+	public ResponseEntity<?> findMember(@RequestParam String email) {
+		Optional<Member> member = Optional.ofNullable(memberService.findMemberByEmail(email));
+		return ResponseEntity.ok(member);
 	}
 
 	private boolean securityCodeCheck(String email, String securityCode) {
