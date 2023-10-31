@@ -7,13 +7,15 @@
         VALUES (#{projectName}, #{createAt});
     </insert>
 
-    <select id="findByMember" parameterType="Long" resultType="com.seungminyi.geera.project.Project">
+    <select id="findByMember" parameterType="com.seungminyi.geera.project.ProjectQuery" resultType="com.seungminyi.geera.project.Project">
         SELECT P.PROJECT_ID, P.PROJECT_NAME, P.CREATE_AT
         FROM PROJECT P, PROJECT_MEMBER PM
         WHERE P.PROJECT_ID = PM.PROJECT_ID
         AND P.DELETED = FALSE
         AND PM.MEMBER_ID = #{memberId}
-        AND PM.ROLE in ('CREATOR', 'MEMBER');
+        AND PM.ROLE in ('CREATOR', 'MEMBER')
+        ORDER BY ${sortKey} ${sortOrder}
+        LIMIT #{size} OFFSET #{start}
     </select>
 
     <update id="update" parameterType="com.seungminyi.geera.project.Project">

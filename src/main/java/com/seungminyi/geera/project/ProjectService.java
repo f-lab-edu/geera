@@ -36,14 +36,26 @@ public class ProjectService {
         return project;
     }
 
-    public List<Project> getProjects() {
+    public List<Project> getProjects(String sortKey, String sortOrder, int page, int size) {
         CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return projectRepository.findByMember(userDetails.getId());
+
+        if (page < 1) {
+            page = 1;
+        }
+        int start = (page - 1) * size;
+
+        ProjectQuery query = ProjectQuery.builder()
+            .memberId(userDetails.getId())
+            .sortKey(sortKey)
+            .sortOrder(sortOrder)
+            .start(start)
+            .size(size)
+            .build();
+        return projectRepository.findByMember(query);
     }
 
     public void updateProject(Long projectId, ProjectRequest projectRequest) {
         checkProjectPermission(projectId,ProjectMemberRoleType.CREATOR,"프로젝트 생성자만 요청할 수 있습니다.");
-
 
         Project project = projectRequest.toProject();
         project.setProjectId(projectId);
@@ -59,10 +71,7 @@ public class ProjectService {
     public void addProjectMember(Long projectId, Long memberId) {
         checkProjectPermission(projectId,ProjectMemberRoleType.CREATOR,"프로젝트 생성자만 요청할 수 있습니다.");
 
-        ProjectMember projectMember = new ProjectMember();
-        projectMember.setProjectId(projectId);
-        projectMember.setMemberId(memberId);
-        projectMember.setRole(ProjectMemberRoleType.INVITED);
+        ProjectMember projectMember = createProjectMember(projectId, memberId, ProjectMemberRoleType.INVITED);
 
         projectMemberRepository.create(projectMember);
     }
@@ -72,12 +81,9 @@ public class ProjectService {
         if (currentUser.getId() == memberId) {
             throw new ProjectPermissionException("본인을 프로젝트에서 제외할 수 없습니다.");
         }
+
         checkProjectPermission(projectId,ProjectMemberRoleType.CREATOR,"프로젝트 생성자만 요청할 수 있습니다.");
-
-        ProjectMember projectMember = new ProjectMember();
-        projectMember.setProjectId(projectId);
-        projectMember.setMemberId(memberId);
-
+        ProjectMember projectMember = createProjectMember(projectId, memberId, ProjectMemberRoleType.MEMBER);
 
         return projectMemberRepository.delete(projectMember);
     }
@@ -85,11 +91,7 @@ public class ProjectService {
     public void acceptProjectInvitation(Long projectId) {
         checkProjectPermission(projectId, ProjectMemberRoleType.INVITED, "초대받지 않은 유저 입니다.");
 
-        CustomUserDetails currentUser = getCurrentUser();
-        ProjectMember projectMember = new ProjectMember();
-        projectMember.setProjectId(projectId);
-        projectMember.setMemberId(currentUser.getId());
-        projectMember.setRole(ProjectMemberRoleType.MEMBER);
+        ProjectMember projectMember = createProjectMember(projectId, getCurrentUser().getId(), ProjectMemberRoleType.MEMBER);
 
         projectMemberRepository.update(projectMember);
     }
@@ -104,11 +106,18 @@ public class ProjectService {
         projectMember.setMemberId(userDetails.getId());
         projectMember.setProjectId(projectId);
         projectMember.setRole(projectMemberRoleType);
-        System.out.println(userDetails.getEmail());
         ProjectMemberRoleType roleByMember = projectMemberRepository.findRoleByMember(projectMember);
         if (roleByMember == null) {
             throw new ProjectPermissionException(errorMessage);
         }
+    }
+
+    private ProjectMember createProjectMember(Long projectId, Long memberId, ProjectMemberRoleType roleType) {
+        ProjectMember projectMember = new ProjectMember();
+        projectMember.setProjectId(projectId);
+        projectMember.setMemberId(memberId);
+        projectMember.setRole(roleType);
+        return projectMember;
     }
 
 

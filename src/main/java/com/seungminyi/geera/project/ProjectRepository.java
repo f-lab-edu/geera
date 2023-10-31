@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
 public interface ProjectRepository {
     Long create(Project project);
 
-    List<Project> findByMember(Long memberId);
+    List<Project> findByMember(ProjectQuery query);
 
     void update(Project project);
 

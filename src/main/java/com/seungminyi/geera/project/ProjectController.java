@@ -1,9 +1,7 @@
 package com.seungminyi.geera.project;
 
-import java.net.http.HttpResponse;
 import java.util.List;
 
-import org.apache.ibatis.annotations.Delete;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.seungminyi.geera.exception.ProjectPermissionException;
@@ -29,9 +28,12 @@ public class ProjectController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Project>> getProject() {
-        //TODO Paging, SortKey, sortOrder, offset
-        List<Project> projects = projectService.getProjects();
+    public ResponseEntity<List<Project>> getProject(@RequestParam(defaultValue = "project_Id") String sortKey,
+                                                    @RequestParam(defaultValue = "desc") String sortOrder,
+                                                    @RequestParam(defaultValue = "1") int page,
+                                                    @RequestParam(defaultValue = "10") int size) {
+
+        List<Project> projects = projectService.getProjects(sortKey, sortOrder, page, size);
         return ResponseEntity.status(HttpStatus.OK).body(projects);
     }
 
