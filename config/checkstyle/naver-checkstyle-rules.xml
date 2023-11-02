@@ -178,7 +178,7 @@ The following rules in the Naver coding convention cannot be checked by this con
 
 		<!-- [indentation-tab] -->
 		<module name="RegexpSinglelineJava">
-			<property name="format" value="^ {4}"/>
+			<property name="format" value="^t+"/>
 			<property name="message" value="[indentation-tab] Indent must use tab characters"/>
 			<property name="ignoreComments" value="true"/>
 		</module>

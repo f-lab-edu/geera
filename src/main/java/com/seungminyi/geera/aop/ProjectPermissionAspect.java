@@ -24,9 +24,12 @@ public class ProjectPermissionAspect {
     }
 
     @Before("@annotation(projectPermissionCheck) && args(projectId, ..)")
-    public void checkProjectPermission(JoinPoint joinPoint, ProjectPermissionCheck projectPermissionCheck, Long projectId) {
+    public void checkProjectPermission(JoinPoint joinPoint,
+        ProjectPermissionCheck projectPermissionCheck,
+        Long projectId) {
         String errorMessage = "프로젝트 " + projectPermissionCheck.value() + "만 요청할 수 있습니다.";
-        CustomUserDetails userDetails = (CustomUserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        CustomUserDetails userDetails =
+            (CustomUserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         ProjectMember projectMember = new ProjectMember();
         projectMember.setMemberId(userDetails.getId());
         projectMember.setProjectId(projectId);

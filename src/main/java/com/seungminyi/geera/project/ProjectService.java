@@ -23,7 +23,8 @@ public class ProjectService {
 
     @Transactional
     public Project createProject(Project project) {
-        CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        CustomUserDetails userDetails =
+            (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         project.setCreateAt(new Date());
         projectRepository.create(project);
 
@@ -38,7 +39,8 @@ public class ProjectService {
     }
 
     public List<Project> getProjects(String sortKey, String sortOrder, int page, int size) {
-        CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        CustomUserDetails userDetails =
+            (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         if (page < 1) {
             page = 1;
@@ -88,7 +90,8 @@ public class ProjectService {
     public void acceptProjectInvitation(Long projectId) {
         checkProjectPermission(projectId, ProjectMemberRoleType.INVITED, "초대받지 않은 유저 입니다.");
 
-        ProjectMember projectMember = createProjectMember(projectId, getCurrentUser().getId(), ProjectMemberRoleType.MEMBER);
+        ProjectMember projectMember =
+            createProjectMember(projectId, getCurrentUser().getId(), ProjectMemberRoleType.MEMBER);
 
         projectMemberRepository.update(projectMember);
     }
