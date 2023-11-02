@@ -1,9 +1,11 @@
 package com.seungminyi.geera.project;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 
 @Builder
+@Data
 public class ProjectQuery {
     private Long memberId;
     private String sortKey;

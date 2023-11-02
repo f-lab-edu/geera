@@ -15,8 +15,10 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.test.context.support.WithMockUser;
 
 import com.seungminyi.geera.TestUtil;
 import com.seungminyi.geera.exception.ProjectPermissionException;
@@ -24,4 +26,119 @@ import com.seungminyi.geera.member.auth.CustomUserDetails;
 
 @SpringBootTest
 class ProjectServiceTest {
+
+    @Mock
+    private ProjectRepository projectRepository;
+
+    @Mock
+    private ProjectMemberRepository projectMemberRepository;
+
+    @InjectMocks
+    private ProjectService projectService;
+
+    @BeforeEach
+    void setUp() {
+        TestUtil.setAuthentication(
+            TestUtil.createCustomUserDetails(
+                TestUtil.createTestMember()
+            )
+        );
+    }
+
+    @Test
+    @DisplayName("프로젝트 생성 서비스")
+    void testCreateProject() {
+        Project testProject = TestUtil.createTestProject();
+
+        ProjectMember projectMember = new ProjectMember();
+        projectMember.setProjectId(testProject.getProjectId());
+        projectMember.setMemberId(getCurrentUser().getId());
+        projectMember.setRole(ProjectMemberRoleType.CREATOR);
+
+        Project createdProject = projectService.createProject(testProject);
+
+        assertEquals(testProject, createdProject);
+        verify(projectRepository).create(testProject);
+        verify(projectMemberRepository).create(projectMember);
+    }
+
+    @Test
+    @DisplayName("프로젝트 조회 서비스")
+    void testGetProjects() {
+        List<Project> testProjects = TestUtil.createTestProjects();
+        String sortKey = "project_id";
+        String sortOrder = "asc";
+        int page = 0;
+        int size = 10;
+
+        when(projectRepository.findByMember(any(ProjectQuery.class))).thenReturn(testProjects);
+
+        List<Project> projects = projectService.getProjects(sortKey, sortOrder, page, size);
+
+        verify(projectRepository).findByMember(
+            Mockito.argThat(query -> query.getStart() == 0
+            && query.getSize() == 10
+            && query.getMemberId() == getCurrentUser().getId()
+            && query.getSortKey().equals(sortKey)
+            && query.getSortOrder().equals(sortOrder))
+        );
+        assertEquals(projects, testProjects);
+    }
+
+    @Test
+    @DisplayName("프로젝트 업데이트")
+    void testUpdateProject() {
+        Long projectId = 1L;
+        ProjectRequest projectRequest = new ProjectRequest();
+        projectRequest.setProjectName("Test Project");
+
+        projectService.updateProject(projectId, projectRequest);
+
+        verify(projectRepository).update(any(Project.class));
+    }
+
+    @Test
+    @DisplayName("프로젝트 삭제")
+    void testDeleteProject() {
+        Long projectId = 1L;
+        projectService.deleteProject(projectId);
+
+        verify(projectRepository).delete(projectId);
+    }
+
+    @Test
+    @DisplayName("프로젝트 맴버 초대")
+    void testAddProjectMember() {
+        Long projectId = 1L;
+        Long memberId = 1L;
+        projectService.addProjectMember(projectId, memberId);
+
+        verify(projectMemberRepository).create(any(ProjectMember.class));
+    }
+
+    @Test
+    @DisplayName("프로젝트 멤버 삭제")
+    void testDeleteProjectMember() {
+        Long projectId = 1L;
+        Long memberId = 2L; //TestUtil.setAuthentication() memberId : 1L
+
+        projectService.deleteProjectMember(projectId, memberId);
+
+        verify(projectMemberRepository).delete(any(ProjectMember.class));
+    }
+
+    @Test
+    @DisplayName("프로젝트 멤버 삭제 - 본인삭제")
+    void testDeleteProjectMember_Failure_본인삭제() {
+        Long projectId = 1L;
+        Long memberId = 1L;
+
+        assertThrows(ProjectPermissionException.class, () ->
+            projectService.deleteProjectMember(projectId, memberId)
+        );
+    }
+
+    private CustomUserDetails getCurrentUser() {
+        return (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    }
 }

@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.seungminyi.geera.exception.ProjectPermissionException;
 import com.seungminyi.geera.member.auth.CustomUserDetails;
+import com.seungminyi.geera.utill.annotation.ProjectPermissionCheck;
 
 @Service
 public class ProjectService {
@@ -54,35 +55,31 @@ public class ProjectService {
         return projectRepository.findByMember(query);
     }
 
+    @ProjectPermissionCheck(ProjectMemberRoleType.CREATOR)
     public void updateProject(Long projectId, ProjectRequest projectRequest) {
-        checkProjectPermission(projectId,ProjectMemberRoleType.CREATOR,"프로젝트 생성자만 요청할 수 있습니다.");
-
         Project project = projectRequest.toProject();
         project.setProjectId(projectId);
         projectRepository.update(project);
     }
 
+    @ProjectPermissionCheck(ProjectMemberRoleType.CREATOR)
     public void deleteProject(Long projectId) {
-        checkProjectPermission(projectId,ProjectMemberRoleType.CREATOR,"프로젝트 생성자만 요청할 수 있습니다.");
-
         projectRepository.delete(projectId);
     }
 
+    @ProjectPermissionCheck(ProjectMemberRoleType.CREATOR)
     public void addProjectMember(Long projectId, Long memberId) {
-        checkProjectPermission(projectId,ProjectMemberRoleType.CREATOR,"프로젝트 생성자만 요청할 수 있습니다.");
-
         ProjectMember projectMember = createProjectMember(projectId, memberId, ProjectMemberRoleType.INVITED);
-
         projectMemberRepository.create(projectMember);
     }
 
+    @ProjectPermissionCheck(ProjectMemberRoleType.CREATOR)
     public int deleteProjectMember(Long projectId, Long memberId) {
         CustomUserDetails currentUser = getCurrentUser();
         if (currentUser.getId() == memberId) {
             throw new ProjectPermissionException("본인을 프로젝트에서 제외할 수 없습니다.");
         }
 
-        checkProjectPermission(projectId,ProjectMemberRoleType.CREATOR,"프로젝트 생성자만 요청할 수 있습니다.");
         ProjectMember projectMember = createProjectMember(projectId, memberId, ProjectMemberRoleType.MEMBER);
 
         return projectMemberRepository.delete(projectMember);
@@ -100,7 +97,9 @@ public class ProjectService {
         return (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
-    private void checkProjectPermission(Long projectId,ProjectMemberRoleType projectMemberRoleType, String errorMessage) {
+    private void checkProjectPermission(Long projectId,
+        ProjectMemberRoleType projectMemberRoleType,
+        String errorMessage) {
         CustomUserDetails userDetails = getCurrentUser();
         ProjectMember projectMember = new ProjectMember();
         projectMember.setMemberId(userDetails.getId());

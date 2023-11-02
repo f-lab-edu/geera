@@ -1,12 +1,20 @@
 package com.seungminyi.geera;
 
+import static org.mockito.Mockito.*;
+
 import com.seungminyi.geera.member.Member;
+import com.seungminyi.geera.member.auth.CustomUserDetails;
 import com.seungminyi.geera.project.Project;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -74,5 +82,17 @@ public class TestUtil {
         project.setCreateAt(new Date());
 
         return project;
+    }
+
+    public static CustomUserDetails createCustomUserDetails(Member member) {
+        return new CustomUserDetails(createTestMember());
+    }
+
+    public static void setAuthentication(CustomUserDetails customUserDetails) {
+        SecurityContext securityContext = Mockito.mock(SecurityContext.class);
+        when(securityContext.getAuthentication()).thenReturn(
+            new UsernamePasswordAuthenticationToken(customUserDetails, null, customUserDetails.getAuthorities())
+        );
+        SecurityContextHolder.setContext(securityContext);
     }
 }
