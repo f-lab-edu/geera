@@ -8,10 +8,7 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,10 +18,9 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.seungminyi.geera.TestUtil;
-import com.seungminyi.geera.exception.ProjectPermissionException;
+import com.seungminyi.geera.exception.InsufficientPermissionException;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -81,7 +77,7 @@ public class ProjectControllerTest {
     @WithMockUser
     @DisplayName("프로젝트 수정 - 권한 없음")
     public void testUpdateProject_권한없음() throws Exception {
-        ProjectPermissionException exception = new ProjectPermissionException("Forbidden");
+        InsufficientPermissionException exception = new InsufficientPermissionException("Forbidden");
         Mockito.doThrow(exception).when(projectService).updateProject(anyLong(), any());
 
         mockMvc.perform(MockMvcRequestBuilders.put("/projects/1")
@@ -104,7 +100,7 @@ public class ProjectControllerTest {
     @WithMockUser
     @DisplayName("프로젝트 삭제 - 권한 없음")
     public void testDeleteProject_권한없음() throws Exception {
-        ProjectPermissionException exception = new ProjectPermissionException("Forbidden");
+        InsufficientPermissionException exception = new InsufficientPermissionException("Forbidden");
         Mockito.doThrow(exception).when(projectService).deleteProject(anyLong());
 
         mockMvc.perform(MockMvcRequestBuilders.delete("/projects/1"))
@@ -125,7 +121,7 @@ public class ProjectControllerTest {
     @WithMockUser
     @DisplayName("프로젝트 맴버 초대 - 권한없음")
     public void testAddProjectMember_권한없음() throws Exception {
-        ProjectPermissionException exception = new ProjectPermissionException("Forbidden");
+        InsufficientPermissionException exception = new InsufficientPermissionException("Forbidden");
         Mockito.doThrow(exception).when(projectService).addProjectMember(anyLong(), anyLong());
 
         mockMvc.perform(MockMvcRequestBuilders.post("/projects/1/members/2"))
@@ -157,7 +153,7 @@ public class ProjectControllerTest {
     @WithMockUser
     @DisplayName("프로젝트 맴버 삭제 - 권한없음")
     public void testDeleteProjectMember_권한없음() throws Exception {
-        ProjectPermissionException exception = new ProjectPermissionException("Forbidden");
+        InsufficientPermissionException exception = new InsufficientPermissionException("Forbidden");
         Mockito.doThrow(exception).when(projectService).deleteProjectMember(anyLong(), anyLong());
 
         mockMvc.perform(MockMvcRequestBuilders.delete("/projects/1/members/2"))
@@ -180,7 +176,7 @@ public class ProjectControllerTest {
     public void testAcceptProjectInvitation() throws Exception {
         Mockito.doNothing().when(projectService).acceptProjectInvitation(anyLong());
 
-        mockMvc.perform(MockMvcRequestBuilders.put("/projects/1/accept-invitation"))
+        mockMvc.perform(MockMvcRequestBuilders.patch("/projects/1/accept-invitation"))
             .andExpect(MockMvcResultMatchers.status().isCreated());
     }
 
@@ -188,10 +184,10 @@ public class ProjectControllerTest {
     @WithMockUser
     @DisplayName("프로젝트 초대 수락 - 초대받지 않음")
     public void testAcceptProjectInvitation_초대받지_않음() throws Exception {
-        ProjectPermissionException exception = new ProjectPermissionException("Forbidden");
+        InsufficientPermissionException exception = new InsufficientPermissionException("Forbidden");
         Mockito.doThrow(exception).when(projectService).acceptProjectInvitation(anyLong());
 
-        mockMvc.perform(MockMvcRequestBuilders.put("/projects/1/accept-invitation"))
+        mockMvc.perform(MockMvcRequestBuilders.patch("/projects/1/accept-invitation"))
             .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 }

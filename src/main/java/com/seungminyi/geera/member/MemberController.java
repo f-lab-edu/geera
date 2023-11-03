@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -67,9 +68,9 @@ public class MemberController {
         return ResponseEntity.ok("이메일 인증코드를 발송했습니다.");
     }
 
-    @GetMapping()
-    public ResponseEntity<?> findMember(@RequestParam String email) {
-        Optional<Member> member = Optional.ofNullable(memberService.findMemberByEmail(email));
+    @GetMapping("/members/email/{emailAddress}")
+    public ResponseEntity<?> findMember(@PathVariable String emailAddress) {
+        Optional<Member> member = Optional.ofNullable(memberService.findMemberByEmail(emailAddress));
         return ResponseEntity.ok(member);
     }
 

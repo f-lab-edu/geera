@@ -3,8 +3,6 @@ package com.seungminyi.geera.project;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -14,14 +12,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.test.context.support.WithMockUser;
 
 import com.seungminyi.geera.TestUtil;
-import com.seungminyi.geera.exception.ProjectPermissionException;
+import com.seungminyi.geera.exception.InsufficientPermissionException;
 import com.seungminyi.geera.member.auth.CustomUserDetails;
 
 @SpringBootTest
@@ -50,10 +44,11 @@ class ProjectServiceTest {
     void testCreateProject() {
         Project testProject = TestUtil.createTestProject();
 
-        ProjectMember projectMember = new ProjectMember();
-        projectMember.setProjectId(testProject.getProjectId());
-        projectMember.setMemberId(getCurrentUser().getId());
-        projectMember.setRole(ProjectMemberRoleType.CREATOR);
+        ProjectMember projectMember = ProjectMember.builder()
+            .projectId(testProject.getProjectId())
+            .memberId(getCurrentUser().getId())
+            .role(ProjectMemberRoleType.CREATOR)
+            .build();
 
         Project createdProject = projectService.createProject(testProject);
 
@@ -133,7 +128,7 @@ class ProjectServiceTest {
         Long projectId = 1L;
         Long memberId = 1L;
 
-        assertThrows(ProjectPermissionException.class, () ->
+        assertThrows(InsufficientPermissionException.class, () ->
             projectService.deleteProjectMember(projectId, memberId)
         );
     }

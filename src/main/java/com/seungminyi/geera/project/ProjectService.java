@@ -3,13 +3,13 @@ package com.seungminyi.geera.project;
 import java.util.Date;
 import java.util.List;
 
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.seungminyi.geera.exception.ProjectPermissionException;
+import com.seungminyi.geera.exception.InsufficientPermissionException;
 import com.seungminyi.geera.member.auth.CustomUserDetails;
 import com.seungminyi.geera.utill.annotation.ProjectPermissionCheck;
+import com.seungminyi.geera.utill.auth.SecurityUtils;
 
 @Service
 public class ProjectService {
@@ -23,15 +23,15 @@ public class ProjectService {
 
     @Transactional
     public Project createProject(Project project) {
-        CustomUserDetails userDetails =
-            (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        CustomUserDetails userDetails = SecurityUtils.getCurrentUser();
         project.setCreateAt(new Date());
         projectRepository.create(project);
 
-        ProjectMember projectMember = new ProjectMember();
-        projectMember.setProjectId(project.getProjectId());
-        projectMember.setMemberId(userDetails.getId());
-        projectMember.setRole(ProjectMemberRoleType.CREATOR);
+        ProjectMember projectMember = ProjectMember.builder()
+            .projectId(project.getProjectId())
+            .memberId(userDetails.getId())
+            .role(ProjectMemberRoleType.CREATOR)
+            .build();
 
         projectMemberRepository.create(projectMember);
 
@@ -39,8 +39,7 @@ public class ProjectService {
     }
 
     public List<Project> getProjects(String sortKey, String sortOrder, int page, int size) {
-        CustomUserDetails userDetails =
-            (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        CustomUserDetails userDetails = SecurityUtils.getCurrentUser();
 
         if (page < 1) {
             page = 1;
@@ -71,18 +70,18 @@ public class ProjectService {
 
     @ProjectPermissionCheck(ProjectMemberRoleType.CREATOR)
     public void addProjectMember(Long projectId, Long memberId) {
-        ProjectMember projectMember = createProjectMember(projectId, memberId, ProjectMemberRoleType.INVITED);
+        ProjectMember projectMember = createProjectMember(projectId, ProjectMemberRoleType.INVITED);
         projectMemberRepository.create(projectMember);
     }
 
     @ProjectPermissionCheck(ProjectMemberRoleType.CREATOR)
     public int deleteProjectMember(Long projectId, Long memberId) {
-        CustomUserDetails currentUser = getCurrentUser();
+        CustomUserDetails currentUser = SecurityUtils.getCurrentUser();
         if (currentUser.getId() == memberId) {
-            throw new ProjectPermissionException("본인을 프로젝트에서 제외할 수 없습니다.");
+            throw new InsufficientPermissionException("본인을 프로젝트에서 제외할 수 없습니다.");
         }
 
-        ProjectMember projectMember = createProjectMember(projectId, memberId, ProjectMemberRoleType.MEMBER);
+        ProjectMember projectMember = createProjectMember(projectId, ProjectMemberRoleType.MEMBER);
 
         return projectMemberRepository.delete(projectMember);
     }
@@ -91,36 +90,34 @@ public class ProjectService {
         checkProjectPermission(projectId, ProjectMemberRoleType.INVITED, "초대받지 않은 유저 입니다.");
 
         ProjectMember projectMember =
-            createProjectMember(projectId, getCurrentUser().getId(), ProjectMemberRoleType.MEMBER);
+            createProjectMember(projectId, ProjectMemberRoleType.MEMBER);
 
         projectMemberRepository.update(projectMember);
-    }
-
-    private CustomUserDetails getCurrentUser() {
-        return (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
     private void checkProjectPermission(Long projectId,
         ProjectMemberRoleType projectMemberRoleType,
         String errorMessage) {
-        CustomUserDetails userDetails = getCurrentUser();
-        ProjectMember projectMember = new ProjectMember();
-        projectMember.setMemberId(userDetails.getId());
-        projectMember.setProjectId(projectId);
-        projectMember.setRole(projectMemberRoleType);
+
+        ProjectMember projectMember = ProjectMember.builder()
+            .projectId(projectId)
+            .memberId(SecurityUtils.getCurrentUser().getId())
+            .role(projectMemberRoleType)
+            .build();
         ProjectMemberRoleType roleByMember = projectMemberRepository.findRoleByMember(projectMember);
+
         if (roleByMember == null) {
-            throw new ProjectPermissionException(errorMessage);
+            throw new InsufficientPermissionException(errorMessage);
         }
+
     }
 
-    private ProjectMember createProjectMember(Long projectId, Long memberId, ProjectMemberRoleType roleType) {
-        ProjectMember projectMember = new ProjectMember();
-        projectMember.setProjectId(projectId);
-        projectMember.setMemberId(memberId);
-        projectMember.setRole(roleType);
-        return projectMember;
+    private ProjectMember createProjectMember(Long projectId, ProjectMemberRoleType roleType) {
+        return  ProjectMember.builder()
+            .projectId(projectId)
+            .memberId(SecurityUtils.getCurrentUser().getId())
+            .role(roleType)
+            .build();
     }
-
 
 }

@@ -6,8 +6,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.seungminyi.geera.exception.ProjectPermissionException;
 
 @RestController
 @RequestMapping("/projects")
@@ -29,8 +28,8 @@ public class ProjectController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Project>> getProject(
-        @RequestParam(defaultValue = "project_Id") String sortKey,
+    public ResponseEntity<List<Project>> getProjects(
+        @RequestParam(defaultValue = "project_id") String sortKey,
         @RequestParam(defaultValue = "desc") String sortOrder,
         @RequestParam(defaultValue = "1") int page,
         @RequestParam(defaultValue = "10") int size
@@ -79,7 +78,7 @@ public class ProjectController {
         return ResponseEntity.status(HttpStatus.CREATED).body("맴버 삭제 완료.");
     }
 
-    @PutMapping("/{projectId}/accept-invitation")
+    @PatchMapping("/{projectId}/accept-invitation")
     public ResponseEntity<?> acceptProjectInvitation(@PathVariable Long projectId) {
         projectService.acceptProjectInvitation(projectId);
         return ResponseEntity.status(HttpStatus.CREATED).body("초대 수락 완료.");

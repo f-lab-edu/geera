@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-    @ExceptionHandler(ProjectPermissionException.class)
-    public ResponseEntity<String> handleProjectPermissionException(ProjectPermissionException exception) {
+    @ExceptionHandler(InsufficientPermissionException.class)
+    public ResponseEntity<String> handleProjectPermissionException(InsufficientPermissionException exception) {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(exception.getMessage());
     }
 }

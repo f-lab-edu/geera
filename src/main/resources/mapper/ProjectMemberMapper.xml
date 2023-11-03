@@ -10,20 +10,20 @@
     <select id="findRoleByMember" parameterType="com.seungminyi.geera.project.ProjectMember">
         SELECT ROLE FROM PROJECT_MEMBER
         WHERE PROJECT_ID = #{projectId}
-        AND MEMBER_ID = #{memberId}
-        AND ROLE = #{role}
+            AND MEMBER_ID = #{memberId}
+            AND ROLE = #{role}
     </select>
 
     <update id="delete" parameterType="com.seungminyi.geera.project.ProjectMember">
         DELETE PROJECT_MEMBER
         WHERE PROJECT_ID = #{projectId}
-        AND MEMBER_ID = #{memberId}
+            AND MEMBER_ID = #{memberId}
     </update>
 
     <update id="update" parameterType="com.seungminyi.geera.project.ProjectMember">
         UPDATE PROJECT_MEMBER
         SET ROLE = #{role}
         WHERE PROJECT_ID = #{projectId}
-        AND MEMBER_ID = #{memberId}
+            AND MEMBER_ID = #{memberId}
     </update>
 </mapper>

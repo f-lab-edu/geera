@@ -7,6 +7,7 @@ import lombok.Data;
 
 
 @Data
+@Builder
 public class ProjectMember {
     private Long projectId;
     private Long memberId;

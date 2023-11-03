@@ -11,7 +11,7 @@ import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.seungminyi.geera.TestUtil;
-import com.seungminyi.geera.exception.ProjectPermissionException;
+import com.seungminyi.geera.exception.InsufficientPermissionException;
 import com.seungminyi.geera.project.ProjectMember;
 import com.seungminyi.geera.project.ProjectMemberRepository;
 import com.seungminyi.geera.project.ProjectMemberRoleType;
@@ -50,7 +50,7 @@ class ProjectPermissionAspectTest {
         when(annotation.value()).thenReturn(ProjectMemberRoleType.CREATOR);
         when(projectMemberRepository.findRoleByMember(any(ProjectMember.class))).thenReturn(null);
 
-        assertThrows(ProjectPermissionException.class, () ->
+        assertThrows(InsufficientPermissionException.class, () ->
             projectPermissionAspect.checkProjectPermission(null, annotation, 1L)
         );
     }
