@@ -3,6 +3,7 @@ package com.seungminyi.geera.utill.validator;
 import jakarta.validation.ConstraintValidatorContext;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.security.core.parameters.P;
@@ -28,6 +29,7 @@ public class PasswordValidatorTest {
 	}
 
 	@Test
+	@DisplayName("유효한 패스워드")
 	public void testValidPassword() {
 		String validPassword = "password1!";
 
@@ -37,6 +39,7 @@ public class PasswordValidatorTest {
 	}
 
 	@Test
+	@DisplayName("취약한 패스워드")
 	public void testInvalidPassword() {
 		String invalidPassword = "password";
 

@@ -7,7 +7,7 @@
         VALUES (#{email}, #{password}, #{name})
     </insert>
 
-    <select id="findMemberByEmail" parameterType="String">
+    <select id="findByEmail" parameterType="String">
         SELECT MEMBER_ID, EMAIL, PASSWORD, NAME
         FROM MEMBER
         WHERE EMAIL = #{email}

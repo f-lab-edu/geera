@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.seungminyi.geera.project.ProjectRepository">
+    <insert id="create" parameterType="com.seungminyi.geera.project.Project" useGeneratedKeys="true" keyProperty="projectId">
+        INSERT INTO PROJECT (PROJECT_NAME, CREATE_AT)
+        VALUES (#{projectName}, #{createAt});
+    </insert>
+
+    <select id="findByMember" parameterType="com.seungminyi.geera.project.ProjectQuery" resultType="com.seungminyi.geera.project.Project">
+        SELECT P.PROJECT_ID, P.PROJECT_NAME, P.CREATE_AT
+        FROM PROJECT P, PROJECT_MEMBER PM
+        WHERE P.PROJECT_ID = PM.PROJECT_ID
+            AND P.DELETED = FALSE
+            AND PM.MEMBER_ID = #{memberId}
+            AND PM.ROLE in ('CREATOR', 'MEMBER')
+        ORDER BY ${sortKey} ${sortOrder}
+        LIMIT #{size} OFFSET #{start}
+    </select>
+
+    <update id="update" parameterType="com.seungminyi.geera.project.Project">
+        UPDATE PROJECT
+        SET PROJECT_NAME = #{projectName}
+        WHERE PROJECT_ID = #{projectId};
+    </update>
+
+    <delete id="delete" parameterType="Long">
+        UPDATE PROJECT
+        SET DELETED = TRUE,
+            DELETE_AT = NOW()
+        WHERE PROJECT_ID = #{projectId};
+    </delete>
+</mapper>

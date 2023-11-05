@@ -11,7 +11,7 @@ import lombok.Setter;
 @Validated
 @Getter
 @Setter
-public class VerifyEmailRequest {
+public class EmailRequest {
 	@Email
 	@JsonProperty("email_address")
 	private String emailAddress;
