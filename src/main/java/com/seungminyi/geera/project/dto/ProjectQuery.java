@@ -1,4 +1,4 @@
-package com.seungminyi.geera.project;
+package com.seungminyi.geera.project.dto;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;

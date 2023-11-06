@@ -1,4 +1,6 @@
-package com.seungminyi.geera.project;
+package com.seungminyi.geera.project.dto;
+
+import com.seungminyi.geera.project.ProjectMemberRoleType;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

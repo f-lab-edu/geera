@@ -1,4 +1,4 @@
-package com.seungminyi.geera.member.auth;
+package com.seungminyi.geera.auth.dto;
 
 import org.springframework.validation.annotation.Validated;
 

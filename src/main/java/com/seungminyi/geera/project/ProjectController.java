@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.seungminyi.geera.project.dto.Project;
+import com.seungminyi.geera.project.dto.ProjectRequest;
 
 @RestController
 @RequestMapping("/projects")

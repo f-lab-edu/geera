@@ -1,8 +1,10 @@
-package com.seungminyi.geera.member.auth;
+package com.seungminyi.geera.auth;
 
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import com.seungminyi.geera.auth.dto.CustomUserDetails;
 
 @Service
 public class AuthService {

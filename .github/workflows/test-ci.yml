@@ -36,3 +36,6 @@ jobs:
 
       - name: PMD (Linter)
         run: ./gradlew pmdMain pmdTest
+
+      - name: Code Coverage
+        run: ./gradlew jacocoTestCoverageVerification

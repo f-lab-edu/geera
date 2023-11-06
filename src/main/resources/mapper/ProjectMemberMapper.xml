@@ -2,25 +2,25 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.seungminyi.geera.project.ProjectMemberRepository">
-    <insert id="create" parameterType="com.seungminyi.geera.project.ProjectMember">
+    <insert id="create" parameterType="com.seungminyi.geera.project.dto.ProjectMember">
         INSERT INTO PROJECT_MEMBER (PROJECT_ID, MEMBER_ID, ROLE)
         VALUES (#{projectId}, #{memberId}, #{role})
     </insert>
 
-    <select id="findRoleByMember" parameterType="com.seungminyi.geera.project.ProjectMember">
+    <select id="findRoleByMember" parameterType="com.seungminyi.geera.project.dto.ProjectMember">
         SELECT ROLE FROM PROJECT_MEMBER
         WHERE PROJECT_ID = #{projectId}
             AND MEMBER_ID = #{memberId}
             AND ROLE = #{role}
     </select>
 
-    <update id="delete" parameterType="com.seungminyi.geera.project.ProjectMember">
+    <update id="delete" parameterType="com.seungminyi.geera.project.dto.ProjectMember">
         DELETE PROJECT_MEMBER
         WHERE PROJECT_ID = #{projectId}
             AND MEMBER_ID = #{memberId}
     </update>
 
-    <update id="update" parameterType="com.seungminyi.geera.project.ProjectMember">
+    <update id="update" parameterType="com.seungminyi.geera.project.dto.ProjectMember">
         UPDATE PROJECT_MEMBER
         SET ROLE = #{role}
         WHERE PROJECT_ID = #{projectId}

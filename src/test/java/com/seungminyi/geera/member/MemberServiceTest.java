@@ -1,17 +1,16 @@
 package com.seungminyi.geera.member;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.test.context.annotation.SecurityTestExecutionListeners;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
+
+import com.seungminyi.geera.member.dto.Member;
 
 @SpringBootTest
 @ComponentScan

@@ -12,7 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.seungminyi.geera.TestUtil;
 import com.seungminyi.geera.exception.InsufficientPermissionException;
-import com.seungminyi.geera.project.ProjectMember;
+import com.seungminyi.geera.project.dto.ProjectMember;
 import com.seungminyi.geera.project.ProjectMemberRepository;
 import com.seungminyi.geera.project.ProjectMemberRoleType;
 import com.seungminyi.geera.utill.annotation.ProjectPermissionCheck;

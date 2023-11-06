@@ -11,8 +11,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.seungminyi.geera.member.auth.JwtTokenFilter;
-import com.seungminyi.geera.member.auth.JwtTokenProvider;
+import com.seungminyi.geera.auth.JwtTokenFilter;
+import com.seungminyi.geera.auth.JwtTokenProvider;
 
 @Configuration
 @EnableWebSecurity

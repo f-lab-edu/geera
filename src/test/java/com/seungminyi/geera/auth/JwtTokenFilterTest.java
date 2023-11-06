@@ -1,6 +1,9 @@
-package com.seungminyi.geera.member.auth;
+package com.seungminyi.geera.auth;
 
 import com.seungminyi.geera.TestUtil;
+import com.seungminyi.geera.auth.JwtTokenFilter;
+import com.seungminyi.geera.auth.JwtTokenProvider;
+
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,7 +19,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
 
 @SpringBootTest

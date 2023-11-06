@@ -1,4 +1,4 @@
-package com.seungminyi.geera.member.auth;
+package com.seungminyi.geera.auth;
 
 import java.io.IOException;
 
@@ -23,7 +23,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 		Authentication authentication) throws IOException, ServletException {
 		response.setStatus(HttpServletResponse.SC_OK);
-		response.setContentType("application/json");
+		response.setContentType("application/json;charset=UTF-8");
 		response.setCharacterEncoding("UTF-8");
 		response.getWriter().write("로그인 성공");
 	}

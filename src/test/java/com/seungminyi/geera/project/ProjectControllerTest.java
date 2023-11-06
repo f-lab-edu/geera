@@ -1,6 +1,5 @@
 package com.seungminyi.geera.project;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 
 import java.util.List;
@@ -21,6 +20,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import com.seungminyi.geera.TestUtil;
 import com.seungminyi.geera.exception.InsufficientPermissionException;
+import com.seungminyi.geera.project.dto.Project;
 
 @SpringBootTest
 @AutoConfigureMockMvc
