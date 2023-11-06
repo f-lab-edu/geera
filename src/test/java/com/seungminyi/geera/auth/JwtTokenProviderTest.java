@@ -1,4 +1,4 @@
-package com.seungminyi.geera.member.auth;
+package com.seungminyi.geera.auth;
 
 import com.seungminyi.geera.TestUtil;
 import com.seungminyi.geera.auth.dto.CustomUserDetails;
@@ -64,6 +64,16 @@ class JwtTokenProviderTest {
     @DisplayName("Authorization 토큰 없음")
     public void testResolveTokenWithEmptyAuthorizationHeader() {
         when(request.getHeader("Authorization")).thenReturn(null);
+
+        String token = jwtTokenProvider.resolveToken(request);
+
+        assertEquals(null, token);
+    }
+
+    @Test
+    @DisplayName("Authorization Bearer 아님")
+    public void testResolveTokenWithNoBearerToken() {
+        when(request.getHeader("Authorization")).thenReturn("Basic Token");
 
         String token = jwtTokenProvider.resolveToken(request);
 

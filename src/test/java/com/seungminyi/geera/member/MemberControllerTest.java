@@ -6,6 +6,7 @@ import com.seungminyi.geera.utill.session.SessionManager;
 
 import org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,6 +74,19 @@ public class MemberControllerTest {
     }
 
     @Test
+    @DisplayName("회원가입 실패 바인딩 에러 - name null")
+    public void testRegisterFailure() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.post("/members")
+                .content("{\n" +
+                    "    \"email\" : \"test@example.com\",\n" +
+                    "    \"password\" : \"password1!\",\n" +
+                    "    \"security_code\" : \"123456\"\n" +
+                    "}")
+                .contentType("application/json"))
+            .andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
+
+    @Test
     public void TestRegisterFailure_중복된_이메일() throws Exception {
         Member testMember = TestUtil.createTestMember();
         String securityCode = "123456";
@@ -106,6 +120,23 @@ public class MemberControllerTest {
         String incorrectSecurityCode = "123456";
 
         Mockito.when(sessionManager.getAttribute(emailAddress)).thenReturn(incorrectSecurityCode);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/members")
+                .content("{\n" +
+                    "    \"email\" : \"test@example.com\",\n" +
+                    "    \"password\" : \"password1!\",\n" +
+                    "    \"name\" : \"Test User\",\n" +
+                    "    \"security_code\" : \"654321\"\n" +
+                    "}")
+                .contentType("application/json"))
+            .andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
+
+    @Test
+    public void testRegisterFailure_인증코드_없음() throws Exception {
+        String emailAddress = "test@example.com";
+
+        Mockito.when(sessionManager.getAttribute(emailAddress)).thenReturn(null);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/members")
                 .content("{\n" +

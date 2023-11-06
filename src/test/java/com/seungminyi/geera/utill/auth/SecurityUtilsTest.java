@@ -2,14 +2,20 @@ package com.seungminyi.geera.utill.auth;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.security.test.context.support.WithMockUser;
 
 import com.seungminyi.geera.TestUtil;
 import com.seungminyi.geera.auth.dto.CustomUserDetails;
 
 class SecurityUtilsTest {
+    private SecurityUtils securityUtils;
+
+    @BeforeEach
+    public void setUp() {
+        securityUtils = new SecurityUtils();
+    }
 
     @Test
     @DisplayName("현재 유저정보")

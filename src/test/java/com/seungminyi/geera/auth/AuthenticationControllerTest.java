@@ -1,4 +1,4 @@
-package com.seungminyi.geera.member.auth;
+package com.seungminyi.geera.auth;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

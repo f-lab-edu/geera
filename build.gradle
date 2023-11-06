@@ -49,7 +49,7 @@ jacocoTestCoverageVerification {
             limit {
                 counter = 'BRANCH'
                 value = 'COVEREDRATIO'
-                minimum = 0.60
+                minimum = 0.80
             }
 
             excludes = ['**.dto.**']
@@ -61,7 +61,7 @@ jacocoTestCoverageVerification {
             limit {
                 counter = 'LINE'
                 value = 'COVEREDRATIO'
-                minimum = 0.50
+                minimum = 0.80
             }
 
             excludes = ['**.dto.**', "com.seungminyi.geera.GeeraApplication"]

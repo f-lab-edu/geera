@@ -1,4 +1,4 @@
-package com.seungminyi.geera.member.auth;
+package com.seungminyi.geera.auth;
 
 import com.seungminyi.geera.TestUtil;
 import com.seungminyi.geera.auth.dto.CustomUserDetails;
