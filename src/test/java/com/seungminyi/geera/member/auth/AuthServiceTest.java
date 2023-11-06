@@ -1,7 +1,11 @@
 package com.seungminyi.geera.member.auth;
 
 import com.seungminyi.geera.TestUtil;
-import com.seungminyi.geera.member.Member;
+import com.seungminyi.geera.auth.AuthService;
+import com.seungminyi.geera.auth.dto.CustomUserDetails;
+import com.seungminyi.geera.auth.CustomUserDetailsService;
+import com.seungminyi.geera.auth.JwtTokenProvider;
+import com.seungminyi.geera.member.dto.Member;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

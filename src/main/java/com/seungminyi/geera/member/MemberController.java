@@ -2,7 +2,6 @@ package com.seungminyi.geera.member;
 
 import static com.seungminyi.geera.utill.validator.ValidationUtil.handleBindingErrors;
 
-import java.util.Collections;
 import java.util.Optional;
 
 import org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException;
@@ -16,9 +15,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.seungminyi.geera.member.dto.EmailRequest;
+import com.seungminyi.geera.member.dto.Member;
+import com.seungminyi.geera.member.dto.MemberRequest;
 import com.seungminyi.geera.utill.session.SessionManager;
 
 @RestController

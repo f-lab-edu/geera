@@ -2,16 +2,14 @@ package com.seungminyi.geera;
 
 import static org.mockito.Mockito.*;
 
-import com.seungminyi.geera.member.Member;
-import com.seungminyi.geera.member.auth.CustomUserDetails;
-import com.seungminyi.geera.project.Project;
+import com.seungminyi.geera.member.dto.Member;
+import com.seungminyi.geera.auth.dto.CustomUserDetails;
+import com.seungminyi.geera.project.dto.Project;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;

@@ -1,7 +1,9 @@
 package com.seungminyi.geera.member.auth;
 
 import com.seungminyi.geera.TestUtil;
-import com.seungminyi.geera.member.Member;
+import com.seungminyi.geera.auth.dto.CustomUserDetails;
+import com.seungminyi.geera.auth.CustomUserDetailsService;
+import com.seungminyi.geera.member.dto.Member;
 import com.seungminyi.geera.member.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

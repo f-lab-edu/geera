@@ -1,9 +1,10 @@
 package com.seungminyi.geera.member;
 
-import org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import com.seungminyi.geera.member.dto.Member;
 
 @Service
 public class MemberService {

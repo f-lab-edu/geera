@@ -1,11 +1,12 @@
-package com.seungminyi.geera.member.auth;
+package com.seungminyi.geera.auth;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.seungminyi.geera.member.Member;
+import com.seungminyi.geera.auth.dto.CustomUserDetails;
+import com.seungminyi.geera.member.dto.Member;
 import com.seungminyi.geera.member.MemberRepository;
 
 @Service

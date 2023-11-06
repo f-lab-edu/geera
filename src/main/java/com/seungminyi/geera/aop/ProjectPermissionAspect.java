@@ -6,8 +6,8 @@ import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Component;
 
 import com.seungminyi.geera.exception.InsufficientPermissionException;
-import com.seungminyi.geera.member.auth.CustomUserDetails;
-import com.seungminyi.geera.project.ProjectMember;
+import com.seungminyi.geera.auth.dto.CustomUserDetails;
+import com.seungminyi.geera.project.dto.ProjectMember;
 import com.seungminyi.geera.project.ProjectMemberRepository;
 import com.seungminyi.geera.project.ProjectMemberRoleType;
 import com.seungminyi.geera.utill.annotation.ProjectPermissionCheck;

@@ -1,10 +1,6 @@
-package com.seungminyi.geera.project;
-
-import java.util.Date;
+package com.seungminyi.geera.project.dto;
 
 import org.springframework.validation.annotation.Validated;
-
-import com.seungminyi.geera.member.Member;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;

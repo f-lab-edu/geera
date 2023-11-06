@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.seungminyi.geera.member.MemberRepository">
-    <insert id="insert" parameterType="com.seungminyi.geera.member.Member">
+    <insert id="insert" parameterType="com.seungminyi.geera.member.dto.Member">
         INSERT INTO MEMBER (EMAIL, PASSWORD, NAME)
         VALUES (#{email}, #{password}, #{name})
     </insert>

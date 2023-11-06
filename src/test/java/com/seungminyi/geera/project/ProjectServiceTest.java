@@ -16,7 +16,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.seungminyi.geera.TestUtil;
 import com.seungminyi.geera.exception.InsufficientPermissionException;
-import com.seungminyi.geera.member.auth.CustomUserDetails;
+import com.seungminyi.geera.auth.dto.CustomUserDetails;
+import com.seungminyi.geera.project.dto.Project;
+import com.seungminyi.geera.project.dto.ProjectMember;
+import com.seungminyi.geera.project.dto.ProjectQuery;
+import com.seungminyi.geera.project.dto.ProjectRequest;
 
 @SpringBootTest
 class ProjectServiceTest {
@@ -130,6 +134,29 @@ class ProjectServiceTest {
 
         assertThrows(InsufficientPermissionException.class, () ->
             projectService.deleteProjectMember(projectId, memberId)
+        );
+    }
+
+    @Test
+    @DisplayName("프로젝트 맴버 초대 여부 확인")
+    public void testAcceptProjectInvitation() {
+        Long projectId = 1L;
+        when(projectMemberRepository.findRoleByMember(any(ProjectMember.class))).thenReturn(ProjectMemberRoleType.INVITED);
+
+        projectService.acceptProjectInvitation(projectId);
+
+        Mockito.verify(projectMemberRepository).update(any(ProjectMember.class));
+    }
+
+    @Test
+    @DisplayName("프로젝트 맴버 초대 여부 확인 - 초대받지 않음")
+    public void testAcceptProjectInvitation_Failure() {
+        Long projectId = 1L;
+        when(projectMemberRepository.findRoleByMember(any(ProjectMember.class))).thenReturn(null);
+
+        assertThrows(
+            InsufficientPermissionException.class, () ->
+            projectService.acceptProjectInvitation(projectId)
         );
     }
 

@@ -1,12 +1,11 @@
 package com.seungminyi.geera.member;
 
 import com.seungminyi.geera.TestUtil;
+import com.seungminyi.geera.member.dto.Member;
 import com.seungminyi.geera.utill.session.SessionManager;
 
 import org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException;
-import org.hibernate.exception.ConstraintViolationException;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +19,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
-
-import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
 
 @SpringBootTest
 @AutoConfigureMockMvc

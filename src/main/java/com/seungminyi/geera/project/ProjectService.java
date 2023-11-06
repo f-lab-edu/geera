@@ -7,7 +7,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.seungminyi.geera.exception.InsufficientPermissionException;
-import com.seungminyi.geera.member.auth.CustomUserDetails;
+import com.seungminyi.geera.auth.dto.CustomUserDetails;
+import com.seungminyi.geera.project.dto.Project;
+import com.seungminyi.geera.project.dto.ProjectMember;
+import com.seungminyi.geera.project.dto.ProjectQuery;
+import com.seungminyi.geera.project.dto.ProjectRequest;
 import com.seungminyi.geera.utill.annotation.ProjectPermissionCheck;
 import com.seungminyi.geera.utill.auth.SecurityUtils;
 

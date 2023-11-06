@@ -1,11 +1,11 @@
-package com.seungminyi.geera.member.auth;
+package com.seungminyi.geera.auth.dto;
 
 import java.util.Collection;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.seungminyi.geera.member.Member;
+import com.seungminyi.geera.member.dto.Member;
 
 import lombok.EqualsAndHashCode;
 
