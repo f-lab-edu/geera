@@ -10,8 +10,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: 'zulu'
+
+      - name: Grant execute permission for Gradle
+        run: chmod +x ./gradlew
+        shell: bash
 
       - name: Build Docker image
         run: docker build -t seungminyi95/geera-api:latest .
