@@ -32,4 +32,4 @@ jobs:
       - name: Push Docker image to GitHub Container Registry
         run: |
           docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_TOKEN }}
-          docker push seungminyi95/geera-app:latest
+          docker push seungminyi95/geera-api:latest
