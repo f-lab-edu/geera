@@ -41,5 +41,4 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
-            docker pull seungminyi95/geera-api:latest
-            docker run -d -p 8080:8080 --name geera-api seungminyi95/geera-api:latest
+            whoami
