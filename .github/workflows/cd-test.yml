@@ -1,0 +1,22 @@
+name: CD Workflow
+
+on:
+  push:
+    branches:
+      - misc/action-test
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build Docker image
+        run: docker build -t seungminyi95/geera-api:latest .
+
+      - name: Push Docker image to GitHub Container Registry
+        run: |
+          docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_TOKEN }}
+          docker push seungminyi95/geera-app:latest
