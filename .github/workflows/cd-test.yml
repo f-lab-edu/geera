@@ -35,14 +35,11 @@ jobs:
           docker push seungminyi95/geera-api:latest
 
       - name: Deploy to Remote Server
-        uses: appleboy/ssh-action@v1.0.0
+        uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.PASSWORD }}
-          port: ${{ secrets.PORT }}
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PASSWORD }}
           script: |
             docker pull seungminyi95/geera-api:latest
-#            docker stop geera-api || true
-#            docker rm geera-api || true
             docker run -d -p 8080:8080 --name geera-api seungminyi95/geera-api:latest
