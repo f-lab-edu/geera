@@ -45,7 +45,7 @@ jobs:
             docker stop geera-api || true
             docker rm geera-api || true
             docker run -d -p 8080:8080 \
-            -e GEERA_DB_USER=${{ secret.GEERA_DB_USER }} \
-            -e GEERA_DB_PASSWORD=${{ secret.GEERA_DB_PASSWORD }}\
-            -e GEERA_JWT_SECRET=${{ secret.GEERA_JWT_SECRET }}\
+            -e GEERA_DB_USER=${{ secrets.GEERA_DB_USER }} \
+            -e GEERA_DB_PASSWORD=${{ secrets.GEERA_DB_PASSWORD }}\
+            -e GEERA_JWT_SECRET=${{ secrets.GEERA_JWT_SECRET }}\
             seungminyi95/geera-api:latest
