@@ -23,6 +23,9 @@ jobs:
         run: chmod +x ./gradlew
         shell: bash
 
+      - name: Build (in CheckStyle, PMD)
+        run: ./gradlew clean build -x test
+
       - name: Build Docker image
         run: docker build -t seungminyi95/geera-api:latest .
 
