@@ -42,8 +42,6 @@ jobs:
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
             docker pull seungminyi95/geera-api:latest
-            docker stop geera-api || true
-            docker rm geera-api || true
             docker run -d -p 8080:8080 \
             -e GEERA_DB_USER=${{ secrets.GEERA_DB_USER }} \
             -e GEERA_DB_PASSWORD=${{ secrets.GEERA_DB_PASSWORD }}\
