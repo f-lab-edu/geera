@@ -25,17 +25,11 @@ jobs:
         run: chmod +x ./gradlew
         shell: bash
 
-      - name: Build
-        run: ./gradlew build
-
       - name: Test
         run: ./gradlew test
 
-      - name: Checkstyle (Code Style Checker)
-        run: ./gradlew checkstyleMain
-
-      - name: PMD (Linter)
-        run: ./gradlew pmdMain pmdTest
-
       - name: Code Coverage
         run: ./gradlew jacocoTestCoverageVerification
+
+      - name: Build (in CheckStyle, PMD)
+        run: ./gradlew build -x test
