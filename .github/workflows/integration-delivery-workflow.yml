@@ -1,4 +1,4 @@
-name: Integration and Deployment Workflow
+name: Integration and Delivery Workflow
 
 on:
   push:
