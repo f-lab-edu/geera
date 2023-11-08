@@ -1,0 +1,61 @@
+name: Integration and Delivery Workflow
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: 'zulu'
+
+      - name: Grant execute permission for Gradle
+        run: chmod +x ./gradlew
+        shell: bash
+
+      - name: Build
+        run: ./gradlew build
+
+      - name: Test
+        run: ./gradlew test
+
+      - name: Checkstyle (Code Style Checker)
+        run: ./gradlew checkstyleMain
+
+      - name: PMD (Linter)
+        run: ./gradlew pmdMain pmdTest
+
+      - name: Code Coverage
+        run: ./gradlew jacocoTestCoverageVerification
+
+      - name: Build Docker image
+        run: docker build -t seungminyi95/geera-api:latest .
+
+      - name: Push Docker image
+        run: |
+          docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_TOKEN }}
+          docker push seungminyi95/geera-api:latest
+
+      - name: Deploy to Remote Server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          script: |
+            docker pull seungminyi95/geera-api:latest
+            docker run -d -p 8080:8080 \
+            -e GEERA_DB_USER=${{ secrets.GEERA_DB_USER }} \
+            -e GEERA_DB_PASSWORD=${{ secrets.GEERA_DB_PASSWORD }} \
+            -e GEERA_JWT_SECRET=${{ secrets.GEERA_JWT_SECRET }} \
+            seungminyi95/geera-api:latest
