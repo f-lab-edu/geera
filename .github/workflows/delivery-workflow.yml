@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - misc/delivery-workflow
 
 jobs:
   build:
