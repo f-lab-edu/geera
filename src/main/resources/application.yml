@@ -2,8 +2,8 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://db-jf1ui.cdb.ntruss.com:3306/geera?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-    username: ${DB_USER}
-    password: ${DB_PASSWORD}
+    username: ${GEERA_DB_USER}
+    password: ${GEERA_DB_PASSWORD}
   profiles:
     active: local
 
