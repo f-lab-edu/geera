@@ -1,0 +1,11 @@
+FROM azul/zulu-openjdk:17
+
+ENV GEERA_DB_USER=$GEERA_DB_USER
+ENV GEERA_DB_PASSWORD=$GEERA_DB_PASSWORD
+ENV GEERA_JWT_SECRET=$GEERA_JWT_SECRET
+
+WORKDIR /app
+
+COPY build/libs/geera-0.0.1-SNAPSHOT.jar .
+
+CMD ["java", "-jar", "geera-0.0.1-SNAPSHOT.jar"]
