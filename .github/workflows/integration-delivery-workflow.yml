@@ -1,4 +1,4 @@
-name: Delivery Work Flow
+name: Integration and Deployment Workflow
 
 on:
   push:
@@ -24,7 +24,19 @@ jobs:
         shell: bash
 
       - name: Build
-        run: ./gradlew clean build -x test
+        run: ./gradlew build
+
+      - name: Test
+        run: ./gradlew test
+
+      - name: Checkstyle (Code Style Checker)
+        run: ./gradlew checkstyleMain
+
+      - name: PMD (Linter)
+        run: ./gradlew pmdMain pmdTest
+
+      - name: Code Coverage
+        run: ./gradlew jacocoTestCoverageVerification
 
       - name: Build Docker image
         run: docker build -t seungminyi95/geera-api:latest .
