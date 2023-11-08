@@ -24,13 +24,13 @@ jobs:
         run: chmod +x ./gradlew
         shell: bash
 
-      - name: Build (in CheckStyle, PMD)
+      - name: Build
         run: ./gradlew clean build -x test
 
       - name: Build Docker image
         run: docker build -t seungminyi95/geera-api:latest .
 
-      - name: Push Docker image to GitHub Container Registry
+      - name: Push Docker image
         run: |
           docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_TOKEN }}
           docker push seungminyi95/geera-api:latest
