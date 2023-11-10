@@ -52,7 +52,7 @@ public class MemberControllerTest {
                     "}")
                 .contentType("application/json"))
             .andExpect(MockMvcResultMatchers.status().isOk())
-            .andExpect(MockMvcResultMatchers.content().string("이메일 인증코드를 발송했습니다."));
+            .andExpect(MockMvcResultMatchers.content().json("{\"message\": \"이메일 인증코드를 발송했습니다.\"}"));
     }
 
     @Test

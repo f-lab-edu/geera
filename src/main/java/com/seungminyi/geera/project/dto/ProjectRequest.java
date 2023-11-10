@@ -8,7 +8,6 @@ import lombok.Data;
 @Validated
 @Data
 public class ProjectRequest {
-    private Long projectId;
     @NotBlank
     private String projectName;
 

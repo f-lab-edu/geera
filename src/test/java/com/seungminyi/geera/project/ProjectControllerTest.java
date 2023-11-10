@@ -93,7 +93,7 @@ public class ProjectControllerTest {
         Mockito.doNothing().when(projectService).deleteProject(anyLong());
 
         mockMvc.perform(MockMvcRequestBuilders.delete("/projects/1"))
-            .andExpect(MockMvcResultMatchers.status().isCreated());
+            .andExpect(MockMvcResultMatchers.status().isNoContent());
     }
 
     @Test
@@ -146,7 +146,7 @@ public class ProjectControllerTest {
         Mockito.when(projectService.deleteProjectMember(anyLong(), anyLong())).thenReturn(1);
 
         mockMvc.perform(MockMvcRequestBuilders.delete("/projects/1/members/2"))
-            .andExpect(MockMvcResultMatchers.status().isCreated());
+            .andExpect(MockMvcResultMatchers.status().isNoContent());
     }
 
     @Test

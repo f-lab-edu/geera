@@ -30,7 +30,10 @@ public class SecurityConfig {
 	public WebSecurityCustomizer webSecurityCustomizer() throws Exception {
 		return (web) -> web.ignoring().requestMatchers(
 			"/api/login",
-			"/members/**"
+			"/members/**",
+			"/docs/**",
+			"/v3/**",
+			"/error/**"
 		);
 	}
 
@@ -47,6 +50,7 @@ public class SecurityConfig {
 			)
 			.addFilterBefore(new JwtTokenFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
 			.authorizeRequests(authorize -> authorize
+				.requestMatchers("/error**").permitAll()
 				.anyRequest().authenticated()
 			)
 			.formLogin(form -> form
