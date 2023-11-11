@@ -12,7 +12,6 @@ import lombok.Data;
 @Validated
 @Data
 public class MemberRequest {
-	private Long id;
 	@Email
 	private String email;
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)

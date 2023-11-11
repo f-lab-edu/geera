@@ -1,7 +1,7 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://db-jf1ui.cdb.ntruss.com:3306/geera?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    url: jdbc:mysql://db-jf1ui.pub-cdb.ntruss.com:3306/geera?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     username: ${GEERA_DB_USER}
     password: ${GEERA_DB_PASSWORD}
   profiles:
@@ -12,6 +12,16 @@ mybatis:
   type-aliases-package: com.seungminyi.geera
   configuration:
     map-underscore-to-camel-case: 'true'
+
+springdoc:
+  packages-to-scan: com.seungminyi.geera
+  default-consumes-media-type: application/json;charset=UTF-8
+  default-produces-media-type: application/json;charset=UTF-8
+  swagger-ui:
+    path: /docs/swagger-ui.html
+    disable-swagger-default-url: true
+    display-request-duration: true
+    operations-sorter: alpha
 
 logging:
   level:
