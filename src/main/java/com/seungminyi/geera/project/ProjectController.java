@@ -54,7 +54,6 @@ public class ProjectController {
         @RequestParam(defaultValue = "1") int page,
         @RequestParam(defaultValue = "10") int size
     ) {
-
         List<Project> projects = projectService.getProjects(sortKey, sortOrder, page, size);
         return ResponseEntity.status(HttpStatus.OK).body(projects);
     }

@@ -51,7 +51,7 @@ class ProjectServiceTest {
         ProjectMember projectMember = ProjectMember.builder()
             .projectId(testProject.getProjectId())
             .memberId(getCurrentUser().getId())
-            .role(ProjectMemberRoleType.CREATOR)
+            .role(ProjectMemberRole.CREATOR)
             .build();
 
         Project createdProject = projectService.createProject(testProject);
@@ -141,7 +141,7 @@ class ProjectServiceTest {
     @DisplayName("프로젝트 맴버 초대 여부 확인")
     public void testAcceptProjectInvitation() {
         Long projectId = 1L;
-        when(projectMemberRepository.findRoleByMember(any(ProjectMember.class))).thenReturn(ProjectMemberRoleType.INVITED);
+        when(projectMemberRepository.findRoleByMember(any(ProjectMember.class))).thenReturn(ProjectMemberRole.INVITED);
 
         projectService.acceptProjectInvitation(projectId);
 

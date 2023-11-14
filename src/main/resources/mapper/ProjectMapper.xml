@@ -3,8 +3,8 @@
 
 <mapper namespace="com.seungminyi.geera.project.ProjectRepository">
     <insert id="create" parameterType="com.seungminyi.geera.project.dto.Project" useGeneratedKeys="true" keyProperty="projectId">
-        INSERT INTO PROJECT (PROJECT_NAME, CREATE_AT)
-        VALUES (#{projectName}, #{createAt});
+        INSERT INTO PROJECT (PROJECT_NAME, CREATE_AT, DELETED)
+        VALUES (#{projectName}, #{createAt}, FALSE);
     </insert>
 
     <select id="findByMember" parameterType="com.seungminyi.geera.project.dto.ProjectQuery" resultType="com.seungminyi.geera.project.dto.Project">

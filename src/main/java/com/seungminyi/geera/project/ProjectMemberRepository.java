@@ -8,7 +8,7 @@ import com.seungminyi.geera.project.dto.ProjectMember;
 public interface ProjectMemberRepository {
     Long create(ProjectMember projectMember);
 
-    ProjectMemberRoleType findRoleByMember(ProjectMember projectMember);
+    ProjectMemberRole findRoleByMember(ProjectMember projectMember);
 
     int delete(ProjectMember projectMember);
 

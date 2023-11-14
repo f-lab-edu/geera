@@ -11,4 +11,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleProjectPermissionException(InsufficientPermissionException exception) {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(exception.getMessage());
     }
+
+    @ExceptionHandler(UnauthorizedAssignmentException.class)
+    public ResponseEntity<String> handleUnauthorizedAssignmentException(UnauthorizedAssignmentException exception) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
+    }
 }

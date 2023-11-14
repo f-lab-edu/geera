@@ -12,6 +12,7 @@ mybatis:
   type-aliases-package: com.seungminyi.geera
   configuration:
     map-underscore-to-camel-case: 'true'
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 springdoc:
   packages-to-scan: com.seungminyi.geera
@@ -25,6 +26,7 @@ springdoc:
 
 logging:
   level:
+
     org.springframework.security: DEBUG
 
 jwt:

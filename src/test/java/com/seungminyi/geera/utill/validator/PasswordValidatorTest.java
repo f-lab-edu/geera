@@ -25,7 +25,7 @@ public class PasswordValidatorTest {
 		passwordValidator = new PasswordValidator();
 		context = mock(ConstraintValidatorContext.class);
 		builder = mock(ConstraintValidatorContext.ConstraintViolationBuilder.class);
-		when(context.buildConstraintViolationWithTemplate(Mockito.anyString())).thenReturn(builder);
+		lenient().when(context.buildConstraintViolationWithTemplate(Mockito.anyString())).thenReturn(builder);
 	}
 
 	@Test

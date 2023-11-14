@@ -14,7 +14,7 @@ import com.seungminyi.geera.TestUtil;
 import com.seungminyi.geera.exception.InsufficientPermissionException;
 import com.seungminyi.geera.project.dto.ProjectMember;
 import com.seungminyi.geera.project.ProjectMemberRepository;
-import com.seungminyi.geera.project.ProjectMemberRoleType;
+import com.seungminyi.geera.project.ProjectMemberRole;
 import com.seungminyi.geera.utill.annotation.ProjectPermissionCheck;
 
 @SpringBootTest
@@ -25,6 +25,7 @@ class ProjectPermissionAspectTest {
     @InjectMocks
     private ProjectPermissionAspect projectPermissionAspect;
 
+    private final ProjectMemberRole[] PROJECT_MEMBER_ROLE_TYPES = {ProjectMemberRole.CREATOR, ProjectMemberRole.MEMBER};
     @BeforeEach
     private void setUp() {
         TestUtil.setAuthentication(
@@ -37,8 +38,7 @@ class ProjectPermissionAspectTest {
     @DisplayName("AOP 프로젝트 권한 확인")
     public void testCheckProjectPermissionAspect() {
         ProjectPermissionCheck annotation = mock(ProjectPermissionCheck.class);
-        when(annotation.value()).thenReturn(ProjectMemberRoleType.CREATOR);
-        when(projectMemberRepository.findRoleByMember(any(ProjectMember.class))).thenReturn(ProjectMemberRoleType.CREATOR);
+        when(projectMemberRepository.findRoleByMember(any(ProjectMember.class))).thenReturn(ProjectMemberRole.CREATOR);
 
         projectPermissionAspect.checkProjectPermission(null, annotation, 1L);
     }
@@ -47,7 +47,6 @@ class ProjectPermissionAspectTest {
     @DisplayName("AOP 프로젝트 권한 없음")
     public void testCheckProjectPermissionAspect_권한없음() {
         ProjectPermissionCheck annotation = mock(ProjectPermissionCheck.class);
-        when(annotation.value()).thenReturn(ProjectMemberRoleType.CREATOR);
         when(projectMemberRepository.findRoleByMember(any(ProjectMember.class))).thenReturn(null);
 
         assertThrows(InsufficientPermissionException.class, () ->
