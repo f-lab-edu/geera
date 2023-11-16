@@ -32,11 +32,10 @@ public class ProjectService {
         project.setCreateAt(new Date());
         projectRepository.create(project);
 
-        ProjectMember projectMember = ProjectMember.builder()
-                .projectId(project.getProjectId())
-                .memberId(userDetails.getId())
-                .role(ProjectMemberRole.CREATOR)
-                .build();
+        ProjectMember projectMember = new ProjectMember()
+                .setProjectId(project.getProjectId())
+                .setMemberId(userDetails.getId())
+                .setRole(ProjectMemberRole.CREATOR);
 
         projectMemberRepository.create(projectMember);
 
@@ -105,25 +104,23 @@ public class ProjectService {
                                         ProjectMemberRole projectMemberRole,
                                         String errorMessage) {
 
-        ProjectMember projectMember = ProjectMember.builder()
-                .projectId(projectId)
-                .memberId(SecurityUtils.getCurrentUser().getId())
-                .role(projectMemberRole)
-                .build();
+        ProjectMember projectMember = new ProjectMember()
+                .setProjectId(projectId)
+                .setMemberId(SecurityUtils.getCurrentUser().getId())
+                .setRole(projectMemberRole);
         ProjectMemberRole roleByMember = projectMemberRepository.findRoleByMember(projectMember);
 
-        if (roleByMember == null || roleByMember.hasIssueAccess()) {
+        if (roleByMember == null || !roleByMember.equals(ProjectMemberRole.INVITED)) {
             throw new InsufficientPermissionException(errorMessage);
         }
 
     }
 
     private ProjectMember buildProjectMember(Long projectId, Long memberId, ProjectMemberRole roleType) {
-        return ProjectMember.builder()
-                .projectId(projectId)
-                .memberId(memberId)
-                .role(roleType)
-                .build();
+        return new ProjectMember()
+                .setProjectId(projectId)
+                .setMemberId(memberId)
+                .setRole(roleType);
     }
 
 }

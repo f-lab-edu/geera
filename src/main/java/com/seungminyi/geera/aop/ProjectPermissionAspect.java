@@ -21,34 +21,34 @@ import com.seungminyi.geera.utill.auth.SecurityUtils;
 @Aspect
 public class ProjectPermissionAspect {
 
-    private final ProjectMemberRepository projectMemberRepository;
+	private final ProjectMemberRepository projectMemberRepository;
 
-    public ProjectPermissionAspect(ProjectMemberRepository projectMemberRepository) {
-        this.projectMemberRepository = projectMemberRepository;
-    }
+	public ProjectPermissionAspect(ProjectMemberRepository projectMemberRepository) {
+		this.projectMemberRepository = projectMemberRepository;
+	}
 
-    @Before("@annotation(projectPermissionCheck) && args(projectId, ..)")
-    public void checkProjectPermission(JoinPoint joinPoint, ProjectPermissionCheck projectPermissionCheck,
-        Long projectId) {
-        if (!hasRequiredRole(PermissionRoleGroup.PROJECT_ACCESS_ROLES, projectId)) {
-            throw new InsufficientPermissionException("프로젝트 접근 권한이 없는 사용자 입니다.");
-        }
-    }
+	@Before("@annotation(projectPermissionCheck) && args(projectId, ..)")
+	public void checkProjectPermission(JoinPoint joinPoint, ProjectPermissionCheck projectPermissionCheck,
+		Long projectId) {
+		if (!hasRequiredRole(PermissionRoleGroup.PROJECT_ACCESS_ROLES, projectId)) {
+			throw new InsufficientPermissionException("프로젝트 접근 권한이 없는 사용자 입니다.");
+		}
+	}
 
-    @Before("@annotation(issuePermissionCheck) && args(projectId, ..)")
-    public void checkIssuePermission(JoinPoint joinPoint, IssuePermissionCheck issuePermissionCheck, Long projectId) {
-        if (!hasRequiredRole(PermissionRoleGroup.ISSUE_ACCESS_ROLES, projectId)) {
-            throw new InsufficientPermissionException("이슈 접근 권한이 없는 사용자 입니다.");
-        }
-    }
+	@Before("@annotation(issuePermissionCheck) && args(projectId, ..)")
+	public void checkIssuePermission(JoinPoint joinPoint, IssuePermissionCheck issuePermissionCheck, Long projectId) {
+		if (!hasRequiredRole(PermissionRoleGroup.ISSUE_ACCESS_ROLES, projectId)) {
+			throw new InsufficientPermissionException("이슈 접근 권한이 없는 사용자 입니다.");
+		}
+	}
 
-    private boolean hasRequiredRole(Set<ProjectMemberRole> projectMemberRoles, Long projectId) {
-        CustomUserDetails userDetails = SecurityUtils.getCurrentUser();
-        ProjectMemberRole memberRole = projectMemberRepository.findRoleByMember(ProjectMember.builder()
-            .memberId(userDetails.getId())
-            .projectId(projectId)
-            .build());
+	private boolean hasRequiredRole(Set<ProjectMemberRole> projectMemberRoles, Long projectId) {
+		CustomUserDetails userDetails = SecurityUtils.getCurrentUser();
+		ProjectMemberRole memberRole = projectMemberRepository.findRoleByMember(
+			new ProjectMember()
+				.setMemberId(userDetails.getId())
+				.setProjectId(projectId));
 
-        return memberRole != null && projectMemberRoles.contains(memberRole);
-    }
+		return memberRole != null && projectMemberRoles.contains(memberRole);
+	}
 }

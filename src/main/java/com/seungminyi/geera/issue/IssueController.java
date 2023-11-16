@@ -77,8 +77,7 @@ public class IssueController {
     @PutMapping("/{issueId}")
     public ResponseEntity<?> updateIssue(@PathVariable Long issueId,
                                          @RequestBody IssueRequest issueRequest) {
-        //TODO 수정시 동시성 문제
-        if (issueId.equals(issueRequest.toIssue())) {
+        if (issueId.equals(issueRequest.getTopIssue())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ErrorResponseMessage("상위 이슈는 자기 자신일 수 없습니다."));
         }

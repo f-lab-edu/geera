@@ -17,15 +17,13 @@ import com.seungminyi.geera.project.dto.ProjectMember;
 import com.seungminyi.geera.utill.annotation.IssuePermissionCheck;
 import com.seungminyi.geera.utill.auth.SecurityUtils;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class IssueService {
 	private final IssueRepository issueRepository;
 	private final ProjectMemberRepository projectMemberRepository;
-
-	public IssueService(IssueRepository issueRepository, ProjectMemberRepository projectMemberRepository) {
-		this.issueRepository = issueRepository;
-		this.projectMemberRepository = projectMemberRepository;
-	}
 
 	@IssuePermissionCheck
 	public void createIssue(IssueRequest issueRequest) {
@@ -77,18 +75,13 @@ public class IssueService {
 	}
 
 	private void checkMemberHasIssueAccess(Long projectId, Long issueContractId) {
-		ProjectMember projectMember = buildProjectMember(projectId, issueContractId);
+		ProjectMember projectMember = new ProjectMember()
+			.setProjectId(projectId)
+			.setMemberId(issueContractId);
 		ProjectMemberRole memberRole = projectMemberRepository.findRoleByMember(projectMember);
 
 		if (!memberRole.hasIssueAccess()) {
 			throw new UnauthorizedAssignmentException("담당자가 프로젝트에 권한이 없습니다.");
 		}
-	}
-
-	private ProjectMember buildProjectMember(Long projectId, Long memberId) {
-		return ProjectMember.builder()
-			.projectId(projectId)
-			.memberId(memberId)
-			.build();
 	}
 }

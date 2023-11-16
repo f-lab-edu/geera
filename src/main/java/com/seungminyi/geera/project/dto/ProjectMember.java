@@ -5,11 +5,10 @@ import com.seungminyi.geera.project.ProjectMemberRole;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-
+import lombok.experimental.Accessors;
 
 @Data
-@AllArgsConstructor
-@Builder
+@Accessors(chain = true)
 public class ProjectMember {
     private Long projectId;
     private Long memberId;
