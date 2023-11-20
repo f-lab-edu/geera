@@ -2,6 +2,9 @@ package com.seungminyi.geera;
 
 import static org.mockito.Mockito.*;
 
+import com.seungminyi.geera.issue.dto.IssueRequest;
+import com.seungminyi.geera.issue.dto.IssueStatusType;
+import com.seungminyi.geera.issue.dto.IssueType;
 import com.seungminyi.geera.member.dto.Member;
 import com.seungminyi.geera.auth.dto.CustomUserDetails;
 import com.seungminyi.geera.project.dto.Project;
@@ -82,13 +85,26 @@ public class TestUtil {
         return project;
     }
 
+    public static IssueRequest createIssueRequest() {
+        return new IssueRequest()
+            .setProjectId(1L)
+            .setIssueType(IssueType.EPIC)
+            .setIssueStatus(IssueStatusType.TODO)
+            .setIssueDescription("이슈 요약")
+            .setIssueDetail("이슈 설명")
+            .setIssueContractId(1L)
+            .setSprintId(1L)
+            .setTopIssue(null)
+            ;
+    }
+
     public static CustomUserDetails createCustomUserDetails(Member member) {
         return new CustomUserDetails(createTestMember());
     }
 
     public static void setAuthentication(CustomUserDetails customUserDetails) {
         SecurityContext securityContext = Mockito.mock(SecurityContext.class);
-        when(securityContext.getAuthentication()).thenReturn(
+        lenient().when(securityContext.getAuthentication()).thenReturn(
             new UsernamePasswordAuthenticationToken(customUserDetails, null, customUserDetails.getAuthorities())
         );
         SecurityContextHolder.setContext(securityContext);

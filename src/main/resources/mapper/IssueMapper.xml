@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.seungminyi.geera.issue.IssueRepository">
+    <select id="getWithConditions" parameterType="com.seungminyi.geera.issue.dto.IssueConditionsDto" resultType="com.seungminyi.geera.issue.dto.Issue">
+        SELECT I.ISSUE_ID,
+               I.PROJECT_ID,
+               I.ISSUE_TYPE,
+               I.ISSUE_STATUS,
+               I.ISSUE_DESCRIPTION,
+               I.ISSUE_DETAIL,
+               I.ISSUE_CONTRACT_ID,
+               I.ISSUE_REPORTER_ID,
+               I.ISSUE_PRIORITY,
+               I.SPRINT_ID,
+               I.CREATE_AT,
+               I.TOP_ISSUE
+        FROM ISSUE I,
+             PROJECT P,
+             PROJECT_MEMBER PM
+        WHERE I.PROJECT_ID = P.PROJECT_ID
+          AND P.PROJECT_ID = PM.PROJECT_ID
+          AND PM.MEMBER_ID = #{member}
+          AND (PM.ROLE IN ('CREATOR', 'MEMBER'))
+          <if test="project != null">
+            AND P.project_id = #{project}
+          </if>
+        ORDER BY #{order} #{sort};
+    </select>
+    <insert id="create" parameterType="com.seungminyi.geera.issue.dto.Issue">
+        INSERT INTO ISSUE
+        (PROJECT_ID,
+         ISSUE_TYPE,
+         ISSUE_STATUS,
+         ISSUE_DESCRIPTION,
+         ISSUE_DETAIL,
+         ISSUE_CONTRACT_ID,
+         ISSUE_REPORTER_ID,
+         ISSUE_PRIORITY,
+         SPRINT_ID,
+         CREATE_AT,
+         TOP_ISSUE)
+        VALUES (#{projectId},
+                #{issueType},
+                #{issueStatus},
+                #{issueDescription},
+                #{issueDetail},
+                #{issueContractId, jdbcType=BIGINT},
+                #{issueReporterId},
+                #{issuePriority},
+                #{sprintId, jdbcType=BIGINT},
+                #{createAt},
+                #{topIssue, jdbcType=BIGINT});
+    </insert>
+
+    <update id="update" parameterType="com.seungminyi.geera.issue.dto.Issue">
+        UPDATE ISSUE
+        SET PROJECT_ID        = #{projectId},
+            ISSUE_TYPE        = #{issueType},
+            ISSUE_STATUS      = #{issueStatus},
+            ISSUE_DESCRIPTION = #{issueDescription},
+            ISSUE_DETAIL      = #{issueDetail},
+            ISSUE_CONTRACT_ID = #{issueContractId, jdbcType=BIGINT},
+            ISSUE_PRIORITY    = #{issuePriority},
+            SPRINT_ID         = #{sprintId, jdbcType=BIGINT},
+            TOP_ISSUE         = #{topIssue, jdbcType=BIGINT}
+        WHERE ISSUE_ID = #{issueId}
+
+    </update>
+
+    <delete id="delete" parameterType="Long">
+        DELETE
+        FROM ISSUE
+        WHERE ISSUE_ID = #{issueId}
+    </delete>
+
+    <update id="updateSubIssuesOnParentDeletion" parameterType="Long">
+        UPDATE ISSUE
+        SET TOP_ISSUE = NULL
+        WHERE TOP_ISSUE = #{issueId}
+    </update>
+</mapper>

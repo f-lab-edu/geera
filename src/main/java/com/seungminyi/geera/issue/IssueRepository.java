@@ -1,0 +1,22 @@
+package com.seungminyi.geera.issue;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.session.RowBounds;
+
+import com.seungminyi.geera.issue.dto.Issue;
+import com.seungminyi.geera.issue.dto.IssueConditionsDto;
+
+@Mapper
+public interface IssueRepository {
+    void create(Issue issue);
+
+    List<Issue> getWithConditions(IssueConditionsDto params, RowBounds rowBounds);
+
+    void update(Issue issue);
+
+    void delete(Long issueId);
+
+    void updateSubIssuesOnParentDeletion(Long issueId);
+}

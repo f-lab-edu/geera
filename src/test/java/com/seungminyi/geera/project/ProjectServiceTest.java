@@ -48,11 +48,10 @@ class ProjectServiceTest {
     void testCreateProject() {
         Project testProject = TestUtil.createTestProject();
 
-        ProjectMember projectMember = ProjectMember.builder()
-            .projectId(testProject.getProjectId())
-            .memberId(getCurrentUser().getId())
-            .role(ProjectMemberRoleType.CREATOR)
-            .build();
+        ProjectMember projectMember = new ProjectMember()
+            .setProjectId(testProject.getProjectId())
+            .setMemberId(getCurrentUser().getId())
+            .setRole(ProjectMemberRole.CREATOR);
 
         Project createdProject = projectService.createProject(testProject);
 
@@ -141,7 +140,7 @@ class ProjectServiceTest {
     @DisplayName("프로젝트 맴버 초대 여부 확인")
     public void testAcceptProjectInvitation() {
         Long projectId = 1L;
-        when(projectMemberRepository.findRoleByMember(any(ProjectMember.class))).thenReturn(ProjectMemberRoleType.INVITED);
+        when(projectMemberRepository.findRoleByMember(any(ProjectMember.class))).thenReturn(ProjectMemberRole.INVITED);
 
         projectService.acceptProjectInvitation(projectId);
 
@@ -159,6 +158,19 @@ class ProjectServiceTest {
             projectService.acceptProjectInvitation(projectId)
         );
     }
+
+    @Test
+    @DisplayName("프로젝트 맴버 초대 여부 확인 - Invite 상태가 아님")
+    public void testAcceptProjectInvitation_Failure_Not_Invited() {
+        Long projectId = 1L;
+        when(projectMemberRepository.findRoleByMember(any(ProjectMember.class))).thenReturn(ProjectMemberRole.MEMBER);
+
+        assertThrows(
+            InsufficientPermissionException.class, () ->
+                projectService.acceptProjectInvitation(projectId)
+        );
+    }
+
 
     private CustomUserDetails getCurrentUser() {
         return (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

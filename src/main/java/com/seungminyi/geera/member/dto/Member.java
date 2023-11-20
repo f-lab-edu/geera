@@ -10,10 +10,12 @@ import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.ToString;
+import lombok.experimental.Accessors;
 
 @Data
 @Entity
 @ToString
+@Accessors(chain = true)
 public class Member {
 
 	@Id

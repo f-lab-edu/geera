@@ -1,17 +1,16 @@
 package com.seungminyi.geera.project.dto;
 
-import com.seungminyi.geera.project.ProjectMemberRoleType;
+import com.seungminyi.geera.project.ProjectMemberRole;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-
+import lombok.experimental.Accessors;
 
 @Data
-@Builder
+@Accessors(chain = true)
 public class ProjectMember {
     private Long projectId;
     private Long memberId;
-    private ProjectMemberRoleType role;
+    private ProjectMemberRole role;
 }

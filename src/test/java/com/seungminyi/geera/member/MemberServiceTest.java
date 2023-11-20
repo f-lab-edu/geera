@@ -13,7 +13,6 @@ import static org.mockito.Mockito.*;
 import com.seungminyi.geera.member.dto.Member;
 
 @SpringBootTest
-@ComponentScan
 class MemberServiceTest {
 
     @Mock
@@ -29,9 +28,9 @@ class MemberServiceTest {
         String testPassword = "password1!";
         String testName = "Test User";
         Member member = new Member();
-        member.setEmail(testEmail);
-        member.setPassword(testPassword);
-        member.setName(testName);
+        member.setEmail(testEmail)
+            .setPassword(testPassword)
+            .setName(testName);
 
         when(passwordEncoder.encode(member.getPassword())).thenReturn("encodedPassword");
         memberService.registerMember(member);

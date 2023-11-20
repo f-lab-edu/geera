@@ -1,15 +1,19 @@
 package com.seungminyi.geera.aop;
 
-import org.aspectj.lang.JoinPoint;
+import java.util.Set;
+
+import org.springframework.stereotype.Component;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
-import org.springframework.stereotype.Component;
+import org.aspectj.lang.JoinPoint;
 
+import com.seungminyi.geera.utill.auth.PermissionRoleGroup;
 import com.seungminyi.geera.auth.dto.CustomUserDetails;
 import com.seungminyi.geera.exception.InsufficientPermissionException;
 import com.seungminyi.geera.project.ProjectMemberRepository;
-import com.seungminyi.geera.project.ProjectMemberRoleType;
+import com.seungminyi.geera.project.ProjectMemberRole;
 import com.seungminyi.geera.project.dto.ProjectMember;
+import com.seungminyi.geera.utill.annotation.IssuePermissionCheck;
 import com.seungminyi.geera.utill.annotation.ProjectPermissionCheck;
 import com.seungminyi.geera.utill.auth.SecurityUtils;
 
@@ -17,26 +21,34 @@ import com.seungminyi.geera.utill.auth.SecurityUtils;
 @Aspect
 public class ProjectPermissionAspect {
 
-    private final ProjectMemberRepository projectMemberRepository;
+	private final ProjectMemberRepository projectMemberRepository;
 
-    public ProjectPermissionAspect(ProjectMemberRepository projectMemberRepository) {
-        this.projectMemberRepository = projectMemberRepository;
-    }
+	public ProjectPermissionAspect(ProjectMemberRepository projectMemberRepository) {
+		this.projectMemberRepository = projectMemberRepository;
+	}
 
-    @Before("@annotation(projectPermissionCheck) && args(projectId, ..)")
-    public void checkProjectPermission(JoinPoint joinPoint,
-        ProjectPermissionCheck projectPermissionCheck,
-        Long projectId) {
-        String errorMessage = "프로젝트 " + projectPermissionCheck.value() + "만 요청할 수 있습니다.";
-        CustomUserDetails userDetails = SecurityUtils.getCurrentUser();
-        ProjectMember projectMember = ProjectMember.builder()
-            .memberId(userDetails.getId())
-            .projectId(projectId)
-            .role(projectPermissionCheck.value())
-            .build();
-        ProjectMemberRoleType roleByMember = projectMemberRepository.findRoleByMember(projectMember);
-        if (roleByMember == null) {
-            throw new InsufficientPermissionException(errorMessage);
-        }
-    }
+	@Before("@annotation(projectPermissionCheck) && args(projectId, ..)")
+	public void checkProjectPermission(JoinPoint joinPoint, ProjectPermissionCheck projectPermissionCheck,
+		Long projectId) {
+		if (!hasRequiredRole(PermissionRoleGroup.PROJECT_ACCESS_ROLES, projectId)) {
+			throw new InsufficientPermissionException("프로젝트 접근 권한이 없는 사용자 입니다.");
+		}
+	}
+
+	@Before("@annotation(issuePermissionCheck) && args(projectId, ..)")
+	public void checkIssuePermission(JoinPoint joinPoint, IssuePermissionCheck issuePermissionCheck, Long projectId) {
+		if (!hasRequiredRole(PermissionRoleGroup.ISSUE_ACCESS_ROLES, projectId)) {
+			throw new InsufficientPermissionException("이슈 접근 권한이 없는 사용자 입니다.");
+		}
+	}
+
+	private boolean hasRequiredRole(Set<ProjectMemberRole> projectMemberRoles, Long projectId) {
+		CustomUserDetails userDetails = SecurityUtils.getCurrentUser();
+		ProjectMemberRole memberRole = projectMemberRepository.findRoleByMember(
+			new ProjectMember()
+				.setMemberId(userDetails.getId())
+				.setProjectId(projectId));
+
+		return memberRole != null && projectMemberRoles.contains(memberRole);
+	}
 }
