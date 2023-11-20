@@ -17,6 +17,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.seungminyi.geera.TestUtil;
+import com.seungminyi.geera.exception.MaxItemsExceededException;
 import com.seungminyi.geera.exception.UnauthorizedAssignmentException;
 import com.seungminyi.geera.issue.dto.Issue;
 import com.seungminyi.geera.issue.dto.IssueConditionsDto;
@@ -82,7 +83,7 @@ class IssueServiceTest {
 	public void GetIssuesWithConditions() {
 		Long project = 1L;
 		int page = 1;
-		int limit = 51;
+		int limit = 49;
 		String sort = "issueId";
 		String order = "asc";
 
@@ -95,6 +96,19 @@ class IssueServiceTest {
 
 		verify(issueRepository).getWithConditions(any(IssueConditionsDto.class), any(RowBounds.class));
 		assertEquals(issues, mockIssues);
+	}
+
+	@Test
+	@DisplayName("이슈 조회 실패 - limit 최대 허용범위 초과")
+	public void GetIssuesWithConditions_Failure() {
+		Long project = 1L;
+		int page = 1;
+		int limit = 51;
+		String sort = "issueId";
+		String order = "asc";
+
+		assertThrows(MaxItemsExceededException.class, () ->
+			issueService.getIssuesWithConditions(project, page, limit, sort, order));
 	}
 
 	@Test

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.apache.ibatis.session.RowBounds;
 
+import com.seungminyi.geera.exception.MaxItemsExceededException;
 import com.seungminyi.geera.exception.UnauthorizedAssignmentException;
 import com.seungminyi.geera.issue.dto.IssueConditionsDto;
 import com.seungminyi.geera.issue.dto.Issue;
@@ -42,7 +43,7 @@ public class IssueService {
 		String order) {
 
 		if (limit > 50) {
-			limit = 50;
+			throw new MaxItemsExceededException();
 		}
 
 		IssueConditionsDto issueConditionsDto = IssueConditionsDto.builder()

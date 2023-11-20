@@ -16,4 +16,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleUnauthorizedAssignmentException(UnauthorizedAssignmentException exception) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
     }
+
+    @ExceptionHandler(MaxItemsExceededException.class)
+    public ResponseEntity<String> handleMaxItemsExceededException(UnauthorizedAssignmentException exception) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
+    }
 }
