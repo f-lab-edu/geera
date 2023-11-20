@@ -41,6 +41,10 @@ public class IssueService {
 		String sort,
 		String order) {
 
+		if(limit > 50) {
+			limit = 50;
+		}
+
 		IssueConditionsDto issueConditionsDto = IssueConditionsDto.builder()
 			.project(project)
 			.sort(sort)

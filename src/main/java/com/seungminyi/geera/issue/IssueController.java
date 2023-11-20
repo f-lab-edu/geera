@@ -58,7 +58,7 @@ public class IssueController {
     public ResponseEntity<?> getIssues(
             @RequestParam(required = false) Long project,
             @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "10") int limit,
+            @RequestParam(defaultValue = "50") int limit,
             @RequestParam(defaultValue = "createdAt") String sort,
             @RequestParam(defaultValue = "asc") String order
     ) {
