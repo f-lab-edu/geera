@@ -41,7 +41,7 @@ public class IssueService {
 		String sort,
 		String order) {
 
-		if(limit > 50) {
+		if (limit > 50) {
 			limit = 50;
 		}
 

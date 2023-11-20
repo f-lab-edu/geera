@@ -82,7 +82,7 @@ class IssueServiceTest {
 	public void GetIssuesWithConditions() {
 		Long project = 1L;
 		int page = 1;
-		int limit = 10;
+		int limit = 51;
 		String sort = "issueId";
 		String order = "asc";
 
