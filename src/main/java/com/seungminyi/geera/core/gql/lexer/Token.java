@@ -1,13 +1,29 @@
 package com.seungminyi.geera.core.gql.lexer;
 
+import com.seungminyi.geera.core.gql.lexer.dto.Position;
+
+import lombok.ToString;
+
+@ToString
 public class Token {
 
 	public final TokenClass tokenClass;
 	public final String data;
+	public final Position position;
 
 	public Token(TokenClass tokenClass, String data, int lineNum, int colNum) {
 		this.tokenClass = tokenClass;
-		this.data = data;
+		switch (tokenClass) {
+			case STRING_LITERAL:
+				this.data = data.substring(1, data.length() - 1);
+				break;
+			case INT_LITERAL:
+				this.data = data;
+				break;
+			default:
+				this.data = "";
+		}
+		this.position = new Position(lineNum, colNum);
 	}
 
 	public Token(TokenClass tokenClass, int lineNum, int colNum) {
@@ -24,6 +40,7 @@ public class Token {
 		// op
 		LT, // '<'
 		GT, // '>'
+		ASSIGN, // '='
 		LE, // "<="
 		GE, // ">="
 		IS, // "IS"
