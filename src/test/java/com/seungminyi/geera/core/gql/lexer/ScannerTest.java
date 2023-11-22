@@ -8,14 +8,14 @@ import org.junit.jupiter.api.Test;
 
 class ScannerTest {
 
-	@Test
-	void testPeek() throws IOException {
-		String query = "abc";
-		Scanner scanner = new Scanner(query);
+    @Test
+    void testPeek() throws IOException {
+        String query = "abc";
+        Scanner scanner = new Scanner(query);
 
-		assertEquals('a', scanner.peek());
-		assertEquals('a', scanner.next());
-		assertEquals('b', scanner.peek());
-		assertEquals('b', scanner.peek());
-	}
+        assertEquals('a', scanner.peek());
+        assertEquals('a', scanner.next());
+        assertEquals('b', scanner.peek());
+        assertEquals('b', scanner.peek());
+    }
 }
