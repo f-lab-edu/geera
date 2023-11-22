@@ -207,7 +207,7 @@ public class TokenizerTest {
         String query = "ISSUE_ID";
 
         assertTokenizerOutput(new Token[] {
-            new Token(TokenClass.ISSUE_ID, 1, 0),
+            new Token(TokenClass.FIELD, "ISSUE_ID",  1, 0),
             new Token(TokenClass.EOF, "", 1, 8)
         }, query);
     }
@@ -218,7 +218,7 @@ public class TokenizerTest {
         String query = "PROJECT_ID";
 
         assertTokenizerOutput(new Token[] {
-            new Token(TokenClass.PROJECT_ID, 1, 0),
+            new Token(TokenClass.FIELD, "PROJECT_ID",  1, 0),
             new Token(TokenClass.EOF, "", 1, 10)
         }, query);
     }
@@ -229,7 +229,7 @@ public class TokenizerTest {
         String query = "ISSUE_TYPE";
 
         assertTokenizerOutput(new Token[] {
-            new Token(TokenClass.ISSUE_TYPE, 1, 0),
+            new Token(TokenClass.FIELD, "ISSUE_TYPE",  1, 0),
             new Token(TokenClass.EOF, "", 1, 10)
         }, query);
     }
@@ -240,7 +240,7 @@ public class TokenizerTest {
         String query = "ISSUE_STATUS";
 
         assertTokenizerOutput(new Token[] {
-            new Token(TokenClass.ISSUE_STATUS, 1, 0),
+            new Token(TokenClass.FIELD, "ISSUE_STATUS",  1, 0),
             new Token(TokenClass.EOF, "", 1, 12)
         }, query);
     }
@@ -251,7 +251,7 @@ public class TokenizerTest {
         String query = "ISSUE_DESCRIPTION";
 
         assertTokenizerOutput(new Token[] {
-            new Token(TokenClass.ISSUE_DESCRIPTION, 1, 0),
+            new Token(TokenClass.FIELD, "ISSUE_DESCRIPTION",  1, 0),
             new Token(TokenClass.EOF, "", 1, 17)
         }, query);
     }
@@ -262,7 +262,7 @@ public class TokenizerTest {
         String query = "ISSUE_DETAIL";
 
         assertTokenizerOutput(new Token[] {
-            new Token(TokenClass.ISSUE_DETAIL, 1, 0),
+            new Token(TokenClass.FIELD, "ISSUE_DETAIL", 1, 0),
             new Token(TokenClass.EOF, "", 1, 12)
         }, query);
     }
@@ -273,7 +273,7 @@ public class TokenizerTest {
         String query = "ISSUE_CONTRACT_ID";
 
         assertTokenizerOutput(new Token[] {
-            new Token(TokenClass.ISSUE_CONTRACT_ID, 1, 0),
+            new Token(TokenClass.FIELD, "ISSUE_CONTRACT_ID", 1, 0),
             new Token(TokenClass.EOF, "", 1, 17)
         }, query);
     }
@@ -284,7 +284,7 @@ public class TokenizerTest {
         String query = "ISSUE_REPORTER_ID";
 
         assertTokenizerOutput(new Token[] {
-            new Token(TokenClass.ISSUE_REPORTER_ID, 1, 0),
+            new Token(TokenClass.FIELD, "ISSUE_REPORTER_ID", 1, 0),
             new Token(TokenClass.EOF, "", 1, 17)
         }, query);
     }
@@ -295,7 +295,7 @@ public class TokenizerTest {
         String query = "ISSUE_PRIORITY";
 
         assertTokenizerOutput(new Token[] {
-            new Token(TokenClass.ISSUE_PRIORITY, 1, 0),
+            new Token(TokenClass.FIELD, "ISSUE_PRIORITY", 1, 0),
             new Token(TokenClass.EOF, "", 1, 14)
         }, query);
     }
@@ -306,7 +306,7 @@ public class TokenizerTest {
         String query = "SPRINT_ID";
 
         assertTokenizerOutput(new Token[] {
-            new Token(TokenClass.SPRINT_ID, 1, 0),
+            new Token(TokenClass.FIELD, "SPRINT_ID", 1, 0),
             new Token(TokenClass.EOF, "", 1, 9)
         }, query);
     }
@@ -317,7 +317,7 @@ public class TokenizerTest {
         String query = "CREATE_AT";
 
         assertTokenizerOutput(new Token[] {
-            new Token(TokenClass.CREATE_AT, 1, 0),
+            new Token(TokenClass.FIELD, "CREATE_AT", 1, 0),
             new Token(TokenClass.EOF, "", 1, 9)
         }, query);
     }
@@ -328,7 +328,7 @@ public class TokenizerTest {
         String query = "TOP_ISSUE";
 
         assertTokenizerOutput(new Token[] {
-            new Token(TokenClass.TOP_ISSUE, 1, 0),
+            new Token(TokenClass.FIELD, "TOP_ISSUE", 1, 0),
             new Token(TokenClass.EOF, "", 1, 9)
         }, query);
     }
@@ -367,7 +367,7 @@ public class TokenizerTest {
             """;
 
         assertTokenizerOutput(new Token[] {
-            new Token(TokenClass.PROJECT_ID, 1, 1),
+            new Token(TokenClass.FIELD, "PROJECT_ID", 1, 1),
             new Token(TokenClass.IN, 1, 12),
             new Token(TokenClass.LPAR, 1, 15),
             new Token(TokenClass.INT_LITERAL, "1", 1, 16),
@@ -379,27 +379,27 @@ public class TokenizerTest {
             new Token(TokenClass.INT_LITERAL, "4", 1, 22),
             new Token(TokenClass.RPAR, 1, 23),
             new Token(TokenClass.AND, 2, 1),
-            new Token(TokenClass.ISSUE_ID, 2, 5),
+            new Token(TokenClass.FIELD, "ISSUE_ID", 2, 5),
             new Token(TokenClass.ASSIGN, 2, 14),
             new Token(TokenClass.INT_LITERAL, "1", 2, 16),
             new Token(TokenClass.AND, 3, 1),
-            new Token(TokenClass.ISSUE_TYPE, 3, 5),
+            new Token(TokenClass.FIELD, "ISSUE_TYPE", 3, 5),
             new Token(TokenClass.ASSIGN, 3, 16),
             new Token(TokenClass.STRING_LITERAL, "\"EPIC\"", 3, 18),
             new Token(TokenClass.AND, 4, 1),
-            new Token(TokenClass.ISSUE_STATUS, 4, 5),
+            new Token(TokenClass.FIELD, "ISSUE_STATUS", 4, 5),
             new Token(TokenClass.NOT_IN, 4, 18),
             new Token(TokenClass.STRING_LITERAL, "\"DONE\"", 4, 25),
             new Token(TokenClass.AND, 5, 1),
-            new Token(TokenClass.ISSUE_DESCRIPTION, 5, 5),
+            new Token(TokenClass.FIELD, "ISSUE_DESCRIPTION", 5, 5),
             new Token(TokenClass.ASSIGN, 5, 23),
             new Token(TokenClass.STRING_LITERAL, "\"이슈 요약\"", 5, 25),
             new Token(TokenClass.AND, 6, 1),
-            new Token(TokenClass.ISSUE_PRIORITY, 6, 5),
+            new Token(TokenClass.FIELD, "ISSUE_PRIORITY", 6, 5),
             new Token(TokenClass.GT, 6, 20),
             new Token(TokenClass.INT_LITERAL, "3", 6, 22),
             new Token(TokenClass.OR, 7, 1),
-            new Token(TokenClass.CREATE_AT, 7, 4),
+            new Token(TokenClass.FIELD, "CREATE_AT", 7, 4),
             new Token(TokenClass.LE, 7, 14),
             new Token(TokenClass.STRING_LITERAL, "\"0000-00-00\"", 7, 17),
         }, query);

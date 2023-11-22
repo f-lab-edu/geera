@@ -17,7 +17,7 @@ public class Token {
             case STRING_LITERAL:
                 this.data = data.substring(1, data.length() - 1);
                 break;
-            case INT_LITERAL:
+            case FIELD, INT_LITERAL:
                 this.data = data;
                 break;
             default:
@@ -56,19 +56,8 @@ public class Token {
         AND, // "AND"
         OR, // "OR"
 
-        // field
-        ISSUE_ID, // "ISSUE_ID"
-        PROJECT_ID, // "PROJECT_ID"
-        ISSUE_TYPE, // "ISSUE_TYPE"
-        ISSUE_STATUS, // "ISSUE_STATUS"
-        ISSUE_DESCRIPTION, // "ISSUE_DESCRIPTION"
-        ISSUE_DETAIL, // "ISSUE_DETAIL"
-        ISSUE_CONTRACT_ID, // "ISSUE_CONTRACT_ID"
-        ISSUE_REPORTER_ID, // "ISSUE_REPORTER_ID"
-        ISSUE_PRIORITY, // "ISSUE_PRIORITY"
-        SPRINT_ID, // "SPRINT_ID"
-        CREATE_AT, // "CREATE_AT"
-        TOP_ISSUE, // "TOP_ISSUE"
+
+		FIELD,
 
         EOF
     }

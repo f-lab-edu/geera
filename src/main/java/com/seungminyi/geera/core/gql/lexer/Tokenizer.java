@@ -187,32 +187,8 @@ public class Tokenizer {
                 return new Token(TokenClass.AND, line, column);
             case "OR":
                 return new Token(TokenClass.OR, line, column);
-            case "ISSUE_ID":
-                return new Token(TokenClass.ISSUE_ID, line, column);
-            case "PROJECT_ID":
-                return new Token(TokenClass.PROJECT_ID, line, column);
-            case "ISSUE_TYPE":
-                return new Token(TokenClass.ISSUE_TYPE, line, column);
-            case "ISSUE_STATUS":
-                return new Token(TokenClass.ISSUE_STATUS, line, column);
-            case "ISSUE_DESCRIPTION":
-                return new Token(TokenClass.ISSUE_DESCRIPTION, line, column);
-            case "ISSUE_DETAIL":
-                return new Token(TokenClass.ISSUE_DETAIL, line, column);
-            case "ISSUE_CONTRACT_ID":
-                return new Token(TokenClass.ISSUE_CONTRACT_ID, line, column);
-            case "ISSUE_REPORTER_ID":
-                return new Token(TokenClass.ISSUE_REPORTER_ID, line, column);
-            case "ISSUE_PRIORITY":
-                return new Token(TokenClass.ISSUE_PRIORITY, line, column);
-            case "SPRINT_ID":
-                return new Token(TokenClass.SPRINT_ID, line, column);
-            case "CREATE_AT":
-                return new Token(TokenClass.CREATE_AT, line, column);
-            case "TOP_ISSUE":
-                return new Token(TokenClass.TOP_ISSUE, line, column);
             default:
-                return null;
+                return new Token(TokenClass.FIELD, token, line, column);
         }
     }
 
