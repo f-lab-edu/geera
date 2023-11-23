@@ -27,7 +27,7 @@ public class Position {
     public boolean equals(Object obj) {
         Position other = obj != null && obj.getClass() == Position.class ? (Position)obj : null;
 
-        return (other != null)
+        return other != null
             && other.getLine() == line
             && other.getColumn() == column;
     }

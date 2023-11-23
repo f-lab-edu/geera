@@ -9,13 +9,20 @@ import org.junit.jupiter.api.Test;
 class ScannerTest {
 
     @Test
-    void testPeek() throws IOException {
+    void testNext() throws IOException {
         String query = "abc";
         Scanner scanner = new Scanner(query);
 
-        assertEquals('a', scanner.peek());
         assertEquals('a', scanner.next());
-        assertEquals('b', scanner.peek());
-        assertEquals('b', scanner.peek());
+        assertEquals('b', scanner.next());
+        assertEquals('c', scanner.next());
+    }
+
+    @Test
+    void test() {
+        char dd = (char) -1;
+        if(dd == -1){
+            System.out.println("dd");
+        }
     }
 }

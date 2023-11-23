@@ -1,6 +1,5 @@
 package com.seungminyi.geera.core.gql.lexer;
 
-import java.io.EOFException;
 import java.io.IOException;
 
 import com.seungminyi.geera.core.gql.lexer.Token.TokenClass;
@@ -10,8 +9,6 @@ public class Tokenizer {
     private final Scanner scanner;
     private char currentChar;
     private final StringBuilder tokenStringBuilder = new StringBuilder();
-    private boolean reachedEof;
-    int error;
 
     public Tokenizer(Scanner scanner) throws IOException {
         this.scanner = scanner;
@@ -23,18 +20,20 @@ public class Tokenizer {
 
         try {
             result = next();
-        } catch (EOFException ex) {
-            return new Token(TokenClass.EOF, scanner.getLine(), scanner.getColumn());
         } catch (IOException e) {
             return null;
+        }
+
+        if (result == null && scanner.isEof()) {
+            return new Token(TokenClass.EOF, scanner.getLineNo(), scanner.getColumnNo());
         }
 
         return result;
     }
 
     private Token next() throws IOException {
-        int line = scanner.getLine();
-        int column = scanner.getColumn() - 1;
+        int line = scanner.getLineNo();
+        int column = scanner.getColumnNo() - 1;
 
         if (Character.isWhitespace(currentChar)) {
             currentChar = scanner.next();
@@ -101,7 +100,7 @@ public class Tokenizer {
     private boolean isFirstTokenMatch(char first, String second) throws IOException {
         acceptChar(currentChar);
 
-        if (reachedEof) {
+        if (scanner.isEof()) {
             return true;
         }
 
@@ -145,16 +144,8 @@ public class Tokenizer {
 
     private void acceptChar(char symbol) throws IOException {
         queueChar(symbol);
-        try {
-            currentChar = scanner.next();
-        } catch (final EOFException e) {
-            if (reachedEof) {
-                throw e;
-            } else {
-                currentChar = (char)0;
-                reachedEof = true;
-            }
-        }
+
+        currentChar = scanner.next();
     }
 
     private void queueChar(char symbol) {
@@ -163,7 +154,7 @@ public class Tokenizer {
 
     private void passStringLiteral() throws IOException {
         if (currentChar != '"') {
-            throw new UnrecognizedCharacterException("\"", currentChar, scanner.getLine(), scanner.getColumn());
+            throw new UnrecognizedCharacterException("\"", currentChar, scanner.getLineNo(), scanner.getColumnNo());
         }
         acceptChar(currentChar);
 
@@ -194,7 +185,8 @@ public class Tokenizer {
 
     private void expectSingleChar(char symbol) throws IOException {
         if (symbol != currentChar) {
-            throw new UnrecognizedCharacterException("" + symbol, currentChar, scanner.getLine(), scanner.getColumn());
+            throw new UnrecognizedCharacterException("" + symbol, currentChar, scanner.getLineNo(),
+                scanner.getColumnNo());
         }
         acceptChar(symbol);
         clearTokenStringBuilder();
@@ -204,7 +196,8 @@ public class Tokenizer {
         acceptChar(currentChar);
         for (char c : str.substring(1).toCharArray()) {
             if (c != currentChar) {
-                throw new UnrecognizedCharacterException("" + c, currentChar, scanner.getLine(), scanner.getColumn());
+                throw new UnrecognizedCharacterException("" + c, currentChar, scanner.getLineNo(),
+                    scanner.getColumnNo());
             }
             acceptChar(c);
         }

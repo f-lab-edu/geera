@@ -6,64 +6,42 @@ import java.io.StringReader;
 
 public class Scanner {
     private final StringReader gqlQueryStringReader;
-    private int peekedVal = -1;
-    private int line = 1;
-    private int column = 0;
+    private int lineNo = 1;
+    private int columnNo = 0;
+
+    private boolean reachedEof = false;
 
     public Scanner(String gqlQueryString) {
         this.gqlQueryStringReader = new StringReader(gqlQueryString);
     }
 
     public char next() throws IOException {
+        int nextVal = gqlQueryStringReader.read();
+        char nextChar = (char)nextVal;
 
-        Boolean havePeeked = peekedVal != -1;
-
-        char nextChar;
-        if (havePeeked) {
-            nextChar = (char)peekedVal;
-            peekedVal = -1;
+        if (nextVal == -1 ) {
+            reachedEof = true;
         } else {
-            int nextVal = gqlQueryStringReader.read();
-            if (nextVal == -1) {
-                throw new EOFException();
+            if (nextChar == '\n') {
+                lineNo++;
+                columnNo = 0;
+            } else {
+                columnNo++;
             }
-            nextChar = (char)nextVal;
-        }
-
-        if (nextChar == '\n') {
-            line++;
-            column = 0;
-        } else {
-            column++;
         }
 
         return nextChar;
     }
 
-    public char peek() throws IOException {
-
-        Boolean havePeeked = peekedVal != -1;
-
-        char peekedChar;
-        if (havePeeked) {
-            peekedChar = (char)peekedVal;
-        } else {
-            int readVal = gqlQueryStringReader.read();
-            if (readVal == -1) {
-                throw new EOFException();
-            }
-            peekedChar = (char)readVal;
-            peekedVal = readVal;
-        }
-
-        return peekedChar;
+    public boolean isEof() {
+        return reachedEof;
     }
 
-    public int getLine() {
-        return this.line;
+    public int getLineNo() {
+        return this.lineNo;
     }
 
-    public int getColumn() {
-        return this.column;
+    public int getColumnNo() {
+        return this.columnNo;
     }
 }
