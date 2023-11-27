@@ -3,7 +3,7 @@ package com.seungminyi.geera.core.gql.lexer;
 import java.io.IOException;
 
 import com.seungminyi.geera.core.gql.lexer.Token.TokenClass;
-import com.seungminyi.geera.exception.UnrecognizedCharacterException;
+import com.seungminyi.geera.exception.GqlUnrecognizedCharacterException;
 
 public class Tokenizer {
     private final Scanner scanner;
@@ -41,7 +41,6 @@ public class Tokenizer {
         }
 
         switch (currentChar) {
-            // delimiters
             case ',':
                 expectSingleChar(',');
                 return new Token(TokenClass.COMMA, line, column);
@@ -154,7 +153,7 @@ public class Tokenizer {
 
     private void passStringLiteral() throws IOException {
         if (currentChar != '"') {
-            throw new UnrecognizedCharacterException("\"", currentChar, scanner.getLineNo(), scanner.getColumnNo());
+            throw new GqlUnrecognizedCharacterException("\"", currentChar, scanner.getLineNo(), scanner.getColumnNo());
         }
         acceptChar(currentChar);
 
@@ -185,7 +184,7 @@ public class Tokenizer {
 
     private void expectSingleChar(char symbol) throws IOException {
         if (symbol != currentChar) {
-            throw new UnrecognizedCharacterException("" + symbol, currentChar, scanner.getLineNo(),
+            throw new GqlUnrecognizedCharacterException("" + symbol, currentChar, scanner.getLineNo(),
                 scanner.getColumnNo());
         }
         acceptChar(symbol);
@@ -196,7 +195,7 @@ public class Tokenizer {
         acceptChar(currentChar);
         for (char c : str.substring(1).toCharArray()) {
             if (c != currentChar) {
-                throw new UnrecognizedCharacterException("" + c, currentChar, scanner.getLineNo(),
+                throw new GqlUnrecognizedCharacterException("" + c, currentChar, scanner.getLineNo(),
                     scanner.getColumnNo());
             }
             acceptChar(c);
