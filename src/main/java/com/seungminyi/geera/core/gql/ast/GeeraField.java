@@ -1,11 +1,11 @@
 package com.seungminyi.geera.core.gql.ast;
 
-import com.seungminyi.geera.core.gql.generator.ASTVisitor;
+import com.seungminyi.geera.core.gql.generator.AstVisitor;
 
 import lombok.Getter;
 
 @Getter
-public class GeeraField implements ASTNode{
+public class GeeraField implements AstNode {
     private final String name;
 
     public GeeraField(String name) {
@@ -13,7 +13,7 @@ public class GeeraField implements ASTNode{
     }
 
     @Override
-    public String accept(ASTVisitor v) {
-        return v.visit(this);
+    public String accept(AstVisitor visitor) {
+        return visitor.visit(this);
     }
 }

@@ -2,24 +2,24 @@ package com.seungminyi.geera.core.gql.ast;
 
 import java.util.List;
 
-import com.seungminyi.geera.core.gql.generator.ASTVisitor;
+import com.seungminyi.geera.core.gql.generator.AstVisitor;
 
 import lombok.Getter;
 
 @Getter
-public class Condition implements QueryNode {
+public class GeeraCondition implements QueryNode {
     private final GeeraField field;
     private final GeeraOperation op;
     private final List<GeeraValue> values;
 
-    public Condition(GeeraField field, GeeraOperation op, List<GeeraValue> values) {
+    public GeeraCondition(GeeraField field, GeeraOperation op, List<GeeraValue> values) {
         this.field = field;
         this.op = op;
         this.values = values;
     }
 
     @Override
-    public String accept(ASTVisitor v) {
-        return v.visit(this);
+    public String accept(AstVisitor visitor) {
+        return visitor.visit(this);
     }
 }

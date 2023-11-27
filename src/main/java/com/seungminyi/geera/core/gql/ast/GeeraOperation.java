@@ -1,11 +1,11 @@
 package com.seungminyi.geera.core.gql.ast;
 
-import com.seungminyi.geera.core.gql.generator.ASTVisitor;
+import com.seungminyi.geera.core.gql.generator.AstVisitor;
 
-public enum GeeraOperation implements ASTNode{
+public enum GeeraOperation implements AstNode {
     LT, LE, GT, GE, ASSIGN, IS, IN, NOT, NOT_IN;
     @Override
-    public String accept(ASTVisitor v) {
-        return v.visit(this);
+    public String accept(AstVisitor visitor) {
+        return visitor.visit(this);
     }
 }

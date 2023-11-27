@@ -6,7 +6,7 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
-import com.seungminyi.geera.core.gql.ast.Condition;
+import com.seungminyi.geera.core.gql.ast.GeeraCondition;
 import com.seungminyi.geera.core.gql.ast.GeeraField;
 import com.seungminyi.geera.core.gql.ast.GeeraQuery;
 import com.seungminyi.geera.core.gql.ast.GeeraKeyword;
@@ -74,11 +74,11 @@ public class GqlParser {
         return keyword;
     }
 
-    private Condition parseCondition() {
+    private GeeraCondition parseCondition() {
         GeeraField field = parseField();
         GeeraOperation operation = parseOp();
         List<GeeraValue> values = parseValues();
-        return new Condition(field, operation, values);
+        return new GeeraCondition(field, operation, values);
     }
 
     private List<GeeraValue> parseValues() {
@@ -112,7 +112,7 @@ public class GqlParser {
                 valueType = ValueType.INT_LITERAL;
                 break;
             default:
-                throw new GqlParseException("예상되지 않은 값입니다. 발견된 토큰: " + currToken.tokenClass);
+                throw new GqlParseException("예상되지 않은 값입니다 : " + currToken.tokenClass);
         }
 
         GeeraValue value = new GeeraValue(currToken.data, valueType);
@@ -131,7 +131,7 @@ public class GqlParser {
 
     private GeeraField parseField() {
         if (currToken.tokenClass != TokenClass.FIELD) {
-            throw new GqlParseException("예상된 필드가 아닙니다. 발견된 토큰 : " + currToken.tokenClass);
+            throw new GqlParseException("FIELD가 위치해야 합니다 : " + currToken.tokenClass);
         }
         GeeraField field = new GeeraField(currToken.data);
         nextToken();
@@ -144,7 +144,7 @@ public class GqlParser {
 
     private void expect(TokenClass... expected) {
         if (!Arrays.asList(expected).contains(currToken.tokenClass)) {
-            throw new GqlParseException("예상치 못한 토큰입니다 : " + currToken.tokenClass);
+            throw new GqlParseException("잘못된 구문입니다 : " + currToken.tokenClass);
         }
         nextToken();
     }

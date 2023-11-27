@@ -1,13 +1,13 @@
 package com.seungminyi.geera.core.gql.ast;
 
-import com.seungminyi.geera.core.gql.generator.ASTVisitor;
+import com.seungminyi.geera.core.gql.generator.AstVisitor;
 
 public enum GeeraKeyword implements QueryNode {
 
     AND, OR;
 
     @Override
-    public String accept(ASTVisitor v) {
-        return v.visit(this);
+    public String accept(AstVisitor visitor) {
+        return visitor.visit(this);
     }
 }

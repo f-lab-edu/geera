@@ -1,8 +1,10 @@
 package com.seungminyi.geera.core.gql.generator;
 
+import java.util.EnumMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
-import com.seungminyi.geera.core.gql.ast.Condition;
+import com.seungminyi.geera.core.gql.ast.GeeraCondition;
 import com.seungminyi.geera.core.gql.ast.GeeraField;
 import com.seungminyi.geera.core.gql.ast.GeeraKeyword;
 import com.seungminyi.geera.core.gql.ast.GeeraOperation;
@@ -14,9 +16,23 @@ import com.seungminyi.geera.exception.GqlUnknownFieldException;
 import com.seungminyi.geera.exception.GqlUnsupportedOperationException;
 import com.seungminyi.geera.utill.text.CaseConverter;
 
-public class SqlGenerator implements ASTVisitor {
+public class SqlGenerator implements AstVisitor {
 
     private Class<?> entityClass;
+
+    private static final Map<GeeraOperation, String> operationSqlMap = new EnumMap<>(GeeraOperation.class);
+
+    static {
+        operationSqlMap.put(GeeraOperation.LT, "<");
+        operationSqlMap.put(GeeraOperation.LE, "<=");
+        operationSqlMap.put(GeeraOperation.GT, ">");
+        operationSqlMap.put(GeeraOperation.GE, ">=");
+        operationSqlMap.put(GeeraOperation.ASSIGN, "=");
+        operationSqlMap.put(GeeraOperation.IS, "IS");
+        operationSqlMap.put(GeeraOperation.IN, "IN");
+        operationSqlMap.put(GeeraOperation.NOT, "NOT");
+        operationSqlMap.put(GeeraOperation.NOT_IN, "NOT IN");
+    }
 
     public SqlGenerator(Class<?> entityClass) {
         this.entityClass = entityClass;
@@ -37,7 +53,7 @@ public class SqlGenerator implements ASTVisitor {
     }
 
     @Override
-    public String visit(Condition node) {
+    public String visit(GeeraCondition node) {
         return buildConditionString(node);
     }
 
@@ -56,9 +72,9 @@ public class SqlGenerator implements ASTVisitor {
     @Override
     public String visit(GeeraField node) {
         String fieldName = node.getName();
-        String EntityColumnName = CaseConverter.snakeToCamel(fieldName);
+        String entityColumnName = CaseConverter.snakeToCamel(fieldName);
         try {
-            entityClass.getDeclaredField(EntityColumnName);
+            entityClass.getDeclaredField(entityColumnName);
             return fieldName;
         } catch (NoSuchFieldException e) {
             throw new GqlUnknownFieldException("정의되지 않은 필드 입니다 : " + fieldName);
@@ -67,28 +83,11 @@ public class SqlGenerator implements ASTVisitor {
 
     @Override
     public String visit(GeeraOperation node) {
-        switch (node) {
-            case LT:
-                return "<";
-            case GT:
-                return ">";
-            case ASSIGN:
-                return "=";
-            case LE:
-                return "<=";
-            case GE:
-                return ">=";
-            case IS:
-                return "IS";
-            case NOT:
-                return "NOT";
-            case IN:
-                return "IN";
-            case NOT_IN:
-                return "NOT IN";
-            default:
-                return null;
+        String op = operationSqlMap.get(node);
+        if (op == null) {
+            throw new GqlUnknownFieldException("지원되지 않는 연산자 입니다 : " + node);
         }
+        return op;
     }
 
     @Override
@@ -99,7 +98,7 @@ public class SqlGenerator implements ASTVisitor {
         return node.getValue();
     }
 
-    private String buildConditionString(Condition node) {
+    private String buildConditionString(GeeraCondition node) {
         StringBuilder sb = new StringBuilder();
         sb.append(node.getField().accept(this))
             .append(" ")
