@@ -1,9 +1,9 @@
 package com.seungminyi.geera.core.gql.generator;
 
-import java.util.EnumMap;
-import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.google.common.base.CaseFormat;
+import com.google.common.collect.ImmutableMap;
 import com.seungminyi.geera.core.gql.ast.GeeraCondition;
 import com.seungminyi.geera.core.gql.ast.GeeraField;
 import com.seungminyi.geera.core.gql.ast.GeeraKeyword;
@@ -14,25 +14,22 @@ import com.seungminyi.geera.core.gql.ast.QueryNode;
 import com.seungminyi.geera.core.gql.ast.ValueType;
 import com.seungminyi.geera.exception.GqlUnknownFieldException;
 import com.seungminyi.geera.exception.GqlUnsupportedOperationException;
-import com.seungminyi.geera.utill.text.CaseConverter;
 
 public class SqlGenerator implements AstVisitor {
 
     private Class<?> entityClass;
 
-    private static final Map<GeeraOperation, String> operationSqlMap = new EnumMap<>(GeeraOperation.class);
-
-    static {
-        operationSqlMap.put(GeeraOperation.LT, "<");
-        operationSqlMap.put(GeeraOperation.LE, "<=");
-        operationSqlMap.put(GeeraOperation.GT, ">");
-        operationSqlMap.put(GeeraOperation.GE, ">=");
-        operationSqlMap.put(GeeraOperation.ASSIGN, "=");
-        operationSqlMap.put(GeeraOperation.IS, "IS");
-        operationSqlMap.put(GeeraOperation.IN, "IN");
-        operationSqlMap.put(GeeraOperation.NOT, "NOT");
-        operationSqlMap.put(GeeraOperation.NOT_IN, "NOT IN");
-    }
+    private static final ImmutableMap<GeeraOperation, String> operationSqlMap = ImmutableMap.<GeeraOperation, String>builder()
+        .put(GeeraOperation.LT, "<")
+        .put(GeeraOperation.LE, "<=")
+        .put(GeeraOperation.GT, ">")
+        .put(GeeraOperation.GE, ">=")
+        .put(GeeraOperation.ASSIGN, "=")
+        .put(GeeraOperation.IS, "IS")
+        .put(GeeraOperation.IN, "IN")
+        .put(GeeraOperation.NOT, "NOT")
+        .put(GeeraOperation.NOT_IN, "NOT IN")
+        .build();
 
     public SqlGenerator(Class<?> entityClass) {
         this.entityClass = entityClass;
@@ -72,7 +69,7 @@ public class SqlGenerator implements AstVisitor {
     @Override
     public String visit(GeeraField node) {
         String fieldName = node.getName();
-        String entityColumnName = CaseConverter.snakeToCamel(fieldName);
+        String entityColumnName = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, fieldName);
         try {
             entityClass.getDeclaredField(entityColumnName);
             return fieldName;

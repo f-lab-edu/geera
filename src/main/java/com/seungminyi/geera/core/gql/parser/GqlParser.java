@@ -2,10 +2,9 @@ package com.seungminyi.geera.core.gql.parser;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.EnumMap;
 import java.util.List;
-import java.util.Map;
 
+import com.google.common.collect.ImmutableMap;
 import com.seungminyi.geera.core.gql.ast.GeeraCondition;
 import com.seungminyi.geera.core.gql.ast.GeeraField;
 import com.seungminyi.geera.core.gql.ast.GeeraQuery;
@@ -22,19 +21,17 @@ import com.seungminyi.geera.exception.GqlParseException;
 public class GqlParser {
     private final Tokenizer tokenizer;
     private Token currToken;
-    private static final Map<TokenClass, GeeraOperation> operationMap = new EnumMap<>(TokenClass.class);
-
-    static {
-        operationMap.put(TokenClass.LT, GeeraOperation.LT);
-        operationMap.put(TokenClass.LE, GeeraOperation.LE);
-        operationMap.put(TokenClass.GT, GeeraOperation.GT);
-        operationMap.put(TokenClass.GE, GeeraOperation.GE);
-        operationMap.put(TokenClass.ASSIGN, GeeraOperation.ASSIGN);
-        operationMap.put(TokenClass.IS, GeeraOperation.IS);
-        operationMap.put(TokenClass.IN, GeeraOperation.IN);
-        operationMap.put(TokenClass.NOT, GeeraOperation.NOT);
-        operationMap.put(TokenClass.NOT_IN, GeeraOperation.NOT_IN);
-    }
+    private static final ImmutableMap<TokenClass, GeeraOperation> operationMap = ImmutableMap.<TokenClass, GeeraOperation>builder()
+        .put(TokenClass.LT, GeeraOperation.LT)
+        .put(TokenClass.LE, GeeraOperation.LE)
+        .put(TokenClass.GT, GeeraOperation.GT)
+        .put(TokenClass.GE, GeeraOperation.GE)
+        .put(TokenClass.ASSIGN, GeeraOperation.ASSIGN)
+        .put(TokenClass.IS, GeeraOperation.IS)
+        .put(TokenClass.IN, GeeraOperation.IN)
+        .put(TokenClass.NOT, GeeraOperation.NOT)
+        .put(TokenClass.NOT_IN, GeeraOperation.NOT_IN)
+        .build();
 
     public GqlParser(Tokenizer tokenizer) {
         this.tokenizer = tokenizer;

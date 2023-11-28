@@ -4,7 +4,8 @@ import com.seungminyi.geera.core.gql.generator.AstVisitor;
 
 public enum GeeraKeyword implements QueryNode {
 
-    AND, OR;
+    AND,
+    OR;
 
     @Override
     public String accept(AstVisitor visitor) {
