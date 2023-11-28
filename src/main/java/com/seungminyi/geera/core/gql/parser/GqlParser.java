@@ -21,17 +21,18 @@ import com.seungminyi.geera.exception.GqlParseException;
 public class GqlParser {
     private final Tokenizer tokenizer;
     private Token currToken;
-    private static final ImmutableMap<TokenClass, GeeraOperation> operationMap = ImmutableMap.<TokenClass, GeeraOperation>builder()
-        .put(TokenClass.LT, GeeraOperation.LT)
-        .put(TokenClass.LE, GeeraOperation.LE)
-        .put(TokenClass.GT, GeeraOperation.GT)
-        .put(TokenClass.GE, GeeraOperation.GE)
-        .put(TokenClass.ASSIGN, GeeraOperation.ASSIGN)
-        .put(TokenClass.IS, GeeraOperation.IS)
-        .put(TokenClass.IN, GeeraOperation.IN)
-        .put(TokenClass.NOT, GeeraOperation.NOT)
-        .put(TokenClass.NOT_IN, GeeraOperation.NOT_IN)
-        .build();
+    private static final ImmutableMap<TokenClass, GeeraOperation> operationMap =
+        ImmutableMap.<TokenClass, GeeraOperation>builder()
+            .put(TokenClass.LT, GeeraOperation.LT)
+            .put(TokenClass.LE, GeeraOperation.LE)
+            .put(TokenClass.GT, GeeraOperation.GT)
+            .put(TokenClass.GE, GeeraOperation.GE)
+            .put(TokenClass.ASSIGN, GeeraOperation.ASSIGN)
+            .put(TokenClass.IS, GeeraOperation.IS)
+            .put(TokenClass.IN, GeeraOperation.IN)
+            .put(TokenClass.NOT, GeeraOperation.NOT)
+            .put(TokenClass.NOT_IN, GeeraOperation.NOT_IN)
+            .build();
 
     public GqlParser(Tokenizer tokenizer) {
         this.tokenizer = tokenizer;

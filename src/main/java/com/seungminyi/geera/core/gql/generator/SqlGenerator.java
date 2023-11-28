@@ -19,17 +19,18 @@ public class SqlGenerator implements AstVisitor {
 
     private Class<?> entityClass;
 
-    private static final ImmutableMap<GeeraOperation, String> operationSqlMap = ImmutableMap.<GeeraOperation, String>builder()
-        .put(GeeraOperation.LT, "<")
-        .put(GeeraOperation.LE, "<=")
-        .put(GeeraOperation.GT, ">")
-        .put(GeeraOperation.GE, ">=")
-        .put(GeeraOperation.ASSIGN, "=")
-        .put(GeeraOperation.IS, "IS")
-        .put(GeeraOperation.IN, "IN")
-        .put(GeeraOperation.NOT, "NOT")
-        .put(GeeraOperation.NOT_IN, "NOT IN")
-        .build();
+    private static final ImmutableMap<GeeraOperation, String> operationSqlMap =
+        ImmutableMap.<GeeraOperation, String>builder()
+            .put(GeeraOperation.LT, "<")
+            .put(GeeraOperation.LE, "<=")
+            .put(GeeraOperation.GT, ">")
+            .put(GeeraOperation.GE, ">=")
+            .put(GeeraOperation.ASSIGN, "=")
+            .put(GeeraOperation.IS, "IS")
+            .put(GeeraOperation.IN, "IN")
+            .put(GeeraOperation.NOT, "NOT")
+            .put(GeeraOperation.NOT_IN, "NOT IN")
+            .build();
 
     public SqlGenerator(Class<?> entityClass) {
         this.entityClass = entityClass;
