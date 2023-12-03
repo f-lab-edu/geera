@@ -28,84 +28,85 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class IssueService {
-	private final IssueRepository issueRepository;
-	private final ProjectMemberRepository projectMemberRepository;
+    private final IssueRepository issueRepository;
+    private final ProjectMemberRepository projectMemberRepository;
 
-	@IssuePermissionCheck
-	public void createIssue(IssueRequest issueRequest) {
-		validateAssignmentPermission(issueRequest);
-		Issue issue = issueRequest.toIssue();
-		issue.setIssueReporterId(SecurityUtils.getCurrentUser().getId());
-		issue.setCreateAt(new Date());
-		issueRepository.create(issue);
-	}
+    @IssuePermissionCheck
+    public void createIssue(IssueRequest issueRequest) {
+        validateAssignmentPermission(issueRequest);
+        Issue issue = issueRequest.toIssue();
+        issue.setIssueReporterId(SecurityUtils.getCurrentUser().getId());
+        issue.setCreateAt(new Date());
+        issueRepository.create(issue);
+    }
 
-	public List<Issue> getIssuesWithConditions(
-		Long project,
-		int page,
-		int limit,
-		String sort,
-		String order,
-		String customSqlCondition) throws IOException {
+    public List<Issue> getIssuesWithConditions(
+        Long project,
+        int page,
+        int limit,
+        String sort,
+        String order,
+        String customSqlCondition) throws IOException {
 
-		if (limit > 50) {
-			throw new MaxItemsExceededException();
-		}
+        if (limit > 50) {
+            throw new MaxItemsExceededException();
+        }
 
-		IssueConditionsDto issueConditionsDto = buildIssueConditionsDto(project, sort, order, customSqlCondition);
-		RowBounds rowBounds = new RowBounds((page - 1) * limit, limit);
+        IssueConditionsDto issueConditionsDto = buildIssueConditionsDto(project, sort, order, customSqlCondition);
+        RowBounds rowBounds = new RowBounds((page - 1) * limit, limit);
 
-		return issueRepository.getWithConditions(issueConditionsDto, rowBounds);
-	}
+        return issueRepository.getWithConditions(issueConditionsDto, rowBounds);
+    }
 
-	@IssuePermissionCheck
-	@Transactional
-	public void deleteIssue(Long issueId) {
-		issueRepository.updateSubIssuesOnParentDeletion(issueId);
-		issueRepository.delete(issueId);
-	}
+    @IssuePermissionCheck
+    @Transactional
+    public void deleteIssue(Long issueId) {
+        issueRepository.updateSubIssuesOnParentDeletion(issueId);
+        issueRepository.delete(issueId);
+    }
 
-	@IssuePermissionCheck
-	public void updateIssue(Long issueId, IssueRequest issueRequest) {
-		validateAssignmentPermission(issueRequest);
-		Issue issue = issueRequest.toIssue();
-		issue.setIssueId(issueId);
-		issueRepository.update(issue);
-	}
+    @IssuePermissionCheck
+    public void updateIssue(Long issueId, IssueRequest issueRequest) {
+        validateAssignmentPermission(issueRequest);
+        Issue issue = issueRequest.toIssue();
+        issue.setIssueId(issueId);
+        issueRepository.update(issue);
+    }
 
-	private void validateAssignmentPermission(IssueRequest issueRequest) {
-		Long issueContractId = issueRequest.getIssueContractId();
-		if (issueContractId != null) {
-			checkMemberHasIssueAccess(issueRequest.getProjectId(), issueContractId);
-		}
-	}
+    private void validateAssignmentPermission(IssueRequest issueRequest) {
+        Long issueContractId = issueRequest.getIssueContractId();
+        if (issueContractId != null) {
+            checkMemberHasIssueAccess(issueRequest.getProjectId(), issueContractId);
+        }
+    }
 
-	private void checkMemberHasIssueAccess(Long projectId, Long issueContractId) {
-		ProjectMember projectMember = new ProjectMember()
-			.setProjectId(projectId)
-			.setMemberId(issueContractId);
-		ProjectMemberRole memberRole = projectMemberRepository.findRoleByMember(projectMember);
+    private void checkMemberHasIssueAccess(Long projectId, Long issueContractId) {
+        ProjectMember projectMember = new ProjectMember()
+            .setProjectId(projectId)
+            .setMemberId(issueContractId);
+        ProjectMemberRole memberRole = projectMemberRepository.findRoleByMember(projectMember);
 
-		if (!memberRole.hasIssueAccess()) {
-			throw new UnauthorizedAssignmentException("담당자가 프로젝트에 권한이 없습니다.");
-		}
-	}
+        if (!memberRole.hasIssueAccess()) {
+            throw new UnauthorizedAssignmentException("담당자가 프로젝트에 권한이 없습니다.");
+        }
+    }
 
-	private IssueConditionsDto buildIssueConditionsDto(Long project, String sort, String order, String customSqlCondition) throws IOException {
-		IssueConditionsDto.IssueConditionsDtoBuilder builder = IssueConditionsDto.builder()
-			.project(project)
-			.sort(sort)
-			.order(order)
-			.member(SecurityUtils.getCurrentUser().getId());
+    private IssueConditionsDto buildIssueConditionsDto(Long project, String sort, String order,
+        String customSqlCondition) throws IOException {
+        IssueConditionsDto.IssueConditionsDtoBuilder builder = IssueConditionsDto.builder()
+            .project(project)
+            .sort(sort)
+            .order(order)
+            .member(SecurityUtils.getCurrentUser().getId());
 
-		if (!customSqlCondition.isBlank()) {
-			GqlParser gqlParser = new GqlParser(customSqlCondition);
-			SqlGenerator generator = new SqlGenerator(Issue.class);
-			GeeraQuery parseTree = gqlParser.parse();
-			String visit = generator.visit(parseTree);
-			builder.customSqlCondition(visit);
-		}
+        if (!customSqlCondition.isBlank()) {
+            GqlParser gqlParser = new GqlParser(customSqlCondition);
+            SqlGenerator generator = new SqlGenerator(Issue.class);
+            GeeraQuery parseTree = gqlParser.parse();
+            String visit = generator.visit(parseTree);
+            builder.customSqlCondition(visit);
+        }
 
-		return builder.build();
-	}
+        return builder.build();
+    }
 }
