@@ -21,4 +21,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleMaxItemsExceededException(UnauthorizedAssignmentException exception) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
     }
+
+    @ExceptionHandler(GqlParseException.class)
+    public ResponseEntity<String> handleGqlParserException(GqlParseException exception) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
+    }
 }

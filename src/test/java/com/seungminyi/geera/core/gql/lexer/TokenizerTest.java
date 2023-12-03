@@ -16,8 +16,7 @@ public class TokenizerTest {
     Tokenizer testTokenizer;
 
     protected void setupTokenizer(String queryString) throws IOException {
-        testScanner = new Scanner(queryString);
-        testTokenizer = new Tokenizer(testScanner);
+        testTokenizer = new Tokenizer(queryString);
     }
 
     protected void assertTokenizerOutput(Token[] expectedOutput, String query) throws IOException {

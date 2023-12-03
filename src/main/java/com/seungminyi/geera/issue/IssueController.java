@@ -1,5 +1,6 @@
 package com.seungminyi.geera.issue;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -60,10 +61,11 @@ public class IssueController {
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "50") int limit,
             @RequestParam(defaultValue = "createdAt") String sort,
-            @RequestParam(defaultValue = "asc") String order
-    ) {
+            @RequestParam(defaultValue = "asc") String order,
+            @RequestParam(defaultValue = "") String query
+    ) throws IOException {
         List<Issue> issuesWithConditions = issueService.getIssuesWithConditions(project,
-                page, limit, sort, order);
+                page, limit, sort, order, query);
         return ResponseEntity.ok(issuesWithConditions);
     }
 

@@ -25,6 +25,9 @@
           <if test="project != null">
             AND P.project_id = #{project}
           </if>
+          <if test="customSqlCondition != null">
+            AND ${customSqlCondition}
+          </if>
         ORDER BY #{order} #{sort};
     </select>
     <insert id="create" parameterType="com.seungminyi.geera.issue.dto.Issue">
