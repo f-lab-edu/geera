@@ -2,6 +2,7 @@ package com.seungminyi.geera.core.gql.generator;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.IOException;
 import java.util.Arrays;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -22,7 +23,7 @@ class SqlGeneratorTest {
     SqlGenerator sqlGenerator;
 
     @BeforeEach
-    void setupParser() {
+    void setupParser() throws IOException {
         sqlGenerator = new SqlGenerator(Issue.class);
     }
 

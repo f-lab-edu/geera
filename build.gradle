@@ -75,33 +75,38 @@ jacocoTestCoverageVerification {
 }
 
 dependencies {
+    // Spring Boot dependencies
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.2'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    testImplementation 'junit:junit:4.13.1'
-    compileOnly 'org.projectlombok:lombok'
-    runtimeOnly 'com.mysql:mysql-connector-j'
-    annotationProcessor 'org.projectlombok:lombok'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.2'
-    implementation "com.h2database:h2"
-    implementation 'org.springframework.boot:spring-boot-starter-validation:3.1.4'
     implementation 'org.springframework.boot:spring-boot-starter-security'
-    testImplementation 'org.springframework.security:spring-security-test'
-
-    implementation 'io.jsonwebtoken:jjwt:0.9.1'
-
-    // com.sun.xml.bind
-    implementation 'com.sun.xml.bind:jaxb-impl:4.0.1'
-    implementation 'com.sun.xml.bind:jaxb-core:4.0.1'
-    // javax.xml.bind
-    implementation 'javax.xml.bind:jaxb-api:2.4.0-b180830.0359'
-
-    testImplementation("org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.2")
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-
+    implementation 'org.springframework.boot:spring-boot-starter-validation:3.1.4'
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
     implementation 'com.google.guava:guava:32.1.3-jre'
+
+    // MyBatis dependencies
+    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.2'
+
+    // Database dependencies
+    runtimeOnly 'com.mysql:mysql-connector-j'
+    implementation "com.h2database:h2"
+
+    // Lombok
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    // JWT
+    implementation 'io.jsonwebtoken:jjwt:0.9.1'
+
+    // JAXB
+    implementation 'com.sun.xml.bind:jaxb-impl:4.0.1'
+    implementation 'com.sun.xml.bind:jaxb-core:4.0.1'
+    implementation 'javax.xml.bind:jaxb-api:2.4.0-b180830.0359'
+
+    // Test dependencies
+    testImplementation 'junit:junit:4.13.1'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.2'
 }
 
 tasks.named('test') {

@@ -1,5 +1,6 @@
 package com.seungminyi.geera.core.gql.parser;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -34,8 +35,8 @@ public class GqlParser {
             .put(TokenClass.NOT_IN, GeeraOperation.NOT_IN)
             .build();
 
-    public GqlParser(Tokenizer tokenizer) {
-        this.tokenizer = tokenizer;
+    public GqlParser(String geeraQuery) throws IOException {
+        this.tokenizer = new Tokenizer(geeraQuery);
         nextToken();
     }
 

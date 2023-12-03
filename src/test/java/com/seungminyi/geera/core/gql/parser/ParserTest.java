@@ -19,9 +19,7 @@ class ParserTest {
     Scanner testScanner;
 
     void setupParser(String queryString) throws IOException {
-        testScanner = new Scanner(queryString);
-        testTokenizer = new Tokenizer(testScanner);
-        testParser = new GqlParser(testTokenizer);
+        testParser = new GqlParser(queryString);
     }
 
     @Test

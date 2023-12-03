@@ -10,8 +10,8 @@ public class Tokenizer {
     private char currentChar;
     private final StringBuilder tokenStringBuilder = new StringBuilder();
 
-    public Tokenizer(Scanner scanner) throws IOException {
-        this.scanner = scanner;
+    public Tokenizer(String geeraQuery) throws IOException {
+        this.scanner = new Scanner(geeraQuery);
         currentChar = scanner.next();
     }
 

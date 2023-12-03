@@ -3,6 +3,7 @@ package com.seungminyi.geera.issue;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -17,6 +18,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.seungminyi.geera.TestUtil;
+import com.seungminyi.geera.core.gql.generator.AstVisitor;
 import com.seungminyi.geera.exception.MaxItemsExceededException;
 import com.seungminyi.geera.exception.UnauthorizedAssignmentException;
 import com.seungminyi.geera.issue.dto.Issue;
@@ -35,6 +37,7 @@ class IssueServiceTest {
 	private IssueRepository issueRepository;
 	@Mock
 	private ProjectMemberRepository projectMemberRepository;
+
 	private IssueService issueService;
 
 	@BeforeEach
@@ -80,19 +83,20 @@ class IssueServiceTest {
 
 	@Test
 	@DisplayName("이슈 조회")
-	public void GetIssuesWithConditions() {
+	public void GetIssuesWithConditions() throws IOException {
 		Long project = 1L;
 		int page = 1;
 		int limit = 49;
 		String sort = "issueId";
 		String order = "asc";
+		String query = "issue_id = 2";
 
 		List<Issue> mockIssues = new ArrayList<>();
 		mockIssues.add(TestUtil.createIssueRequest().toIssue());
 		when(issueRepository.getWithConditions(any(IssueConditionsDto.class), any(RowBounds.class)))
 			.thenReturn(mockIssues);
 
-		List<Issue> issues = issueService.getIssuesWithConditions(project, page, limit, sort, order);
+		List<Issue> issues = issueService.getIssuesWithConditions(project, page, limit, sort, order, query);
 
 		verify(issueRepository).getWithConditions(any(IssueConditionsDto.class), any(RowBounds.class));
 		assertEquals(issues, mockIssues);
@@ -106,9 +110,10 @@ class IssueServiceTest {
 		int limit = 51;
 		String sort = "issueId";
 		String order = "asc";
+		String query = "";
 
 		assertThrows(MaxItemsExceededException.class, () ->
-			issueService.getIssuesWithConditions(project, page, limit, sort, order));
+			issueService.getIssuesWithConditions(project, page, limit, sort, order, query));
 	}
 
 	@Test

@@ -1,5 +1,6 @@
 package com.seungminyi.geera.issue;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -7,6 +8,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.apache.ibatis.session.RowBounds;
 
+import com.seungminyi.geera.core.gql.ast.GeeraQuery;
+import com.seungminyi.geera.core.gql.generator.AstVisitor;
+import com.seungminyi.geera.core.gql.generator.SqlGenerator;
+import com.seungminyi.geera.core.gql.parser.GqlParser;
 import com.seungminyi.geera.exception.MaxItemsExceededException;
 import com.seungminyi.geera.exception.UnauthorizedAssignmentException;
 import com.seungminyi.geera.issue.dto.IssueConditionsDto;
@@ -40,20 +45,16 @@ public class IssueService {
 		int page,
 		int limit,
 		String sort,
-		String order) {
+		String order,
+		String customSqlCondition) throws IOException {
 
 		if (limit > 50) {
 			throw new MaxItemsExceededException();
 		}
 
-		IssueConditionsDto issueConditionsDto = IssueConditionsDto.builder()
-			.project(project)
-			.sort(sort)
-			.order(order)
-			.member(SecurityUtils.getCurrentUser().getId())
-			.build();
-
+		IssueConditionsDto issueConditionsDto = buildIssueConditionsDto(project, sort, order, customSqlCondition);
 		RowBounds rowBounds = new RowBounds((page - 1) * limit, limit);
+
 		return issueRepository.getWithConditions(issueConditionsDto, rowBounds);
 	}
 
@@ -88,5 +89,23 @@ public class IssueService {
 		if (!memberRole.hasIssueAccess()) {
 			throw new UnauthorizedAssignmentException("담당자가 프로젝트에 권한이 없습니다.");
 		}
+	}
+
+	private IssueConditionsDto buildIssueConditionsDto(Long project, String sort, String order, String customSqlCondition) throws IOException {
+		IssueConditionsDto.IssueConditionsDtoBuilder builder = IssueConditionsDto.builder()
+			.project(project)
+			.sort(sort)
+			.order(order)
+			.member(SecurityUtils.getCurrentUser().getId());
+
+		if (!customSqlCondition.isBlank()) {
+			GqlParser gqlParser = new GqlParser(customSqlCondition);
+			SqlGenerator generator = new SqlGenerator(Issue.class);
+			GeeraQuery parseTree = gqlParser.parse();
+			String visit = generator.visit(parseTree);
+			builder.customSqlCondition(visit);
+		}
+
+		return builder.build();
 	}
 }
