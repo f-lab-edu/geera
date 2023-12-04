@@ -10,4 +10,5 @@ public class IssueConditionsDto {
     private Long member;
     private String sort;
     private String order;
+    private String customSqlCondition;
 }
