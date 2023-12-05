@@ -24,5 +24,6 @@ Geera 프로젝트의 목표는 다음과 같습니다:
 ## 프로젝트 구성도
 
 아키텍처는 프로젝트 상황과 목표에 맞게 변경 될 수 있습니다.
-![Geera 프로젝트 구조 001](https://github.com/f-lab-edu/geera/assets/62599371/863610f9-75bd-4268-b67d-1854d21993c1)
+![GEERA 프로젝트 구조 001](https://github.com/f-lab-edu/geera/assets/62599371/4a3c194e-838d-49c4-b8e5-9477b52f7c5a)
+
 
