@@ -2,7 +2,7 @@ name: Integration workflow
 
 on:
   pull_request:
-    branches: '*'
+    types: [ opened, synchronize, reopened ]
 
 jobs:
   build_and_test:
