@@ -6,7 +6,31 @@ on:
       - main
 
 jobs:
-  build:
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      cache-key-gradle: ${{ steps.cache-keys.outputs.gradle-key }}
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: 'zulu'
+
+      - name: Cache Gradle packages
+        id: cache-keys
+        uses: actions/cache@v3
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+          restore-keys: ${{ runner.os }}-gradle
+
+  build_and_test:
+    needs: setup
     runs-on: ubuntu-latest
 
     steps:
@@ -19,32 +43,32 @@ jobs:
           java-version: 17
           distribution: 'zulu'
 
+      - name: Cache Gradle packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.gradle/caches
+          key: ${{ needs.setup.outputs.cache-key-gradle }}
+
       - name: Grant execute permission for Gradle
         run: chmod +x ./gradlew
         shell: bash
 
-      - name: Build
-        run: ./gradlew build
-
-      - name: Test
-        run: ./gradlew test
-
-      - name: Checkstyle (Code Style Checker)
-        run: ./gradlew checkstyleMain
-
-      - name: PMD (Linter)
-        run: ./gradlew pmdMain pmdTest
-
-      - name: Code Coverage
-        run: ./gradlew jacocoTestCoverageVerification
+      - name: Build, Test, and Quality Checks
+        run: ./gradlew build test checkstyleMain pmdMain pmdTest jacocoTestCoverageVerification
 
       - name: Run SonarQube Scan
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-          run: ./gradlew sonarqube -Dsonar.pullrequest.base=${{ github.base_ref }} -Dsonar.pullrequest.branch=${{ github.head_ref }} -Dsonar.pullrequest.key=${{ github.event.number }}
+        run: ./gradlew sonarqube -Dsonar.pullrequest.base=${{ github.base_ref }} -Dsonar.pullrequest.branch=${{ github.head_ref }} -Dsonar.pullrequest.key=${{ github.event.number }}
 
+  docker_build_and_deploy:
+    needs: build_and_test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+
+    steps:
       - name: Build Docker image
         run: docker build -t seungminyi95/geera-api:latest .
 
