@@ -113,7 +113,7 @@ public class MemberController {
     }
 
     private String generateRandomNumber() {
-        int min = (int)Math.pow(10, RANDOM_NUMBER_LENGTH - 1);
+        int min = (int)Math.pow(10, (RANDOM_NUMBER_LENGTH - 1));
         int max = (int)Math.pow(10, RANDOM_NUMBER_LENGTH) - 1;
 
         return String.format("%06d", (int)(Math.random() * (max - min + 1)) + min);
