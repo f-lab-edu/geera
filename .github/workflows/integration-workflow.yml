@@ -3,7 +3,8 @@ name: Integration workflow
 on:
   push:
     branches:
-      - master
+      - main
+      - misc/sonar-qube
   pull_request:
     types:
       - opened
