@@ -5,6 +5,7 @@ plugins {
     id 'checkstyle'
     id 'pmd'
     id 'jacoco'
+    id 'org.sonarqube' version "4.4.1.3373"
 }
 
 group = 'com.seungminyi'
@@ -41,6 +42,24 @@ pmd {
     ruleSets = []
 }
 
+jacocoTestReport {
+    dependsOn test
+
+    reports {
+        xml.required = true
+        html.required = true
+    }
+
+    classDirectories.setFrom(files(classDirectories.files.collect {
+        fileTree(dir: it, exclude: [
+                '**/dto/**',
+                "com/seungminyi/geera/GeeraApplication.*",
+                "com/seungminyi/geera/exception/**",
+                "com/seungminyi/geera/utill/auth/PermissionRoleGroup.*"
+        ])
+    }))
+}
+
 jacocoTestCoverageVerification {
     violationRules {
         rule {
@@ -71,6 +90,16 @@ jacocoTestCoverageVerification {
                     "com.seungminyi.geera.utill.auth.PermissionRoleGroup"
             ]
         }
+    }
+}
+
+sonarqube {
+    properties {
+        property "sonar.projectKey", "f-lab-edu_geera"
+        property "sonar.organization", "f-lab-edu"
+        property "sonar.host.url", "https://sonarcloud.io"
+        property "sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/jacocoTestReport.xml"
+        property "sonar.pullrequest.provider", "GitHub"
     }
 }
 
@@ -110,6 +139,14 @@ dependencies {
 }
 
 tasks.named('test') {
+    finalizedBy 'jacocoTestReport'
     useJUnitPlatform()
+
+    jacoco {
+        excludes += ["com/example/thandbag/ThandbagApplication.class",
+                     "com/example/thandbag/exceptionHandler/**",
+                     "com/example/thandbag/repository/**",
+                     "com/example/thandbag/service/KakaoUserService.class"]
+    }
 }
 
