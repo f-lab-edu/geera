@@ -2,7 +2,7 @@ name: Integration workflow
 
 on:
   pull_request:
-    types: [ opened, synchronize, reopened ]
+    branches: '*'
 
 jobs:
   build_and_test:
@@ -49,6 +49,11 @@ jobs:
           path: ~/.gradle/caches
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
           restore-keys: ${{ runner.os }}-gradle
+      - name: Build and analyze
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: ./gradlew build sonar --info
       - name: SonarCloud Scan
         uses: sonarsource/sonarcloud-github-action@master
         env:
