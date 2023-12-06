@@ -1,8 +1,14 @@
 name: Integration workflow
 
 on:
+  push:
+    branches:
+      - master
   pull_request:
-    branches: '*'
+    types:
+      - opened
+      - synchronize
+      - reopened
 
 jobs:
   build_and_test:
