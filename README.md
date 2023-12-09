@@ -8,10 +8,9 @@ Geera 프로젝트의 목표는 다음과 같습니다:
 
 - JIRA와 유사한 이슈 관리 및 추적 기능 제공
 - 사용자 인증 및 권한 관리 구현
-- 클라이언트와의 통합을 위한 RESTful API
 - 데이터베이스 모델링 및 관리
-- 빠르고 효율적인 백엔드 서비스 제공
-- 확장성 있는 웹 애플리케이션 구현
+- 빠르고 효율적인 API
+- 확장성 있는 애플리케이션 구현
 
 ## 기술 스택
 
@@ -20,6 +19,11 @@ Geera 프로젝트의 목표는 다음과 같습니다:
 - 데이터베이스: MySQL
 - 버전 관리: Git/GitHub
 - CI/CD: Github Action / Docker
+
+## Wiki
+프로젝트의 내용은 아래 wiki에서 확인하실수 있습니다.
+
+👉  [Geera Wiki](https://github.com/f-lab-edu/geera/wiki)
 
 ## 프로젝트 구성도
 
