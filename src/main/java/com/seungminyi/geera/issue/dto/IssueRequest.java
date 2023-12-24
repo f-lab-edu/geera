@@ -21,7 +21,6 @@ public class IssueRequest {
     private String issueDetail;
     private Long issueContractId;
     private Integer issuePriority;
-    private Long sprintId;
     private Long topIssue;
 
     public IssueRequest() {
@@ -37,7 +36,6 @@ public class IssueRequest {
             .issueDetail(issueDetail)
             .issueContractId(issueContractId)
             .issuePriority(issuePriority)
-            .sprintId(sprintId)
             .topIssue(topIssue)
             .build();
     }

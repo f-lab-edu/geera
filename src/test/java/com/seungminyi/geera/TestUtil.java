@@ -93,7 +93,6 @@ public class TestUtil {
             .setIssueDescription("이슈 요약")
             .setIssueDetail("이슈 설명")
             .setIssueContractId(1L)
-            .setSprintId(1L)
             .setTopIssue(null)
             ;
     }

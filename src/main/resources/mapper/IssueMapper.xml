@@ -40,7 +40,6 @@
          ISSUE_CONTRACT_ID,
          ISSUE_REPORTER_ID,
          ISSUE_PRIORITY,
-         SPRINT_ID,
          CREATE_AT,
          TOP_ISSUE)
         VALUES (#{projectId},
@@ -51,7 +50,6 @@
                 #{issueContractId, jdbcType=BIGINT},
                 #{issueReporterId},
                 #{issuePriority},
-                #{sprintId, jdbcType=BIGINT},
                 #{createAt},
                 #{topIssue, jdbcType=BIGINT});
     </insert>
@@ -65,7 +63,6 @@
             ISSUE_DETAIL      = #{issueDetail},
             ISSUE_CONTRACT_ID = #{issueContractId, jdbcType=BIGINT},
             ISSUE_PRIORITY    = #{issuePriority},
-            SPRINT_ID         = #{sprintId, jdbcType=BIGINT},
             TOP_ISSUE         = #{topIssue, jdbcType=BIGINT}
         WHERE ISSUE_ID = #{issueId}
 
