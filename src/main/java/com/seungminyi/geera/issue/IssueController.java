@@ -71,7 +71,7 @@ public class IssueController {
 
     @Operation(summary = "이슈 수정")
     @ApiResponses({
-        @ApiResponse(responseCode = "204", content = {
+        @ApiResponse(responseCode = "200", content = {
             @Content(schema = @Schema(implementation = ResponseMessage.class), mediaType = "application/json")}),
         @ApiResponse(responseCode = "400", content = {
             @Content(schema = @Schema(implementation = ErrorResponseMessage.class), mediaType = "application/json")})
@@ -84,15 +84,15 @@ public class IssueController {
                     .body(new ErrorResponseMessage("상위 이슈는 자기 자신일 수 없습니다."));
         }
         issueService.updateIssue(issueId, issueRequest);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ResponseMessage("issue 수정 완료"));
+        return ResponseEntity.ok(new ResponseMessage("issue 수정 완료"));
     }
 
     @Operation(summary = "이슈 삭제")
-    @ApiResponse(responseCode = "204", content = {
+    @ApiResponse(responseCode = "200", content = {
         @Content(schema = @Schema(implementation = ResponseMessage.class), mediaType = "application/json")})
     @DeleteMapping("/{issueId}")
     public ResponseEntity<?> deleteIssue(@PathVariable Long issueId) {
         issueService.deleteIssue(issueId);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ResponseMessage("issue 삭제 완료"));
+        return ResponseEntity.ok(new ResponseMessage("issue 수정 완료"));
     }
 }

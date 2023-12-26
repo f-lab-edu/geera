@@ -12,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.seungminyi.geera.TestUtil;
 import com.seungminyi.geera.exception.InsufficientPermissionException;
+import com.seungminyi.geera.issue.dto.IssueRequest;
 import com.seungminyi.geera.project.dto.ProjectMember;
 import com.seungminyi.geera.project.ProjectMemberRepository;
 import com.seungminyi.geera.project.ProjectMemberRole;
@@ -57,7 +58,18 @@ class ProjectPermissionAspectTest {
 
     @Test
     @DisplayName("AOP 이슈 권한 확인")
-    public void testCheckIssuePermissionAspect() {
+    public void testCheckIssuePermissionAspectWithIssueRequest() {
+        IssueRequest issueRequest = new IssueRequest().setProjectId(1L);
+        IssuePermissionCheck annotation = mock(IssuePermissionCheck.class);
+        when(projectMemberRepository.findRoleByMember(any(ProjectMember.class))).thenReturn(ProjectMemberRole.CREATOR);
+
+        projectPermissionAspect.checkIssuePermission(null, annotation, issueRequest);
+    }
+
+    @Test
+    @DisplayName("AOP 이슈 권한 확인")
+    public void testCheckIssuePermissionAspectWithIssueId() {
+        Long issueId = 1L;
         IssuePermissionCheck annotation = mock(IssuePermissionCheck.class);
         when(projectMemberRepository.findRoleByMember(any(ProjectMember.class))).thenReturn(ProjectMemberRole.CREATOR);
 
@@ -67,11 +79,13 @@ class ProjectPermissionAspectTest {
     @Test
     @DisplayName("AOP 이슈 권한 없음")
     public void testCheckIssuePermissionAspect_권한없음() {
+        IssueRequest issueRequest = new IssueRequest().setProjectId(1L);
         IssuePermissionCheck annotation = mock(IssuePermissionCheck.class);
         when(projectMemberRepository.findRoleByMember(any(ProjectMember.class))).thenReturn(ProjectMemberRole.INVITED);
 
+
         assertThrows(InsufficientPermissionException.class, () ->
-            projectPermissionAspect.checkIssuePermission(null, annotation, 1L)
+            projectPermissionAspect.checkIssuePermission(null, annotation, issueRequest)
         );
     }
 }

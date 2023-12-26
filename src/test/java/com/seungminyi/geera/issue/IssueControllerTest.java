@@ -55,7 +55,7 @@ class IssueControllerTest {
 		mockMvc.perform(put("/issues/1")
 				.content(objectMapper.writeValueAsString(issueRequest))
 				.contentType(MediaType.APPLICATION_JSON_VALUE))
-			.andExpect(MockMvcResultMatchers.status().isNoContent())
+			.andExpect(MockMvcResultMatchers.status().isOk())
 			.andExpect(MockMvcResultMatchers.content().json("{\"message\": \"issue 수정 완료\"}"));
 	}
 
@@ -78,7 +78,7 @@ class IssueControllerTest {
 	void deleteIssue() throws Exception {
 		mockMvc.perform(delete("/issues/1")
 			.contentType(MediaType.APPLICATION_JSON_VALUE))
-			.andExpect(MockMvcResultMatchers.status().isNoContent())
+			.andExpect(MockMvcResultMatchers.status().isOk())
 			.andExpect(MockMvcResultMatchers.content().json("{\"message\": \"issue 삭제 완료\"}"));
 	}
 

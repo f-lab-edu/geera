@@ -7,6 +7,8 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.JoinPoint;
 
+import com.seungminyi.geera.issue.IssueRepository;
+import com.seungminyi.geera.issue.dto.IssueRequest;
 import com.seungminyi.geera.utill.auth.PermissionRoleGroup;
 import com.seungminyi.geera.auth.dto.CustomUserDetails;
 import com.seungminyi.geera.exception.InsufficientPermissionException;
@@ -17,15 +19,17 @@ import com.seungminyi.geera.utill.annotation.IssuePermissionCheck;
 import com.seungminyi.geera.utill.annotation.ProjectPermissionCheck;
 import com.seungminyi.geera.utill.auth.SecurityUtils;
 
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 @Component
 @Aspect
+@Slf4j
+@AllArgsConstructor
 public class ProjectPermissionAspect {
 
 	private final ProjectMemberRepository projectMemberRepository;
-
-	public ProjectPermissionAspect(ProjectMemberRepository projectMemberRepository) {
-		this.projectMemberRepository = projectMemberRepository;
-	}
+	private final IssueRepository issueRepository;
 
 	@Before("@annotation(projectPermissionCheck) && args(projectId, ..)")
 	public void checkProjectPermission(JoinPoint joinPoint, ProjectPermissionCheck projectPermissionCheck,
@@ -35,8 +39,18 @@ public class ProjectPermissionAspect {
 		}
 	}
 
-	@Before("@annotation(issuePermissionCheck) && args(projectId, ..)")
-	public void checkIssuePermission(JoinPoint joinPoint, IssuePermissionCheck issuePermissionCheck, Long projectId) {
+	@Before("@annotation(issuePermissionCheck) && args(issueRequest, ..)")
+	public void checkIssuePermission(JoinPoint joinPoint, IssuePermissionCheck issuePermissionCheck, IssueRequest issueRequest) {
+		System.out.println("issue request!!");
+		if (!hasRequiredRole(PermissionRoleGroup.ISSUE_ACCESS_ROLES, issueRequest.getProjectId())) {
+			throw new InsufficientPermissionException("이슈 접근 권한이 없는 사용자 입니다.");
+		}
+	}
+
+	@Before("@annotation(issuePermissionCheck) && args(issueId, ..)")
+	public void checkIssuePermission(JoinPoint joinPoint, IssuePermissionCheck issuePermissionCheck, Long issueId) {
+		Long projectId = issueRepository.getProjectId(issueId);
+		System.out.println("issue id!!");
 		if (!hasRequiredRole(PermissionRoleGroup.ISSUE_ACCESS_ROLES, projectId)) {
 			throw new InsufficientPermissionException("이슈 접근 권한이 없는 사용자 입니다.");
 		}
