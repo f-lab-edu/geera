@@ -93,6 +93,6 @@ public class IssueController {
     @DeleteMapping("/{issueId}")
     public ResponseEntity<?> deleteIssue(@PathVariable Long issueId) {
         issueService.deleteIssue(issueId);
-        return ResponseEntity.ok(new ResponseMessage("issue 수정 완료"));
+        return ResponseEntity.ok(new ResponseMessage("issue 삭제 완료"));
     }
 }

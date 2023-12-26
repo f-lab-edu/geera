@@ -12,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.seungminyi.geera.TestUtil;
 import com.seungminyi.geera.exception.InsufficientPermissionException;
+import com.seungminyi.geera.issue.IssueRepository;
 import com.seungminyi.geera.issue.dto.IssueRequest;
 import com.seungminyi.geera.project.dto.ProjectMember;
 import com.seungminyi.geera.project.ProjectMemberRepository;
@@ -23,11 +24,11 @@ import com.seungminyi.geera.utill.annotation.ProjectPermissionCheck;
 class ProjectPermissionAspectTest {
     @Mock
     private ProjectMemberRepository projectMemberRepository;
-
+    @Mock
+    private IssueRepository issueRepository;
     @InjectMocks
     private ProjectPermissionAspect projectPermissionAspect;
 
-    private final ProjectMemberRole[] PROJECT_MEMBER_ROLE_TYPES = {ProjectMemberRole.CREATOR, ProjectMemberRole.MEMBER};
     @BeforeEach
     private void setUp() {
         TestUtil.setAuthentication(
@@ -71,9 +72,10 @@ class ProjectPermissionAspectTest {
     public void testCheckIssuePermissionAspectWithIssueId() {
         Long issueId = 1L;
         IssuePermissionCheck annotation = mock(IssuePermissionCheck.class);
+        when(issueRepository.getProjectId(issueId)).thenReturn(1L);
         when(projectMemberRepository.findRoleByMember(any(ProjectMember.class))).thenReturn(ProjectMemberRole.CREATOR);
 
-        projectPermissionAspect.checkIssuePermission(null, annotation, 1L);
+        projectPermissionAspect.checkIssuePermission(null, annotation, issueId);
     }
 
     @Test

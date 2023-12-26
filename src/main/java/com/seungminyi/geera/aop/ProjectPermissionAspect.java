@@ -41,7 +41,6 @@ public class ProjectPermissionAspect {
 
 	@Before("@annotation(issuePermissionCheck) && args(issueRequest, ..)")
 	public void checkIssuePermission(JoinPoint joinPoint, IssuePermissionCheck issuePermissionCheck, IssueRequest issueRequest) {
-		System.out.println("issue request!!");
 		if (!hasRequiredRole(PermissionRoleGroup.ISSUE_ACCESS_ROLES, issueRequest.getProjectId())) {
 			throw new InsufficientPermissionException("이슈 접근 권한이 없는 사용자 입니다.");
 		}
@@ -50,7 +49,6 @@ public class ProjectPermissionAspect {
 	@Before("@annotation(issuePermissionCheck) && args(issueId, ..)")
 	public void checkIssuePermission(JoinPoint joinPoint, IssuePermissionCheck issuePermissionCheck, Long issueId) {
 		Long projectId = issueRepository.getProjectId(issueId);
-		System.out.println("issue id!!");
 		if (!hasRequiredRole(PermissionRoleGroup.ISSUE_ACCESS_ROLES, projectId)) {
 			throw new InsufficientPermissionException("이슈 접근 권한이 없는 사용자 입니다.");
 		}
