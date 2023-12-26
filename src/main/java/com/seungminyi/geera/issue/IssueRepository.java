@@ -14,7 +14,7 @@ public interface IssueRepository {
 
     List<Issue> getWithConditions(IssueConditionsDto params, RowBounds rowBounds);
 
-    Long getProjectId(Long IssueId);
+    Long getProjectId(Long issueId);
 
     void update(Issue issue);
 

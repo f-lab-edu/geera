@@ -28,39 +28,40 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 public class ProjectPermissionAspect {
 
-	private final ProjectMemberRepository projectMemberRepository;
-	private final IssueRepository issueRepository;
+    private final ProjectMemberRepository projectMemberRepository;
+    private final IssueRepository issueRepository;
 
-	@Before("@annotation(projectPermissionCheck) && args(projectId, ..)")
-	public void checkProjectPermission(JoinPoint joinPoint, ProjectPermissionCheck projectPermissionCheck,
-		Long projectId) {
-		if (!hasRequiredRole(PermissionRoleGroup.PROJECT_ACCESS_ROLES, projectId)) {
-			throw new InsufficientPermissionException("프로젝트 접근 권한이 없는 사용자 입니다.");
-		}
-	}
+    @Before("@annotation(projectPermissionCheck) && args(projectId, ..)")
+    public void checkProjectPermission(JoinPoint joinPoint, ProjectPermissionCheck projectPermissionCheck,
+        Long projectId) {
+        if (!hasRequiredRole(PermissionRoleGroup.PROJECT_ACCESS_ROLES, projectId)) {
+            throw new InsufficientPermissionException("프로젝트 접근 권한이 없는 사용자 입니다.");
+        }
+    }
 
-	@Before("@annotation(issuePermissionCheck) && args(issueRequest, ..)")
-	public void checkIssuePermission(JoinPoint joinPoint, IssuePermissionCheck issuePermissionCheck, IssueRequest issueRequest) {
-		if (!hasRequiredRole(PermissionRoleGroup.ISSUE_ACCESS_ROLES, issueRequest.getProjectId())) {
-			throw new InsufficientPermissionException("이슈 접근 권한이 없는 사용자 입니다.");
-		}
-	}
+    @Before("@annotation(issuePermissionCheck) && args(issueRequest, ..)")
+    public void checkIssuePermission(JoinPoint joinPoint, IssuePermissionCheck issuePermissionCheck,
+        IssueRequest issueRequest) {
+        if (!hasRequiredRole(PermissionRoleGroup.ISSUE_ACCESS_ROLES, issueRequest.getProjectId())) {
+            throw new InsufficientPermissionException("이슈 접근 권한이 없는 사용자 입니다.");
+        }
+    }
 
-	@Before("@annotation(issuePermissionCheck) && args(issueId, ..)")
-	public void checkIssuePermission(JoinPoint joinPoint, IssuePermissionCheck issuePermissionCheck, Long issueId) {
-		Long projectId = issueRepository.getProjectId(issueId);
-		if (!hasRequiredRole(PermissionRoleGroup.ISSUE_ACCESS_ROLES, projectId)) {
-			throw new InsufficientPermissionException("이슈 접근 권한이 없는 사용자 입니다.");
-		}
-	}
+    @Before("@annotation(issuePermissionCheck) && args(issueId, ..)")
+    public void checkIssuePermission(JoinPoint joinPoint, IssuePermissionCheck issuePermissionCheck, Long issueId) {
+        Long projectId = issueRepository.getProjectId(issueId);
+        if (!hasRequiredRole(PermissionRoleGroup.ISSUE_ACCESS_ROLES, projectId)) {
+            throw new InsufficientPermissionException("이슈 접근 권한이 없는 사용자 입니다.");
+        }
+    }
 
-	private boolean hasRequiredRole(Set<ProjectMemberRole> projectMemberRoles, Long projectId) {
-		CustomUserDetails userDetails = SecurityUtils.getCurrentUser();
-		ProjectMemberRole memberRole = projectMemberRepository.findRoleByMember(
-			new ProjectMember()
-				.setMemberId(userDetails.getId())
-				.setProjectId(projectId));
+    private boolean hasRequiredRole(Set<ProjectMemberRole> projectMemberRoles, Long projectId) {
+        CustomUserDetails userDetails = SecurityUtils.getCurrentUser();
+        ProjectMemberRole memberRole = projectMemberRepository.findRoleByMember(
+            new ProjectMember()
+                .setMemberId(userDetails.getId())
+                .setProjectId(projectId));
 
-		return memberRole != null && projectMemberRoles.contains(memberRole);
-	}
+        return memberRole != null && projectMemberRoles.contains(memberRole);
+    }
 }
