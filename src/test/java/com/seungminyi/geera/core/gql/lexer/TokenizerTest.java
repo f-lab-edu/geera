@@ -300,17 +300,6 @@ public class TokenizerTest {
     }
 
     @Test
-    @DisplayName("GQL 토크나이저 - SPRINT_ID")
-    public void testSPRINT_ID() throws IOException {
-        String query = "SPRINT_ID";
-
-        assertTokenizerOutput(new Token[] {
-            new Token(TokenClass.FIELD, "SPRINT_ID", 1, 0),
-            new Token(TokenClass.EOF, "", 1, 9)
-        }, query);
-    }
-
-    @Test
     @DisplayName("GQL 토크나이저 - CREATE_AT")
     public void testCREATE_AT() throws IOException {
         String query = "CREATE_AT";

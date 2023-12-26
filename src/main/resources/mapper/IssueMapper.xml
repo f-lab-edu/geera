@@ -12,7 +12,6 @@
                I.ISSUE_CONTRACT_ID,
                I.ISSUE_REPORTER_ID,
                I.ISSUE_PRIORITY,
-               I.SPRINT_ID,
                I.CREATE_AT,
                I.TOP_ISSUE
         FROM ISSUE I,
@@ -30,6 +29,11 @@
           </if>
         ORDER BY #{order} #{sort};
     </select>
+    <select id="getProjectId" parameterType="Long" resultType="Long">
+        SELECT PROJECT_ID
+        FROM ISSUE I
+        WHERE ISSUE_ID = #{issueId}
+    </select>
     <insert id="create" parameterType="com.seungminyi.geera.issue.dto.Issue">
         INSERT INTO ISSUE
         (PROJECT_ID,
@@ -40,7 +44,6 @@
          ISSUE_CONTRACT_ID,
          ISSUE_REPORTER_ID,
          ISSUE_PRIORITY,
-         SPRINT_ID,
          CREATE_AT,
          TOP_ISSUE)
         VALUES (#{projectId},
@@ -51,21 +54,18 @@
                 #{issueContractId, jdbcType=BIGINT},
                 #{issueReporterId},
                 #{issuePriority},
-                #{sprintId, jdbcType=BIGINT},
                 #{createAt},
                 #{topIssue, jdbcType=BIGINT});
     </insert>
 
     <update id="update" parameterType="com.seungminyi.geera.issue.dto.Issue">
         UPDATE ISSUE
-        SET PROJECT_ID        = #{projectId},
-            ISSUE_TYPE        = #{issueType},
+        SET ISSUE_TYPE        = #{issueType},
             ISSUE_STATUS      = #{issueStatus},
             ISSUE_DESCRIPTION = #{issueDescription},
             ISSUE_DETAIL      = #{issueDetail},
             ISSUE_CONTRACT_ID = #{issueContractId, jdbcType=BIGINT},
             ISSUE_PRIORITY    = #{issuePriority},
-            SPRINT_ID         = #{sprintId, jdbcType=BIGINT},
             TOP_ISSUE         = #{topIssue, jdbcType=BIGINT}
         WHERE ISSUE_ID = #{issueId}
 
@@ -82,4 +82,6 @@
         SET TOP_ISSUE = NULL
         WHERE TOP_ISSUE = #{issueId}
     </update>
+
+
 </mapper>

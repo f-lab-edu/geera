@@ -16,7 +16,6 @@ public class IssueRequestFixture {
 	public String issueDescription = "이슈 요약";
 	public String issueDetail = "이슈 설명";
 	public Long issueContractId = 1L;
-	public Long sprintId = 1L;
 	public Date createAt = null;
 	public Long topIssue = null;
 

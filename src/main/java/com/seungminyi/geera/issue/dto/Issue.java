@@ -19,7 +19,6 @@ public class Issue {
     private Long issueContractId;
     private Long issueReporterId;
     private Integer issuePriority;
-    private Long sprintId;
     private Date createAt;
     private Long topIssue;
 }
