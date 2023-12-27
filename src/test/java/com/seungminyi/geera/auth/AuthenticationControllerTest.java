@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import com.seungminyi.geera.auth.AuthService;
+import com.seungminyi.geera.auth.dto.LoginResponse;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -34,16 +35,21 @@ class AuthenticationControllerTest {
     void authenticateUseSuccess() throws Exception {
         String testEmail = "test@example.com";
         String testPassword = "password1!";
+        String testUserName = "test";
         String testToken = "testToken";
+        LoginResponse loginResponse = new LoginResponse(testToken, testUserName, testEmail);
 
-        Mockito.when(authService.login(testEmail, testPassword)).thenReturn(testToken);
+        Mockito.when(authService.login(testEmail, testPassword)).thenReturn(loginResponse);
         mockMvc.perform(MockMvcRequestBuilders.post("/api/login")
-                        .content("{\n" +
-                                "    \"email\" : \"" + testEmail + "\",\n" +
-                                "    \"password\" : \"" + testPassword + "\"\n" +
-                                "}")
-                        .contentType("application/json"))
-                .andExpect(MockMvcResultMatchers.status().isOk());
+                .content("{\n" +
+                    "    \"email\" : \"" + testEmail + "\",\n" +
+                    "    \"password\" : \"" + testPassword + "\"\n" +
+                    "}")
+                .contentType("application/json"))
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andExpect(MockMvcResultMatchers.jsonPath("$.token").value(testToken))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.username").value(testUserName))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.email").value(testEmail));
     }
 
     @Test
@@ -52,14 +58,15 @@ class AuthenticationControllerTest {
         String testEmail = "test@example.com";
         String testPassword = "password1!";
 
-        Mockito.when(authService.login(testEmail, testPassword)).thenThrow(new UsernameNotFoundException("아이디 혹은 패스워드가 일치하지 않습니다."));
+        Mockito.when(authService.login(testEmail, testPassword))
+            .thenThrow(new UsernameNotFoundException("아이디 혹은 패스워드가 일치하지 않습니다."));
         mockMvc.perform(MockMvcRequestBuilders.post("/api/login")
-                        .content("{\n" +
-                                "    \"email\" : \"" + testEmail + "\",\n" +
-                                "    \"password\" : \"" + testPassword + "\"\n" +
-                                "}")
-                        .contentType("application/json"))
+                .content("{\n" +
+                    "    \"email\" : \"" + testEmail + "\",\n" +
+                    "    \"password\" : \"" + testPassword + "\"\n" +
+                    "}")
+                .contentType("application/json"))
 
-                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+            .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 }

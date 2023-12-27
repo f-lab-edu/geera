@@ -5,6 +5,7 @@ import com.seungminyi.geera.auth.AuthService;
 import com.seungminyi.geera.auth.dto.CustomUserDetails;
 import com.seungminyi.geera.auth.CustomUserDetailsService;
 import com.seungminyi.geera.auth.JwtTokenProvider;
+import com.seungminyi.geera.auth.dto.LoginResponse;
 import com.seungminyi.geera.member.dto.Member;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -38,9 +39,9 @@ class AuthServiceTest {
         Mockito.when(passwordEncoder.matches(member.getPassword(), member.getPassword())).thenReturn(Boolean.TRUE);
         Mockito.when(jwtTokenProvider.generateToken(customUserDetails)).thenReturn("jwt token");
 
-        String token = authService.login(member.getEmail(), member.getPassword());
+        LoginResponse response = authService.login(member.getEmail(), member.getPassword());
 
-        assertNotNull(token);
+        assertNotNull(response);
     }
 
     @Test

@@ -7,9 +7,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.seungminyi.geera.auth.dto.CustomUserDetails;
 import com.seungminyi.geera.auth.dto.LoginRequest;
 import com.seungminyi.geera.auth.dto.LoginResponse;
 import com.seungminyi.geera.common.dto.ResponseMessage;
+import com.seungminyi.geera.utill.auth.SecurityUtils;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -38,8 +40,7 @@ public class AuthenticationController {
 	@PostMapping("/api/login")
 	public ResponseEntity<?> authenticateUser(@RequestBody @Valid LoginRequest loginRequest) {
 		try {
-			String jwtToken = authService.login(loginRequest.getEmail(), loginRequest.getPassword());
-			return ResponseEntity.ok(new LoginResponse(jwtToken, loginRequest.getEmail()));
+			return ResponseEntity.ok(authService.login(loginRequest.getEmail(), loginRequest.getPassword()));
 		} catch (UsernameNotFoundException e) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage(e.getMessage()));
 		}

@@ -22,7 +22,7 @@ class ScannerTest {
     void test() {
         char dd = (char) -1;
         if(dd == -1){
-            System.out.println("dd");
+
         }
     }
 }

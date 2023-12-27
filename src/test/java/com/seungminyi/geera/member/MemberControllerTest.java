@@ -42,17 +42,14 @@ public class MemberControllerTest {
     @Test
     public void testVerifyEmailSuccess() throws Exception {
         String emailAddress = "test@example.com";
-        String securityCode = "123456";
-
-        Mockito.when(sessionManager.getAttribute(emailAddress)).thenReturn(securityCode);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/members/verify-email")
                 .content("{\n" +
-                    "    \"email_address\" : \"test@example.com\"\n" +
+                    "    \"email_address\" : " + emailAddress  +
                     "}")
                 .contentType("application/json"))
             .andExpect(MockMvcResultMatchers.status().isOk())
-            .andExpect(MockMvcResultMatchers.content().json("{\"message\": \"이메일 인증코드를 발송했습니다.\"}"));
+            .andExpect(MockMvcResultMatchers.jsonPath("$.securityCode").value(anyString()));
     }
 
     @Test

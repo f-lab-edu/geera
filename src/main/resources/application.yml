@@ -26,9 +26,12 @@ springdoc:
 
 logging:
   level:
-
     org.springframework.security: DEBUG
 
 jwt:
   secret: 1234
   expiration: 3600000
+
+server:
+  servlet.session.cookie:
+    http-only: false #TODO DELETE
