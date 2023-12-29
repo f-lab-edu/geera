@@ -28,7 +28,10 @@ public class AuthService {
         if (userDetails == null || !passwordEncoder.matches(password, userDetails.getPassword())) {
             throw new UsernameNotFoundException("아이디 혹은 패스워드가 일치하지 않습니다.");
         }
-        return new LoginResponse(jwtTokenProvider.generateToken(userDetails), userDetails.getUsername(),
-            userDetails.getEmail());
+        return new LoginResponse()
+            .setMemberId(userDetails.getId())
+            .setToken(jwtTokenProvider.generateToken(userDetails))
+            .setUsername(userDetails.getUsername())
+            .setEmail(userDetails.getEmail());
     }
 }

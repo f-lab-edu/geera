@@ -3,6 +3,7 @@ package com.seungminyi.geera.member;
 import static com.seungminyi.geera.utill.validator.ValidationUtil.handleBindingErrors;
 
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.dao.DataIntegrityViolationException;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +23,7 @@ import com.seungminyi.geera.common.dto.ResponseMessage;
 import com.seungminyi.geera.member.dto.EmailRequest;
 import com.seungminyi.geera.member.dto.Member;
 import com.seungminyi.geera.member.dto.MemberRequest;
+import com.seungminyi.geera.member.dto.ProjectInfo;
 import com.seungminyi.geera.member.dto.VerifyEmailResponse;
 import com.seungminyi.geera.utill.session.SessionManager;
 import com.seungminyi.geera.utill.validator.ValidationUtil;
@@ -108,6 +111,12 @@ public class MemberController {
     public ResponseEntity<?> findMember(@RequestParam String emailAddress) {
         Optional<Member> member = Optional.ofNullable(memberService.findMemberByEmail(emailAddress));
         return ResponseEntity.ok(member);
+    }
+
+    @GetMapping("/{memberId}/invited-projects")
+    public ResponseEntity<?> getInvitedProjects(@PathVariable Long memberId) {
+        List<ProjectInfo> invitedProjects = memberService.getInvitedProjects(memberId);
+        return ResponseEntity.ok(invitedProjects);
     }
 
     private boolean securityCodeCheck(String email, String securityCode) {

@@ -13,6 +13,8 @@ import com.seungminyi.geera.project.dto.Project;
 import com.seungminyi.geera.project.dto.ProjectMember;
 import com.seungminyi.geera.project.dto.ProjectQuery;
 import com.seungminyi.geera.project.dto.ProjectRequest;
+import com.seungminyi.geera.project.dto.ProjectTeamMember;
+import com.seungminyi.geera.utill.annotation.IssuePermissionCheck;
 import com.seungminyi.geera.utill.annotation.ProjectPermissionCheck;
 import com.seungminyi.geera.utill.auth.SecurityUtils;
 
@@ -89,6 +91,11 @@ public class ProjectService {
         ProjectMember projectMember = buildProjectMember(projectId, memberId, ProjectMemberRole.MEMBER);
 
         return projectMemberRepository.delete(projectMember);
+    }
+
+    @ProjectPermissionCheck //TODO
+    public List<ProjectTeamMember> getProjectTeamMembers(Long projectId) {
+        return projectMemberRepository.getAllByProject(projectId);
     }
 
     public void acceptProjectInvitation(Long projectId) {

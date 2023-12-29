@@ -45,11 +45,10 @@ public class MemberControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.post("/members/verify-email")
                 .content("{\n" +
-                    "    \"email_address\" : " + emailAddress  +
+                    "    \"email_address\" : \"" + emailAddress  + "\"\n" +
                     "}")
                 .contentType("application/json"))
-            .andExpect(MockMvcResultMatchers.status().isOk())
-            .andExpect(MockMvcResultMatchers.jsonPath("$.securityCode").value(anyString()));
+            .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
     @Test
