@@ -93,7 +93,7 @@ public class ProjectService {
         return projectMemberRepository.delete(projectMember);
     }
 
-    @ProjectPermissionCheck //TODO
+    // @IssuePermissionCheck //TODO
     public List<ProjectTeamMember> getProjectTeamMembers(Long projectId) {
         return projectMemberRepository.getAllByProject(projectId);
     }

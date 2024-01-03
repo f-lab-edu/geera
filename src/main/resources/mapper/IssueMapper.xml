@@ -2,46 +2,72 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.seungminyi.geera.issue.IssueRepository">
-    <select id="getWithConditions" parameterType="com.seungminyi.geera.issue.dto.IssueConditionsDto" resultType="com.seungminyi.geera.issue.dto.Issue">
+    <resultMap id="IssueResultMap" type="com.seungminyi.geera.issue.dto.Issue">
+        <id property="issueId" column="issue_id"/>
+        <result property="projectId" column="project_id"/>
+        <result property="issueType" column="issue_type"/>
+        <result property="issueStatus" column="issue_status"/>
+        <result property="issueDescription" column="issue_description"/>
+        <result property="issueDetail" column="issue_detail"/>
+        <result property="issueReporterId" column="issue_reporter_id"/>
+        <result property="issuePriority" column="issue_priority"/>
+        <result property="createAt" column="create_at"/>
+        <result property="updateAt" column="update_at"/>
+        <result property="topIssue" column="top_issue"/>
+
+        <collection property="assignees" ofType="com.seungminyi.geera.issue.dto.IssueAssignee" notNullColumn="issue_assignee_id">
+            <id property="issueAssigneeId" column="issue_assignee_id"/>
+            <result property="issueId" column="issue_id"/>
+            <result property="memberId" column="member_id"/>
+        </collection>
+    </resultMap>
+
+    <select id="getWithConditions" parameterType="com.seungminyi.geera.issue.dto.IssueConditionsDto"
+            resultMap="IssueResultMap">
         SELECT I.ISSUE_ID,
-               I.PROJECT_ID,
-               I.ISSUE_TYPE,
-               I.ISSUE_STATUS,
-               I.ISSUE_DESCRIPTION,
-               I.ISSUE_DETAIL,
-               I.ISSUE_CONTRACT_ID,
-               I.ISSUE_REPORTER_ID,
-               I.ISSUE_PRIORITY,
-               I.CREATE_AT,
-               I.TOP_ISSUE
-        FROM ISSUE I,
-             PROJECT P,
-             PROJECT_MEMBER PM
+        I.PROJECT_ID,
+        I.ISSUE_TYPE,
+        I.ISSUE_STATUS,
+        I.ISSUE_DESCRIPTION,
+        I.ISSUE_DETAIL,
+        I.ISSUE_REPORTER_ID,
+        I.ISSUE_PRIORITY,
+        I.CREATE_AT,
+        I.UPDATE_AT,
+        I.TOP_ISSUE,
+        IA.ISSUE_ASSIGNEE_ID,
+        IA.MEMBER_ID
+        FROM ISSUE I
+        LEFT JOIN ISSUE_ASSIGNEE IA ON I.ISSUE_ID = IA.ISSUE_ID,
+        PROJECT P,
+        PROJECT_MEMBER PM
         WHERE I.PROJECT_ID = P.PROJECT_ID
-          AND P.PROJECT_ID = PM.PROJECT_ID
-          AND PM.MEMBER_ID = #{member}
-          AND (PM.ROLE IN ('CREATOR', 'MEMBER'))
-          <if test="project != null">
+        AND P.PROJECT_ID = PM.PROJECT_ID
+        AND PM.MEMBER_ID = #{member}
+        AND (PM.ROLE IN ('CREATOR', 'MEMBER'))
+        <if test="project != null">
             AND P.project_id = #{project}
-          </if>
-          <if test="customSqlCondition != null">
+        </if>
+        <if test="customSqlCondition != null">
             AND ${customSqlCondition}
-          </if>
+        </if>
         ORDER BY #{order} #{sort};
     </select>
+
     <select id="getProjectId" parameterType="Long" resultType="Long">
         SELECT PROJECT_ID
-        FROM ISSUE I
+        FROM ISSUE
         WHERE ISSUE_ID = #{issueId}
     </select>
-    <insert id="create" parameterType="com.seungminyi.geera.issue.dto.Issue">
+
+    <insert id="create" parameterType="com.seungminyi.geera.issue.dto.Issue" useGeneratedKeys="true"
+            keyProperty="issueId">
         INSERT INTO ISSUE
         (PROJECT_ID,
          ISSUE_TYPE,
          ISSUE_STATUS,
          ISSUE_DESCRIPTION,
          ISSUE_DETAIL,
-         ISSUE_CONTRACT_ID,
          ISSUE_REPORTER_ID,
          ISSUE_PRIORITY,
          CREATE_AT,
@@ -51,7 +77,6 @@
                 #{issueStatus},
                 #{issueDescription},
                 #{issueDetail},
-                #{issueContractId, jdbcType=BIGINT},
                 #{issueReporterId},
                 #{issuePriority},
                 #{createAt},
@@ -64,11 +89,39 @@
             ISSUE_STATUS      = #{issueStatus},
             ISSUE_DESCRIPTION = #{issueDescription},
             ISSUE_DETAIL      = #{issueDetail},
-            ISSUE_CONTRACT_ID = #{issueContractId, jdbcType=BIGINT},
             ISSUE_PRIORITY    = #{issuePriority},
-            TOP_ISSUE         = #{topIssue, jdbcType=BIGINT}
+            TOP_ISSUE         = #{topIssue, jdbcType=BIGINT},
+            UPDATE_AT         = #{updateAt}
         WHERE ISSUE_ID = #{issueId}
+    </update>
 
+    <update id="patch" parameterType="com.seungminyi.geera.issue.dto.Issue">
+        UPDATE ISSUE
+        <set>
+            <if test="projectId != null">
+                PROJECT_ID = #{projectId},
+            </if>
+            <if test="issueType != null">
+                ISSUE_TYPE = #{issueType},
+            </if>
+            <if test="issueStatus != null">
+                ISSUE_STATUS = #{issueStatus},
+            </if>
+            <if test="issueDescription != null">
+                ISSUE_DESCRIPTION = #{issueDescription},
+            </if>
+            <if test="issueDetail != null">
+                ISSUE_DETAIL = #{issueDetail},
+            </if>
+            <if test="issuePriority != null">
+                ISSUE_PRIORITY = #{issuePriority},
+            </if>
+            <if test="topIssue != null">
+                TOP_ISSUE = #{topIssue, jdbcType=BIGINT},
+            </if>
+            UPDATE_AT = #{updateAt}
+        </set>
+        WHERE ISSUE_ID = #{issueId}
     </update>
 
     <delete id="delete" parameterType="Long">
@@ -83,5 +136,14 @@
         WHERE TOP_ISSUE = #{issueId}
     </update>
 
+    <delete id="deleteAssignees" parameterType="Long">
+        DELETE
+        FROM ISSUE_ASSIGNEE
+        WHERE ISSUE_ID = #{issueId}
+    </delete>
 
+    <insert id="insertAssignee" parameterType="Long">
+        INSERT INTO ISSUE_ASSIGNEE (ISSUE_ID, MEMBER_ID)
+        VALUES (#{issueId}, #{memberId})
+    </insert>
 </mapper>

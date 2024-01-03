@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.seungminyi.geera.issue.IssueCommentRepository">
+    <insert id="insert" parameterType="com.seungminyi.geera.issue.dto.Comment">
+        INSERT INTO ISSUE_COMMENT (member_id, issue_id, content, create_at)
+        VALUES (#{memberId}, #{issueId}, #{content}, #{createAt})
+    </insert>
+
+    <select id="selectById" parameterType="Long" resultType="com.seungminyi.geera.issue.dto.Comment">
+        SELECT issue_comment_id,
+               member_id,
+               issue_id,
+               content,
+               create_at,
+               update_at
+        FROM ISSUE_COMMENT
+        WHERE issue_comment_id = #{issueCommentId}
+    </select>
+
+    <select id="selectAllByIssueId" parameterType="Long" resultType="com.seungminyi.geera.issue.dto.Comment">
+        SELECT issue_comment_id,
+               member_id,
+               issue_id,
+               content,
+               create_at,
+               update_at
+        FROM ISSUE_COMMENT
+        WHERE issue_id = #{issueId}
+    </select>
+
+    <update id="update" parameterType="com.seungminyi.geera.issue.dto.Comment">
+        UPDATE ISSUE_COMMENT
+        SET content   = #{content},
+            update_at = #{updateAt}
+        WHERE issue_comment_id = #{issueCommentId}
+    </update>
+
+    <delete id="delete" parameterType="Long">
+        DELETE
+        FROM ISSUE_COMMENT
+        WHERE issue_comment_id = #{issueCommentId}
+    </delete>
+</mapper>

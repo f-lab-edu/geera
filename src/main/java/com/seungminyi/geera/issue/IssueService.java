@@ -1,8 +1,11 @@
 package com.seungminyi.geera.issue;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +17,7 @@ import com.seungminyi.geera.core.gql.generator.SqlGenerator;
 import com.seungminyi.geera.core.gql.parser.GqlParser;
 import com.seungminyi.geera.exception.MaxItemsExceededException;
 import com.seungminyi.geera.exception.UnauthorizedAssignmentException;
+import com.seungminyi.geera.issue.dto.IssueAssignee;
 import com.seungminyi.geera.issue.dto.IssueConditionsDto;
 import com.seungminyi.geera.issue.dto.Issue;
 import com.seungminyi.geera.issue.dto.IssueRequest;
@@ -31,13 +35,20 @@ public class IssueService {
     private final IssueRepository issueRepository;
     private final ProjectMemberRepository projectMemberRepository;
 
-    @IssuePermissionCheck
+    @Transactional
     public void createIssue(IssueRequest issueRequest) {
         validateAssignmentPermission(issueRequest);
         Issue issue = issueRequest.toIssue();
         issue.setIssueReporterId(SecurityUtils.getCurrentUser().getId());
-        issue.setCreateAt(new Date());
+        issue.setCreateAt(LocalDateTime.now());
+
         issueRepository.create(issue);
+
+        Long createdIssueId = issue.getIssueId();
+
+        Optional.ofNullable(issueRequest.getAssignees())
+            .orElse(Collections.emptyList())
+            .forEach(assignee -> issueRepository.insertAssignee(createdIssueId, assignee.getMemberId()));
     }
 
     public List<Issue> getIssuesWithConditions(
@@ -61,23 +72,47 @@ public class IssueService {
     @IssuePermissionCheck
     @Transactional
     public void deleteIssue(Long issueId) {
+        issueRepository.deleteAssignees(issueId);
         issueRepository.updateSubIssuesOnParentDeletion(issueId);
         issueRepository.delete(issueId);
     }
 
     @IssuePermissionCheck
-    public void updateIssue(Long issueId, IssueRequest issueRequest) {
+    public void putIssue(Long issueId, IssueRequest issueRequest) {
         validateAssignmentPermission(issueRequest);
         Issue issue = issueRequest.toIssue();
         issue.setIssueId(issueId);
+        issue.setUpdateAt(LocalDateTime.now());
         issueRepository.update(issue);
+
+        issueRepository.deleteAssignees(issueId);
+        for (IssueAssignee assignee : issueRequest.getAssignees()) {
+            issueRepository.insertAssignee(issueId, assignee.getMemberId());
+        }
+    }
+
+    @IssuePermissionCheck
+    public void patchIssue(Long issueId, IssueRequest issueRequest) {
+        validateAssignmentPermission(issueRequest);
+        Issue issue = issueRequest.toIssue();
+        issue.setIssueId(issueId);
+        issue.setUpdateAt(LocalDateTime.now());
+        issueRepository.patch(issue);
+
+        if (issueRequest.getAssignees() != null) {
+            issueRepository.deleteAssignees(issueId);
+            for (IssueAssignee assignee : issueRequest.getAssignees()) {
+                issueRepository.insertAssignee(issueId, assignee.getMemberId());
+            }
+        }
     }
 
     private void validateAssignmentPermission(IssueRequest issueRequest) {
-        Long issueContractId = issueRequest.getIssueContractId();
-        if (issueContractId != null) {
-            checkMemberHasIssueAccess(issueRequest.getProjectId(), issueContractId);
-        }
+        Optional.ofNullable(issueRequest.getAssignees())
+            .orElse(Collections.emptyList())
+            .stream()
+            .filter(assignee -> assignee.getMemberId() != null)
+            .forEach(assignee -> checkMemberHasIssueAccess(issueRequest.getProjectId(), assignee.getMemberId()));
     }
 
     private void checkMemberHasIssueAccess(Long projectId, Long issueContractId) {

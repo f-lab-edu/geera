@@ -1,6 +1,7 @@
 package com.seungminyi.geera.issue.dto;
 
 import java.util.Date;
+import java.util.List;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.media.SchemaProperty;
@@ -19,24 +20,22 @@ public class IssueRequest {
     @NotBlank
     private String issueDescription;
     private String issueDetail;
-    private Long issueContractId;
     private Integer issuePriority;
     private Long topIssue;
+    private List<IssueAssignee> assignees;
 
     public IssueRequest() {
         this.issuePriority = 3;
-        this.issueStatus = IssueStatusType.TODO;
     }
     public Issue toIssue() {
-        return Issue.builder()
-            .projectId(projectId)
-            .issueType(issueType)
-            .issueStatus(issueStatus)
-            .issueDescription(issueDescription)
-            .issueDetail(issueDetail)
-            .issueContractId(issueContractId)
-            .issuePriority(issuePriority)
-            .topIssue(topIssue)
-            .build();
+        return new Issue()
+            .setProjectId(projectId)
+            .setIssueType(issueType)
+            .setIssueStatus(issueStatus)
+            .setIssueDescription(issueDescription)
+            .setIssueDetail(issueDetail)
+            .setIssuePriority(issuePriority)
+            .setTopIssue(topIssue)
+            .setAssignees(assignees);
     }
 }

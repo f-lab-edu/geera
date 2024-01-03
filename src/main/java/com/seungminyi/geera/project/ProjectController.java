@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.seungminyi.geera.common.dto.ErrorResponseMessage;
 import com.seungminyi.geera.common.dto.ResponseMessage;
 import com.seungminyi.geera.project.dto.Project;
 import com.seungminyi.geera.project.dto.ProjectRequest;
@@ -100,7 +101,7 @@ public class ProjectController {
             projectService.addProjectMember(projectId, memberId);
             return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseMessage("맴버 초대 완료."));
         } catch (DataIntegrityViolationException ex) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(new ResponseMessage("초대에 실패했습니다."));
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponseMessage("초대에 실패했습니다."));
         }
     }
 

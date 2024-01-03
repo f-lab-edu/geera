@@ -43,14 +43,9 @@
     </select>
 
     <update id="delete" parameterType="com.seungminyi.geera.project.dto.ProjectMember">
-        DELETE
-        PROJECT_MEMBER
-        WHERE PROJECT_ID =
-        #{projectId}
-        AND
-        MEMBER_ID
-        =
-        #{memberId}
+        DELETE FROM PROJECT_MEMBER
+        WHERE PROJECT_ID = #{projectId}
+        AND MEMBER_ID = #{memberId}
     </update>
 
     <update id="update" parameterType="com.seungminyi.geera.project.dto.ProjectMember">
