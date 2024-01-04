@@ -2,10 +2,15 @@ package com.seungminyi.geera.auth.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
-@AllArgsConstructor
 @Getter
+@Setter
+@Accessors(chain = true)
 public class LoginResponse {
-	private String token;
-	private String username;
+    private Long memberId;
+    private String token;
+    private String username;
+    private String email;
 }

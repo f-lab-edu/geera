@@ -16,9 +16,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.seungminyi.geera.common.dto.ErrorResponseMessage;
 import com.seungminyi.geera.common.dto.ResponseMessage;
 import com.seungminyi.geera.project.dto.Project;
 import com.seungminyi.geera.project.dto.ProjectRequest;
+import com.seungminyi.geera.project.dto.ProjectTeamMember;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -99,7 +101,7 @@ public class ProjectController {
             projectService.addProjectMember(projectId, memberId);
             return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseMessage("맴버 초대 완료."));
         } catch (DataIntegrityViolationException ex) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(new ResponseMessage("초대에 실패했습니다."));
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponseMessage("초대에 실패했습니다."));
         }
     }
 
@@ -127,5 +129,11 @@ public class ProjectController {
     public ResponseEntity<?> acceptProjectInvitation(@PathVariable Long projectId) {
         projectService.acceptProjectInvitation(projectId);
         return ResponseEntity.status(HttpStatus.CREATED).body("초대 수락 완료.");
+    }
+
+    @GetMapping("/{projectId}/members")
+    public ResponseEntity<?> getProjectMembers(@PathVariable Long projectId) {
+        List<ProjectTeamMember> projectTeamMembers = projectService.getProjectTeamMembers(projectId);
+        return ResponseEntity.ok(projectTeamMembers);
     }
 }

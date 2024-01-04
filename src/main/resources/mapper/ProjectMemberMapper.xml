@@ -8,21 +8,50 @@
     </insert>
 
     <select id="findRoleByMember" parameterType="com.seungminyi.geera.project.dto.ProjectMember">
-        SELECT ROLE FROM PROJECT_MEMBER
+        SELECT ROLE
+        FROM PROJECT_MEMBER
         WHERE PROJECT_ID = #{projectId}
-            AND MEMBER_ID = #{memberId}
+          AND MEMBER_ID = #{memberId}
+    </select>
+
+    <select id="getAllByProject" parameterType="Long">
+        SELECT PM.MEMBER_ID, M.NAME, M.email
+        FROM PROJECT_MEMBER PM,
+             MEMBER M
+        WHERE PM.member_id = M.member_id
+          AND PM.ROLE IN ('CREATOR', 'MEMBER')
+          AND PM.project_id = #{projectId};
+    </select>
+
+    <select id="getInvitedProjects" parameterType="Long">
+        SELECT P.PROJECT_ID,
+               P.PROJECT_NAME,
+               M2.NAME AS CREATOR_NAME,
+               M2.EMAIL AS CREATOR_EMAIL
+        FROM PROJECT_MEMBER PM
+                 JOIN
+             PROJECT P ON PM.PROJECT_ID = P.PROJECT_ID
+                 JOIN
+             (SELECT PROJECT_ID,
+                     MEMBER_ID
+              FROM PROJECT_MEMBER
+              WHERE ROLE = 'CREATOR') AS Creator ON P.PROJECT_ID = Creator.PROJECT_ID
+                 JOIN
+             MEMBER M2 ON Creator.MEMBER_ID = M2.MEMBER_ID
+        WHERE PM.ROLE = 'INVITED'
+          AND PM.MEMBER_ID = #{memberId};
     </select>
 
     <update id="delete" parameterType="com.seungminyi.geera.project.dto.ProjectMember">
-        DELETE PROJECT_MEMBER
+        DELETE FROM PROJECT_MEMBER
         WHERE PROJECT_ID = #{projectId}
-            AND MEMBER_ID = #{memberId}
+        AND MEMBER_ID = #{memberId}
     </update>
 
     <update id="update" parameterType="com.seungminyi.geera.project.dto.ProjectMember">
         UPDATE PROJECT_MEMBER
         SET ROLE = #{role}
         WHERE PROJECT_ID = #{projectId}
-            AND MEMBER_ID = #{memberId}
+          AND MEMBER_ID = #{memberId}
     </update>
 </mapper>

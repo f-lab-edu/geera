@@ -1,14 +1,16 @@
 package com.seungminyi.geera.issue.dto;
 
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
-import lombok.Builder;
 import lombok.Data;
 import lombok.ToString;
+import lombok.experimental.Accessors;
 
-@Builder
 @Data
 @ToString
+@Accessors(chain = true)
 public class Issue {
     private Long issueId;
     private Long projectId;
@@ -16,9 +18,10 @@ public class Issue {
     private IssueStatusType issueStatus;
     private String issueDescription;
     private String issueDetail;
-    private Long issueContractId;
     private Long issueReporterId;
     private Integer issuePriority;
-    private Date createAt;
+    private LocalDateTime createAt;
+    private LocalDateTime updateAt;
     private Long topIssue;
+    private List<IssueAssignee> assignees = new ArrayList<>();
 }

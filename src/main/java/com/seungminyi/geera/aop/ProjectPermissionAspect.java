@@ -35,7 +35,7 @@ public class ProjectPermissionAspect {
     public void checkProjectPermission(JoinPoint joinPoint, ProjectPermissionCheck projectPermissionCheck,
         Long projectId) {
         if (!hasRequiredRole(PermissionRoleGroup.PROJECT_ACCESS_ROLES, projectId)) {
-            throw new InsufficientPermissionException("프로젝트 접근 권한이 없는 사용자 입니다.");
+            throw new InsufficientPermissionException("프로젝트 생성자가 아닙니다.");
         }
     }
 
@@ -43,7 +43,7 @@ public class ProjectPermissionAspect {
     public void checkIssuePermission(JoinPoint joinPoint, IssuePermissionCheck issuePermissionCheck,
         IssueRequest issueRequest) {
         if (!hasRequiredRole(PermissionRoleGroup.ISSUE_ACCESS_ROLES, issueRequest.getProjectId())) {
-            throw new InsufficientPermissionException("이슈 접근 권한이 없는 사용자 입니다.");
+            throw new InsufficientPermissionException("프로젝트 맴버가 아닙니다.");
         }
     }
 
@@ -51,7 +51,7 @@ public class ProjectPermissionAspect {
     public void checkIssuePermission(JoinPoint joinPoint, IssuePermissionCheck issuePermissionCheck, Long issueId) {
         Long projectId = issueRepository.getProjectId(issueId);
         if (!hasRequiredRole(PermissionRoleGroup.ISSUE_ACCESS_ROLES, projectId)) {
-            throw new InsufficientPermissionException("이슈 접근 권한이 없는 사용자 입니다.");
+            throw new InsufficientPermissionException("프로젝트 맴버가 아닙니다.");
         }
     }
 

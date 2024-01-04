@@ -5,7 +5,6 @@ import static org.mockito.Mockito.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.apache.ibatis.session.RowBounds;
@@ -18,15 +17,13 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.seungminyi.geera.TestUtil;
-import com.seungminyi.geera.core.gql.generator.AstVisitor;
 import com.seungminyi.geera.exception.MaxItemsExceededException;
-import com.seungminyi.geera.exception.UnauthorizedAssignmentException;
+import com.seungminyi.geera.exception.UnauthorizedException;
 import com.seungminyi.geera.issue.dto.Issue;
 import com.seungminyi.geera.issue.dto.IssueConditionsDto;
 import com.seungminyi.geera.issue.dto.IssueRequest;
 import com.seungminyi.geera.project.ProjectMemberRepository;
 import com.seungminyi.geera.project.ProjectMemberRole;
-import com.seungminyi.geera.project.ProjectRepository;
 import com.seungminyi.geera.project.dto.ProjectMember;
 import com.seungminyi.geera.utill.auth.SecurityUtils;
 
@@ -76,7 +73,7 @@ class IssueServiceTest {
 
 		when(projectMemberRepository.findRoleByMember(projectMember)).thenReturn(ProjectMemberRole.INVITED);
 
-		assertThrows(UnauthorizedAssignmentException.class, () ->
+		assertThrows(UnauthorizedException.class, () ->
 			issueService.createIssue(issueRequest));
 	}
 
@@ -138,9 +135,29 @@ class IssueServiceTest {
 
 		when(projectMemberRepository.findRoleByMember(projectMember)).thenReturn(ProjectMemberRole.MEMBER);
 
-		issueService.updateIssue(issueId, issueRequest);
+		issueService.putIssue(issueId, issueRequest);
 
 		verify(issueRepository).update(any(Issue.class));
+		verify(issueRepository).deleteAssignees(issueId);
+		verify(issueRepository).insertAssignee(eq(issueId), anyLong());
+	}
+
+	@Test
+	@DisplayName("이슈 부분 수정")
+	void patchIssue() {
+		Long issueId = 1L;
+		IssueRequest issueRequest = TestUtil.createIssueRequest();
+		ProjectMember projectMember = new ProjectMember()
+			.setMemberId(SecurityUtils.getCurrentUser().getId())
+			.setProjectId(issueRequest.getProjectId());
+
+		when(projectMemberRepository.findRoleByMember(projectMember)).thenReturn(ProjectMemberRole.MEMBER);
+
+		issueService.patchIssue(issueId, issueRequest);
+
+		verify(issueRepository).patch(any(Issue.class));
+		verify(issueRepository).deleteAssignees(issueId);
+		verify(issueRepository).insertAssignee(eq(issueId), anyLong());
 	}
 
 	@Test
@@ -154,7 +171,7 @@ class IssueServiceTest {
 
 		when(projectMemberRepository.findRoleByMember(projectMember)).thenReturn(ProjectMemberRole.INVITED);
 
-		assertThrows(UnauthorizedAssignmentException.class, () ->
-			issueService.createIssue(issueRequest));
+		assertThrows(UnauthorizedException.class, () ->
+			issueService.putIssue(issueId, issueRequest));
 	}
 }

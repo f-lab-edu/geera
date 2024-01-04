@@ -21,4 +21,8 @@ public class HttpSessionManager implements SessionManager {
 	public Object getAttribute(String attributeName) {
 		return httpSession.getAttribute(attributeName);
 	}
+
+	public String getId() {
+		return httpSession.getId();
+	}
 }

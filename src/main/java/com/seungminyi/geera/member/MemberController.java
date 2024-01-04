@@ -2,9 +2,10 @@ package com.seungminyi.geera.member;
 
 import static com.seungminyi.geera.utill.validator.ValidationUtil.handleBindingErrors;
 
+import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.List;
 import java.util.Optional;
 
-import org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,8 @@ import com.seungminyi.geera.common.dto.ResponseMessage;
 import com.seungminyi.geera.member.dto.EmailRequest;
 import com.seungminyi.geera.member.dto.Member;
 import com.seungminyi.geera.member.dto.MemberRequest;
+import com.seungminyi.geera.member.dto.ProjectInfo;
+import com.seungminyi.geera.member.dto.VerifyEmailResponse;
 import com.seungminyi.geera.utill.session.SessionManager;
 import com.seungminyi.geera.utill.validator.ValidationUtil;
 
@@ -66,7 +69,6 @@ public class MemberController {
     public ResponseEntity<?> register(@Validated @RequestBody MemberRequest memberRequest,
         BindingResult bindingResult) {
         ValidationUtil.handleBindingErrors(bindingResult);
-
         if (!securityCodeCheck(memberRequest.getEmail(), memberRequest.getSecurityCode())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage("인증코드가 일치하지 않습니다."));
         }
@@ -76,7 +78,7 @@ public class MemberController {
         try {
             memberService.registerMember(member);
         } catch (DataIntegrityViolationException e) {
-            if (e.getCause() instanceof JdbcSQLIntegrityConstraintViolationException) {
+            if (e.getCause() instanceof SQLIntegrityConstraintViolationException) {
                 return ResponseEntity.status(HttpStatus.CONFLICT).body(new ResponseMessage("이미 가입된 이메일 입니다."));
             }
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -86,7 +88,7 @@ public class MemberController {
         return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseMessage("회원 가입이 완료 되었습니다"));
     }
 
-    @Operation(summary = "이메일 인증코드 발송", description = "회원가입 선행작업")
+    @Operation(summary = "이메일 인증코드 발송(메일서버 부재로 인증코드를 반환합니다.)", description = "회원가입 선행작업")
     @Parameter(name = "email_address", description = "email 주소")
     @ApiResponse(responseCode = "200", description = "인증코드 발송 완료", content = {
         @Content(schema = @Schema(implementation = ResponseMessage.class), mediaType = "application/json")})
@@ -94,8 +96,12 @@ public class MemberController {
     public ResponseEntity<?> verifyEmail(@Validated @RequestBody EmailRequest emailRequest,
         BindingResult bindingResult) {
         ValidationUtil.handleBindingErrors(bindingResult);
-        sessionManager.setAttribute(emailRequest.getEmailAddress(), generateRandomNumber());
-        return ResponseEntity.ok().body(new ResponseMessage("이메일 인증코드를 발송했습니다."));
+        String verificationCode = generateRandomNumber();
+        sessionManager.setAttribute(emailRequest.getEmailAddress(), verificationCode);
+
+        //메일서버 부재로 인증코드 반환
+        VerifyEmailResponse response = new VerifyEmailResponse(verificationCode);
+        return ResponseEntity.ok().body(response);
     }
 
     @Operation(summary = "맴버 찾기", description = "email로 member 검색")
@@ -105,6 +111,12 @@ public class MemberController {
     public ResponseEntity<?> findMember(@RequestParam String emailAddress) {
         Optional<Member> member = Optional.ofNullable(memberService.findMemberByEmail(emailAddress));
         return ResponseEntity.ok(member);
+    }
+
+    @GetMapping("/invited-projects")
+    public ResponseEntity<?> getInvitedProjects() {
+        List<ProjectInfo> invitedProjects = memberService.getInvitedProjects();
+        return ResponseEntity.ok(invitedProjects);
     }
 
     private boolean securityCodeCheck(String email, String securityCode) {

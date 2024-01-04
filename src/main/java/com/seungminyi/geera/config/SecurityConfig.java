@@ -2,6 +2,7 @@ package com.seungminyi.geera.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -10,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsUtils;
 
 import com.seungminyi.geera.auth.JwtTokenFilter;
 import com.seungminyi.geera.auth.JwtTokenProvider;
@@ -30,7 +32,8 @@ public class SecurityConfig {
 	public WebSecurityCustomizer webSecurityCustomizer() throws Exception {
 		return (web) -> web.ignoring().requestMatchers(
 			"/api/login",
-			"/members/**",
+			"/members",
+			"/members/verify-email",
 			"/docs/**",
 			"/v3/**",
 			"/error/**"
@@ -48,8 +51,10 @@ public class SecurityConfig {
 			.csrf(csrf -> csrf
 				.disable()
 			)
+
 			.addFilterBefore(new JwtTokenFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
 			.authorizeRequests(authorize -> authorize
+				.requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
 				.requestMatchers("/error**").permitAll()
 				.anyRequest().authenticated()
 			)
@@ -60,18 +65,4 @@ public class SecurityConfig {
 		return http.build();
 	}
 }
-//    @Bean
-//    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-//        return httpSecurity
-//                .csrf(csrf -> csrf.disable())
-//                .exceptionHandling(exch -> exch
-//                        .authenticationEntryPoint(new Http403ForbiddenEntryPoint()))
-//                .authorizeHttpRequests(authz -> authz
-//                        .anyRequest().authenticated())
-//                .formLogin(form -> form
-//                        .successHandler(authenticationSuccessHandler))
-//                .logout(logout -> logout
-//                        .logoutUrl("/logout"))
-//                .build();
-//    }
 
