@@ -113,9 +113,9 @@ public class MemberController {
         return ResponseEntity.ok(member);
     }
 
-    @GetMapping("/{memberId}/invited-projects")
-    public ResponseEntity<?> getInvitedProjects(@PathVariable Long memberId) {
-        List<ProjectInfo> invitedProjects = memberService.getInvitedProjects(memberId);
+    @GetMapping("/invited-projects")
+    public ResponseEntity<?> getInvitedProjects() {
+        List<ProjectInfo> invitedProjects = memberService.getInvitedProjects();
         return ResponseEntity.ok(invitedProjects);
     }
 

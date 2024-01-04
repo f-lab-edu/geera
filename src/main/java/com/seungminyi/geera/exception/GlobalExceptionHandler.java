@@ -12,13 +12,13 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(exception.getMessage());
     }
 
-    @ExceptionHandler(UnauthorizedAssignmentException.class)
-    public ResponseEntity<String> handleUnauthorizedAssignmentException(UnauthorizedAssignmentException exception) {
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<String> handleUnauthorizedAssignmentException(UnauthorizedException exception) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
     }
 
     @ExceptionHandler(MaxItemsExceededException.class)
-    public ResponseEntity<String> handleMaxItemsExceededException(UnauthorizedAssignmentException exception) {
+    public ResponseEntity<String> handleMaxItemsExceededException(MaxItemsExceededException exception) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
     }
 

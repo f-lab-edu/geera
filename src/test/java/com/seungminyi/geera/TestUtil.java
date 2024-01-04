@@ -2,6 +2,9 @@ package com.seungminyi.geera;
 
 import static org.mockito.Mockito.*;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.seungminyi.geera.issue.dto.IssueAssignee;
 import com.seungminyi.geera.issue.dto.IssueRequest;
 import com.seungminyi.geera.issue.dto.IssueStatusType;
 import com.seungminyi.geera.issue.dto.IssueType;
@@ -18,6 +21,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -92,14 +96,21 @@ public class TestUtil {
             .setIssueStatus(IssueStatusType.TODO)
             .setIssueDescription("이슈 요약")
             .setIssueDetail("이슈 설명")
-            .setIssueContractId(1L)
+            .setAssignees(Collections.singletonList(createIssueAssignee()))
             .setTopIssue(null)
             ;
+    }
+
+    public static IssueAssignee createIssueAssignee() {
+        return new IssueAssignee()
+            .setIssueId(1L)
+            .setMemberId(1L);
     }
 
     public static CustomUserDetails createCustomUserDetails(Member member) {
         return new CustomUserDetails(createTestMember());
     }
+
 
     public static void setAuthentication(CustomUserDetails customUserDetails) {
         SecurityContext securityContext = Mockito.mock(SecurityContext.class);
@@ -108,4 +119,10 @@ public class TestUtil {
         );
         SecurityContextHolder.setContext(securityContext);
     }
+
+    public static String convertToJson(Object obj) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        return objectMapper.writeValueAsString(obj);
+    }
+
 }

@@ -33,11 +33,16 @@ class AuthenticationControllerTest {
     @Test
     @DisplayName("로그인 성공")
     void authenticateUseSuccess() throws Exception {
+        Long testMemberId = 1L;
         String testEmail = "test@example.com";
         String testPassword = "password1!";
         String testUserName = "test";
         String testToken = "testToken";
-        LoginResponse loginResponse = new LoginResponse(testToken, testUserName, testEmail);
+        LoginResponse loginResponse = new LoginResponse()
+            .setMemberId(testMemberId)
+            .setEmail(testEmail)
+            .setUsername(testUserName)
+            .setToken(testToken);
 
         Mockito.when(authService.login(testEmail, testPassword)).thenReturn(loginResponse);
         mockMvc.perform(MockMvcRequestBuilders.post("/api/login")
@@ -48,6 +53,7 @@ class AuthenticationControllerTest {
                 .contentType("application/json"))
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andExpect(MockMvcResultMatchers.jsonPath("$.token").value(testToken))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.memberId").value(testMemberId))
             .andExpect(MockMvcResultMatchers.jsonPath("$.username").value(testUserName))
             .andExpect(MockMvcResultMatchers.jsonPath("$.email").value(testEmail));
     }

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.seungminyi.geera.member.dto.Member;
 import com.seungminyi.geera.member.dto.ProjectInfo;
 import com.seungminyi.geera.project.ProjectMemberRepository;
+import com.seungminyi.geera.utill.auth.SecurityUtils;
 
 import lombok.RequiredArgsConstructor;
 
@@ -31,8 +32,8 @@ public class MemberService {
 		return memberRepository.findByEmail(email);
 	}
 
-	//TODO 본인이 초대받은 프로젝트만 조회가능
-    public List<ProjectInfo> getInvitedProjects(Long memberId) {
+    public List<ProjectInfo> getInvitedProjects() {
+	    Long memberId = SecurityUtils.getCurrentUser().getId();
 	    return projectMemberRepository.getInvitedProjects(memberId);
     }
 }

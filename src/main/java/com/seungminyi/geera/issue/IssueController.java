@@ -91,11 +91,17 @@ public class IssueController {
 
     @Operation(summary = "이슈 부분 수정")
     @ApiResponses({
-        @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = ResponseMessage.class), mediaType = "application/json")),
-        @ApiResponse(responseCode = "400", content = @Content(schema = @Schema(implementation = ErrorResponseMessage.class), mediaType = "application/json"))
+        @ApiResponse(responseCode = "200", content =
+            @Content(schema = @Schema(implementation = ResponseMessage.class), mediaType = "application/json")),
+        @ApiResponse(responseCode = "400", content = {
+            @Content(schema = @Schema(implementation = ErrorResponseMessage.class), mediaType = "application/json")})
     })
     @PatchMapping("/{issueId}")
     public ResponseEntity<?> patchIssue(@PathVariable Long issueId, @RequestBody IssueRequest issueRequest) {
+        if (issueId.equals(issueRequest.getTopIssue())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorResponseMessage("상위 이슈는 자기 자신일 수 없습니다."));
+        }
         issueService.patchIssue(issueId, issueRequest);
         return ResponseEntity.ok(new ResponseMessage("issue 수정 완료"));
     }
@@ -109,6 +115,10 @@ public class IssueController {
         return ResponseEntity.ok(new ResponseMessage("issue 삭제 완료"));
     }
 
+    @Operation(summary = "댓글 작성")
+    @ApiResponse(responseCode = "200", content = {
+        @Content(schema = @Schema(implementation = ResponseMessage.class), mediaType = "application/json")
+    })
     @PostMapping("/{issueId}/comments")
     public ResponseEntity<?> createCommentForIssue(@PathVariable Long issueId,
         @RequestBody CommentRequest commentRequest) {
@@ -116,18 +126,30 @@ public class IssueController {
         return ResponseEntity.ok(new ResponseMessage("comment 생성완료"));
     }
 
+    @Operation(summary = "댓글 조회")
+    @ApiResponse(responseCode = "200", content = {
+        @Content(schema = @Schema(implementation = ResponseMessage.class), mediaType = "application/json")
+    })
     @GetMapping("/{issueId}/comments")
     public ResponseEntity<List<CommentResponse>> getCommentsByIssueId(@PathVariable Long issueId) {
         List<CommentResponse> commentResponses = issueCommentService.getCommentsByIssueId(issueId);
         return ResponseEntity.ok(commentResponses);
     }
 
+    @Operation(summary = "댓글 수정")
+    @ApiResponse(responseCode = "200", content = {
+        @Content(schema = @Schema(implementation = ResponseMessage.class), mediaType = "application/json")
+    })
     @PatchMapping("/comments/{commentId}")
     public ResponseEntity<?> updateComment(@PathVariable Long commentId, @RequestBody CommentRequest commentRequest) {
         issueCommentService.updateComment(commentId, commentRequest);
         return ResponseEntity.ok(new ResponseMessage("comment 수정완료"));
     }
 
+    @Operation(summary = "이슈삭제")
+    @ApiResponse(responseCode = "200", content = {
+        @Content(schema = @Schema(implementation = ResponseMessage.class), mediaType = "application/json")
+    })
     @DeleteMapping("/comments/{commentId}")
     public ResponseEntity<?> deleteComment(@PathVariable Long commentId) {
         issueCommentService.deleteComment(commentId);

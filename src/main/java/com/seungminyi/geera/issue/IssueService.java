@@ -3,7 +3,6 @@ package com.seungminyi.geera.issue;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,11 +11,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.apache.ibatis.session.RowBounds;
 
 import com.seungminyi.geera.core.gql.ast.GeeraQuery;
-import com.seungminyi.geera.core.gql.generator.AstVisitor;
 import com.seungminyi.geera.core.gql.generator.SqlGenerator;
 import com.seungminyi.geera.core.gql.parser.GqlParser;
 import com.seungminyi.geera.exception.MaxItemsExceededException;
-import com.seungminyi.geera.exception.UnauthorizedAssignmentException;
+import com.seungminyi.geera.exception.UnauthorizedException;
 import com.seungminyi.geera.issue.dto.IssueAssignee;
 import com.seungminyi.geera.issue.dto.IssueConditionsDto;
 import com.seungminyi.geera.issue.dto.Issue;
@@ -35,6 +33,7 @@ public class IssueService {
     private final IssueRepository issueRepository;
     private final ProjectMemberRepository projectMemberRepository;
 
+    @IssuePermissionCheck
     @Transactional
     public void createIssue(IssueRequest issueRequest) {
         validateAssignmentPermission(issueRequest);
@@ -108,11 +107,16 @@ public class IssueService {
     }
 
     private void validateAssignmentPermission(IssueRequest issueRequest) {
-        Optional.ofNullable(issueRequest.getAssignees())
-            .orElse(Collections.emptyList())
-            .stream()
-            .filter(assignee -> assignee.getMemberId() != null)
-            .forEach(assignee -> checkMemberHasIssueAccess(issueRequest.getProjectId(), assignee.getMemberId()));
+        List<IssueAssignee> assignees = issueRequest.getAssignees();
+        if (assignees == null) {
+            assignees = Collections.emptyList();
+        }
+
+        for (IssueAssignee assignee : assignees) {
+            if (assignee.getMemberId() != null) {
+                checkMemberHasIssueAccess(issueRequest.getProjectId(), assignee.getMemberId());
+            }
+        }
     }
 
     private void checkMemberHasIssueAccess(Long projectId, Long issueContractId) {
@@ -122,7 +126,7 @@ public class IssueService {
         ProjectMemberRole memberRole = projectMemberRepository.findRoleByMember(projectMember);
 
         if (!memberRole.hasIssueAccess()) {
-            throw new UnauthorizedAssignmentException("담당자가 프로젝트에 권한이 없습니다.");
+            throw new UnauthorizedException("담당자가 프로젝트에 권한이 없습니다.");
         }
     }
 

@@ -1,11 +1,11 @@
 package com.seungminyi.geera.issue;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.seungminyi.geera.exception.UnauthorizedException;
 import com.seungminyi.geera.issue.dto.Comment;
 import com.seungminyi.geera.issue.dto.CommentRequest;
 import com.seungminyi.geera.issue.dto.CommentResponse;
@@ -35,15 +35,26 @@ public class IssueCommentService {
         issueCommentRepository.insert(comment);
     }
 
-    public void updateComment(Long commentId, CommentRequest commentRequest) { //TODO 본인이 작성한 덧글 확인, 권한
-        Comment comment = new Comment()
-            .setIssueCommentId(commentId)
-            .setUpdateAt(LocalDateTime.now())
+    public void updateComment(Long commentId, CommentRequest commentRequest) {
+        Comment comment = validateCommentOwner(commentId);
+
+        comment.setUpdateAt(LocalDateTime.now())
             .setContent(commentRequest.getCommentContent());
         issueCommentRepository.update(comment);
     }
 
     public void deleteComment(Long commentId) {
+        validateCommentOwner(commentId);
         issueCommentRepository.delete(commentId);
-    } //TODO 본인이 작성한 덧글 확인, 권한
+    }
+
+    private Comment validateCommentOwner(Long commentId) {
+        Long memberId = SecurityUtils.getCurrentUser().getId();
+        Comment comment = issueCommentRepository.selectById(commentId);
+
+        if (comment == null || memberId != comment.getMemberId()) {
+            throw new UnauthorizedException("댓글 작성자만 수정가능합니다.");
+        }
+        return comment;
+    }
 }

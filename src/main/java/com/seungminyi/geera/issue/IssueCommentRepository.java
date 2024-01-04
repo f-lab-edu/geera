@@ -16,4 +16,6 @@ public interface IssueCommentRepository {
     void update(Comment comment);
 
     void delete(Long commentId);
+
+    Comment selectById(Long commentId);
 }

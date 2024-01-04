@@ -5,11 +5,12 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-@Getter @Setter
+@Getter
+@Setter
 @Accessors(chain = true)
 public class LoginResponse {
-	private Long memberId;
-	private String token;
-	private String username;
-	private String email;
+    private Long memberId;
+    private String token;
+    private String username;
+    private String email;
 }
