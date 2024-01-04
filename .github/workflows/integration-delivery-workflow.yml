@@ -56,12 +56,6 @@ jobs:
       - name: Build, Test, and Quality Checks
         run: ./gradlew build test checkstyleMain pmdMain pmdTest jacocoTestCoverageVerification
 
-      - name: Run SonarQube Scan
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: ./gradlew sonarqube
-
   docker_build_and_deploy:
     needs: build_and_test
     runs-on: ubuntu-latest

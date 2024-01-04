@@ -5,6 +5,7 @@ plugins {
     id 'checkstyle'
     id 'pmd'
     id 'jacoco'
+    id 'org.sonarqube' version "4.4.1.3373"
 }
 
 group = 'com.seungminyi'
@@ -89,6 +90,13 @@ jacocoTestCoverageVerification {
                     "com.seungminyi.geera.utill.auth.PermissionRoleGroup"
             ]
         }
+    }
+}
+
+sonarqube {
+    properties {
+        property 'sonar.java.binaries', '**'
+        property "sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/jacocoTestReport.xml"
     }
 }
 
