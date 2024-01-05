@@ -6,6 +6,21 @@ spring:
     password: ${GEERA_DB_PASSWORD}
   profiles:
     active: local
+  web:
+    cors:
+      allow-credentials: true
+      allowed-origins:
+        - "http://localhost:3000"
+        - "http:///geera-ui.vercel.app"
+      allowed-methods:
+        - GET
+        - POST
+        - PUT
+        - DELETE
+        - PATCH
+        - OPTIONS
+      allowed-headers:
+        - "*"
 
 mybatis:
   mapper-locations: classpath:mapper/*.xml
