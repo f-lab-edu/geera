@@ -3,6 +3,8 @@ name: F-Lab SonarCloud Code Analyze
 on:
   pull_request:
     types: [opened, synchronize, reopened]
+  push:
+    - sonarcloud-test
   workflow_dispatch:
 
 env:
@@ -29,7 +31,12 @@ jobs:
         with:
           java-version: '19'
           distribution: 'adopt'
-          
+
+      - name: Print environment variables
+        run: |
+          echo "Repository: $GITHUB_REPOSITORY"
+          echo "Sonar Project Key: $SONAR_PROJECT_KEY"
+          echo "Sonar Token: $SONAR_TOKEN"
 
       - name: Analyze
         run: ./gradlew sonar -Dsonar.projectKey=${{ env.SONAR_PROJECT_KEY }} -Dsonar.organization=f-lab-edu-1 -Dsonar.host.url=https://sonarcloud.io -Dsonar.token=${{ secrets.SECRET_SONARQUBE }} -Dsonar.gradle.skipCompile=true
