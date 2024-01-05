@@ -4,7 +4,8 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
   push:
-    - sonarcloud-test
+    branches:
+      - sonarcloud-test
   workflow_dispatch:
 
 env:
