@@ -20,8 +20,7 @@ import com.seungminyi.geera.auth.JwtTokenProvider;
 public class SecurityConfig {
 	private final JwtTokenProvider jwtTokenProvider;
 
-	public SecurityConfig(JwtTokenProvider jwtTokenProvider,
-		AuthenticationSuccessHandler authenticationSuccessHandler) {
+	public SecurityConfig(JwtTokenProvider jwtTokenProvider) {
 		this.jwtTokenProvider = jwtTokenProvider;
 	}
 
