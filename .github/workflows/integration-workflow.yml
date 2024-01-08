@@ -63,9 +63,9 @@ jobs:
           REPO_NAME=$(echo $GITHUB_REPOSITORY | cut -d '/' -f 2)
           ORG_NAME=$(echo $GITHUB_REPOSITORY | cut -d '/' -f 1)
           SONAR_PROJECT_KEY="${ORG_NAME}_${REPO_NAME}"
-          echo "SONAR_PROJECT_KEY=$SONAR_PROJECT_KEY" >> $GITHUB_ENV 
+          echo "SONAR_PROJECT_KEY=$SONAR_PROJECT_KEY" >> $GITHUB_ENV
 
-      - name: SonarCloud Analysis
-        run: ./gradlew sonarqube -Dsonar.projectKey=${{ env.SONAR_PROJECT_KEY }} -Dsonar.organization=f-lab-edu-1 -Dsonar.host.url=https://sonarcloud.io -Dsonar.token=${{ secrets.SECRET_SONARQUBE }} -Dsonar.coverage.jacoco.xmlReportPaths=build/reports/jacoco/test/jacocoTestReport.xml
+      - name: SonarCloud Analyze
+        run: ./gradlew sonar -Dsonar.projectKey=${{ env.SONAR_PROJECT_KEY }} -Dsonar.organization=f-lab-edu-1 -Dsonar.host.url=https://sonarcloud.io -Dsonar.token=${{ secrets.SECRET_SONARQUBE }} -Dsonar.gradle.skipCompile=true
         env:
           SONAR_TOKEN: ${{ secrets.SECRET_SONARQUBE }}
