@@ -41,7 +41,7 @@ class IssueCommentServiceTest {
 
     @Test
     @DisplayName("댓글 조회")
-    public void testGetComments() {
+    void testGetComments() {
         List<CommentResponse> mockResponses = Arrays.asList(new CommentResponse(), new CommentResponse());
         when(issueCommentRepository.selectAllByIssueId(1L)).thenReturn(mockResponses);
 
@@ -51,7 +51,7 @@ class IssueCommentServiceTest {
 
     @Test
     @DisplayName("댓글 조회 - 댓글없음")
-    public void testGetComment_NoComments() {
+    void testGetComment_NoComments() {
         when(issueCommentRepository.selectAllByIssueId(1L)).thenReturn(Arrays.asList());
 
         List<CommentResponse> responses = issueCommentService.getCommentsByIssueId(1L);
@@ -60,7 +60,7 @@ class IssueCommentServiceTest {
 
     @Test
     @DisplayName("댓글 작성")
-    public void testCreateComment() {
+    void testCreateComment() {
         CommentRequest commentRequest = new CommentRequest();
         commentRequest.setCommentContent("댓글 내용");
 
@@ -71,7 +71,7 @@ class IssueCommentServiceTest {
 
     @Test
     @DisplayName("댓글 수정 - 작성자가 아님")
-    public void testUpdateComment_NotOwner() {
+    void testUpdateComment_NotOwner() {
         CommentRequest commentRequest = new CommentRequest();
         commentRequest.setCommentContent("수정된 댓글 내용");
 
@@ -85,7 +85,7 @@ class IssueCommentServiceTest {
 
     @Test
     @DisplayName("댓글 수정")
-    public void testUpdateComment() {
+    void testUpdateComment() {
         Comment comment = new Comment()
             .setMemberId(SecurityUtils.getCurrentUser().getId())
             .setContent("이전 댓글 내용");
@@ -101,7 +101,7 @@ class IssueCommentServiceTest {
 
     @Test
     @DisplayName("댓글 삭제 - 작성자가 아님")
-    public void testDeleteComment_NotOwner() {
+    void testDeleteComment_NotOwner() {
         when(issueCommentRepository.selectById(1L)).thenReturn(new Comment().setMemberId(999L));
 
         assertThrows(UnauthorizedException.class, () -> {
@@ -111,7 +111,7 @@ class IssueCommentServiceTest {
 
     @Test
     @DisplayName("댓글 삭제")
-    public void testDeleteComment() {
+    void testDeleteComment() {
         Comment comment = new Comment().setMemberId(SecurityUtils.getCurrentUser().getId());
         when(issueCommentRepository.selectById(1L)).thenReturn(comment);
 

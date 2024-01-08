@@ -1,6 +1,5 @@
 package com.seungminyi.geera.core.gql.lexer;
 
-import java.io.EOFException;
 import java.io.IOException;
 import java.io.StringReader;
 

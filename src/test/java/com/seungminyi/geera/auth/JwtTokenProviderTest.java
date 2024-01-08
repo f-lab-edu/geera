@@ -2,7 +2,6 @@ package com.seungminyi.geera.auth;
 
 import com.seungminyi.geera.TestUtil;
 import com.seungminyi.geera.auth.dto.CustomUserDetails;
-import com.seungminyi.geera.auth.JwtTokenProvider;
 import com.seungminyi.geera.member.dto.Member;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -51,7 +50,7 @@ class JwtTokenProviderTest {
 
     @Test
     @DisplayName("Authorization 토큰 파싱")
-    public void testResolveTokenWithBearerToken() {
+    void testResolveTokenWithBearerToken() {
         String bearerToken = "Bearer Token";
         when(request.getHeader("Authorization")).thenReturn(bearerToken);
 
@@ -62,7 +61,7 @@ class JwtTokenProviderTest {
 
     @Test
     @DisplayName("Authorization 토큰 없음")
-    public void testResolveTokenWithEmptyAuthorizationHeader() {
+    void testResolveTokenWithEmptyAuthorizationHeader() {
         when(request.getHeader("Authorization")).thenReturn(null);
 
         String token = jwtTokenProvider.resolveToken(request);
@@ -72,7 +71,7 @@ class JwtTokenProviderTest {
 
     @Test
     @DisplayName("Authorization Bearer 아님")
-    public void testResolveTokenWithNoBearerToken() {
+    void testResolveTokenWithNoBearerToken() {
         when(request.getHeader("Authorization")).thenReturn("Basic Token");
 
         String token = jwtTokenProvider.resolveToken(request);

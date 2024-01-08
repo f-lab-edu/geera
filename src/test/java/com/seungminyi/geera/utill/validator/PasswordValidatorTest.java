@@ -21,7 +21,7 @@ public class PasswordValidatorTest {
 	private ConstraintValidatorContext.ConstraintViolationBuilder builder;
 
 	@BeforeEach
-	public void setUp() {
+	void setUp() {
 		passwordValidator = new PasswordValidator();
 		context = mock(ConstraintValidatorContext.class);
 		builder = mock(ConstraintValidatorContext.ConstraintViolationBuilder.class);
@@ -30,7 +30,7 @@ public class PasswordValidatorTest {
 
 	@Test
 	@DisplayName("유효한 패스워드")
-	public void testValidPassword() {
+	void testValidPassword() {
 		String validPassword = "password1!";
 
 		boolean isValid = passwordValidator.isValid(validPassword, context);
@@ -40,7 +40,7 @@ public class PasswordValidatorTest {
 
 	@Test
 	@DisplayName("취약한 패스워드")
-	public void testInvalidPassword() {
+	void testInvalidPassword() {
 		String invalidPassword = "password";
 
 		boolean isValid = passwordValidator.isValid(invalidPassword, context);

@@ -40,7 +40,7 @@ public class ProjectControllerTest {
     @Test
     @WithMockUser
     @DisplayName("프로젝트 조회")
-    public void testGetProject() throws Exception {
+    void testGetProject() throws Exception {
         List<Project> projects = TestUtil.createTestProjects();
         Mockito.when(projectService.getProjects(anyString(), anyString(), anyInt(), anyInt())).thenReturn(projects);
 
@@ -51,7 +51,7 @@ public class ProjectControllerTest {
     @Test
     @WithMockUser
     @DisplayName("프로젝트 생성")
-    public void testCreateProject() throws Exception {
+    void testCreateProject() throws Exception {
         Project createdProject = TestUtil.createTestProject();
         Mockito.when(projectService.createProject(any())).thenReturn(createdProject);
 
@@ -64,7 +64,7 @@ public class ProjectControllerTest {
     @Test
     @WithMockUser
     @DisplayName("프로젝트 수정")
-    public void testUpdateProject() throws Exception {
+    void testUpdateProject() throws Exception {
         Mockito.doNothing().when(projectService).updateProject(anyLong(), any());
 
         mockMvc.perform(MockMvcRequestBuilders.put("/projects/1")
@@ -76,7 +76,7 @@ public class ProjectControllerTest {
     @Test
     @WithMockUser
     @DisplayName("프로젝트 수정 - 권한 없음")
-    public void testUpdateProject_권한없음() throws Exception {
+    void testUpdateProject_권한없음() throws Exception {
         InsufficientPermissionException exception = new InsufficientPermissionException("Forbidden");
         Mockito.doThrow(exception).when(projectService).updateProject(anyLong(), any());
 
@@ -89,7 +89,7 @@ public class ProjectControllerTest {
     @Test
     @WithMockUser
     @DisplayName("프로젝트 삭제")
-    public void testDeleteProject() throws Exception {
+    void testDeleteProject() throws Exception {
         Mockito.doNothing().when(projectService).deleteProject(anyLong());
 
         mockMvc.perform(MockMvcRequestBuilders.delete("/projects/1"))
@@ -99,7 +99,7 @@ public class ProjectControllerTest {
     @Test
     @WithMockUser
     @DisplayName("프로젝트 삭제 - 권한 없음")
-    public void testDeleteProject_권한없음() throws Exception {
+    void testDeleteProject_권한없음() throws Exception {
         InsufficientPermissionException exception = new InsufficientPermissionException("Forbidden");
         Mockito.doThrow(exception).when(projectService).deleteProject(anyLong());
 
@@ -110,7 +110,7 @@ public class ProjectControllerTest {
     @Test
     @WithMockUser
     @DisplayName("프로젝트 맴버 초대")
-    public void testAddProjectMember() throws Exception {
+    void testAddProjectMember() throws Exception {
         Mockito.doNothing().when(projectService).addProjectMember(anyLong(), anyLong());
 
         mockMvc.perform(MockMvcRequestBuilders.post("/projects/1/members/2"))
@@ -120,7 +120,7 @@ public class ProjectControllerTest {
     @Test
     @WithMockUser
     @DisplayName("프로젝트 맴버 초대 - 권한없음")
-    public void testAddProjectMember_권한없음() throws Exception {
+    void testAddProjectMember_권한없음() throws Exception {
         InsufficientPermissionException exception = new InsufficientPermissionException("Forbidden");
         Mockito.doThrow(exception).when(projectService).addProjectMember(anyLong(), anyLong());
 
@@ -131,7 +131,7 @@ public class ProjectControllerTest {
     @Test
     @WithMockUser
     @DisplayName("프로젝트 맴버 초대 - 이미 초대된 맴버")
-    public void testAddProjectMember_이미_초대된_맴버() throws Exception {
+    void testAddProjectMember_이미_초대된_맴버() throws Exception {
         DataIntegrityViolationException exception = new DataIntegrityViolationException("Conflict");
         Mockito.doThrow(exception).when(projectService).addProjectMember(anyLong(), anyLong());
 
@@ -142,7 +142,7 @@ public class ProjectControllerTest {
     @Test
     @WithMockUser
     @DisplayName("프로젝트 맴버 삭제")
-    public void testDeleteProjectMember() throws Exception {
+    void testDeleteProjectMember() throws Exception {
         Mockito.when(projectService.deleteProjectMember(anyLong(), anyLong())).thenReturn(1);
 
         mockMvc.perform(MockMvcRequestBuilders.delete("/projects/1/members/2"))
@@ -152,7 +152,7 @@ public class ProjectControllerTest {
     @Test
     @WithMockUser
     @DisplayName("프로젝트 맴버 삭제 - 권한없음")
-    public void testDeleteProjectMember_권한없음() throws Exception {
+    void testDeleteProjectMember_권한없음() throws Exception {
         InsufficientPermissionException exception = new InsufficientPermissionException("Forbidden");
         Mockito.doThrow(exception).when(projectService).deleteProjectMember(anyLong(), anyLong());
 
@@ -163,7 +163,7 @@ public class ProjectControllerTest {
     @Test
     @WithMockUser
     @DisplayName("프로젝트 멤버 삭제 - 본인삭제")
-    public void testDeleteProjectMember_본인삭제() throws Exception {
+    void testDeleteProjectMember_본인삭제() throws Exception {
         Mockito.when(projectService.deleteProjectMember(anyLong(), anyLong())).thenReturn(0);
 
         mockMvc.perform(MockMvcRequestBuilders.delete("/projects/1/members/2"))
@@ -173,7 +173,7 @@ public class ProjectControllerTest {
     @Test
     @WithMockUser
     @DisplayName("프로젝트 초대 수락")
-    public void testAcceptProjectInvitation() throws Exception {
+    void testAcceptProjectInvitation() throws Exception {
         Mockito.doNothing().when(projectService).acceptProjectInvitation(anyLong());
 
         mockMvc.perform(MockMvcRequestBuilders.patch("/projects/1/accept-invitation"))
@@ -183,7 +183,7 @@ public class ProjectControllerTest {
     @Test
     @WithMockUser
     @DisplayName("프로젝트 초대 수락 - 초대받지 않음")
-    public void testAcceptProjectInvitation_초대받지_않음() throws Exception {
+    void testAcceptProjectInvitation_초대받지_않음() throws Exception {
         InsufficientPermissionException exception = new InsufficientPermissionException("Forbidden");
         Mockito.doThrow(exception).when(projectService).acceptProjectInvitation(anyLong());
 

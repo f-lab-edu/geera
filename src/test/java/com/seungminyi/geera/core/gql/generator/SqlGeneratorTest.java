@@ -34,7 +34,7 @@ class SqlGeneratorTest {
 
         String sqlValue = sqlGenerator.visit(value);
 
-        assertEquals(sqlValue, "'TEST'");
+        assertEquals("'TEST'", sqlValue);
     }
 
     @Test
@@ -44,7 +44,7 @@ class SqlGeneratorTest {
 
         String sqlValue = sqlGenerator.visit(value);
 
-        assertEquals(sqlValue, "123");
+        assertEquals("123", sqlValue);
     }
 
     @Test
@@ -54,7 +54,7 @@ class SqlGeneratorTest {
 
         String sqlOp = sqlGenerator.visit(op);
 
-        assertEquals(sqlOp, "=");
+        assertEquals("=", sqlOp);
     }
 
     @Test
@@ -64,7 +64,7 @@ class SqlGeneratorTest {
 
         String sqlField = sqlGenerator.visit(field);
 
-        assertEquals(sqlField, "PROJECT_ID");
+        assertEquals("I.PROJECT_ID", sqlField);
     }
 
     @Test
@@ -82,7 +82,7 @@ class SqlGeneratorTest {
 
         String visit = sqlGenerator.visit(keyword);
 
-        assertEquals(visit, "AND ");
+        assertEquals("AND ", visit);
     }
 
     @Test
@@ -95,7 +95,7 @@ class SqlGeneratorTest {
 
         String sqlCondition = sqlGenerator.visit(condition);
 
-        assertEquals(sqlCondition, "PROJECT_ID = 123\n");
+        assertEquals("I.PROJECT_ID = 123\n", sqlCondition);
     }
 
     @Test
@@ -115,6 +115,6 @@ class SqlGeneratorTest {
 
         String sqlCondition = sqlGenerator.visit(query);
 
-        assertEquals(sqlCondition, "PROJECT_ID = 123\nOR ISSUE_STATUS IN ('TODO', 'DONE')\n");
+        assertEquals("I.PROJECT_ID = 123\nOR I.ISSUE_STATUS IN ('TODO', 'DONE')\n", sqlCondition);
     }
 }
