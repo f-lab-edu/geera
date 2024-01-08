@@ -62,7 +62,7 @@ jobs:
         run: |
           REPO_NAME=$(echo $GITHUB_REPOSITORY | cut -d '/' -f 2)
           ORG_NAME=$(echo $GITHUB_REPOSITORY | cut -d '/' -f 1)
-          SONAR_PROJECT_KEY="${ORG_NAME}_${REPO_NAME}"
+          SONAR_PROJECT_KEY="${ORG_NAME}_${REPO_NAME}2"
           echo "SONAR_PROJECT_KEY=$SONAR_PROJECT_KEY" >> $GITHUB_ENV
 
       - name: SonarCloud Analyze
