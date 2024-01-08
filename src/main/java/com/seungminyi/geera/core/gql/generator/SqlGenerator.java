@@ -73,7 +73,7 @@ public class SqlGenerator implements AstVisitor {
         String entityColumnName = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, fieldName);
         try {
             entityClass.getDeclaredField(entityColumnName);
-            return fieldName;
+            return "I." + fieldName;
         } catch (NoSuchFieldException e) {
             throw new GqlUnknownFieldException("정의되지 않은 필드 입니다 : " + fieldName);
         }
