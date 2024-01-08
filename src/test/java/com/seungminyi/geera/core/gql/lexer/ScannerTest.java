@@ -17,12 +17,4 @@ class ScannerTest {
         assertEquals('b', scanner.next());
         assertEquals('c', scanner.next());
     }
-
-    @Test
-    void test() {
-        char dd = (char) -1;
-        if(dd == -1){
-
-        }
-    }
 }

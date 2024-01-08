@@ -1,7 +1,6 @@
 package com.seungminyi.geera.auth;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 import java.io.IOException;
 
@@ -32,7 +31,7 @@ class CustomAuthenticationSuccessHandlerTest {
     private CustomAuthenticationSuccessHandler sut;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         request = new MockHttpServletRequest();
         response = new MockHttpServletResponse();
         sut = new CustomAuthenticationSuccessHandler();
@@ -40,7 +39,7 @@ class CustomAuthenticationSuccessHandlerTest {
 
     @Test
     @DisplayName("인증 성공 핸들러")
-    public void testOnAuthenticationSuccess() throws IOException, ServletException {
+    void testOnAuthenticationSuccess() throws IOException, ServletException {
         sut.onAuthenticationSuccess(request, response, filterChain, authentication);
 
         assertEquals(HttpServletResponse.SC_OK, response.getStatus());

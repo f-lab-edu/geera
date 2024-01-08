@@ -21,7 +21,7 @@ public class HttpSessionManagerTest {
     private HttpSession httpSession;
 
     @Test
-    public void testSetAttribute() {
+    void testSetAttribute() {
         String attributeName = "testAttribute";
         String attributeValue = "testValue";
 
@@ -32,7 +32,7 @@ public class HttpSessionManagerTest {
     }
 
     @Test
-    public void testGetAttribute() {
+    void testGetAttribute() {
         String attributeName = "testAttribute";
         String expectedValue = "testValue";
 

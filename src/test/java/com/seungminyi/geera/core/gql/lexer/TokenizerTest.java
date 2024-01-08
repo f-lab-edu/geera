@@ -48,7 +48,7 @@ public class TokenizerTest {
 
     @Test
     @DisplayName("GQL 토크나이저 - LPAR")
-    public void testLPAR() throws IOException {
+    void testLPAR() throws IOException {
         String query = "(";
 
         assertTokenizerOutput(new Token[] {
@@ -59,7 +59,7 @@ public class TokenizerTest {
 
     @Test
     @DisplayName("GQL 토크나이저 - RPAR")
-    public void testRPAR() throws IOException {
+    void testRPAR() throws IOException {
         String query = ")";
 
         assertTokenizerOutput(new Token[] {
@@ -70,7 +70,7 @@ public class TokenizerTest {
 
     @Test
     @DisplayName("GQL 토크나이저 - COMMA")
-    public void testCOMMA() throws IOException {
+    void testCOMMA() throws IOException {
         String query = ",";
 
         assertTokenizerOutput(new Token[] {
@@ -81,7 +81,7 @@ public class TokenizerTest {
 
     @Test
     @DisplayName("GQL 토크나이저 - ASSIGN")
-    public void testASSIGN() throws IOException {
+    void testASSIGN() throws IOException {
         String query = "=";
 
         assertTokenizerOutput(new Token[] {
@@ -92,7 +92,7 @@ public class TokenizerTest {
 
     @Test
     @DisplayName("GQL 토크나이저 - LT")
-    public void testLT() throws IOException {
+    void testLT() throws IOException {
         String query = "<";
 
         assertTokenizerOutput(new Token[] {
@@ -103,7 +103,7 @@ public class TokenizerTest {
 
     @Test
     @DisplayName("GQL 토크나이저 - GT")
-    public void testGT() throws IOException {
+    void testGT() throws IOException {
         String query = ">";
 
         assertTokenizerOutput(new Token[] {
@@ -114,7 +114,7 @@ public class TokenizerTest {
 
     @Test
     @DisplayName("GQL 토크나이저 - LE")
-    public void testLE() throws IOException {
+    void testLE() throws IOException {
         String query = "<=";
 
         assertTokenizerOutput(new Token[] {
@@ -125,7 +125,7 @@ public class TokenizerTest {
 
     @Test
     @DisplayName("GQL 토크나이저 - GE")
-    public void testGE() throws IOException {
+    void testGE() throws IOException {
         String query = ">=";
 
         assertTokenizerOutput(new Token[] {
@@ -136,7 +136,7 @@ public class TokenizerTest {
 
     @Test
     @DisplayName("GQL 토크나이저 - IS")
-    public void testIS() throws IOException {
+    void testIS() throws IOException {
         String query = "IS";
 
         assertTokenizerOutput(new Token[] {
@@ -147,7 +147,7 @@ public class TokenizerTest {
 
     @Test
     @DisplayName("GQL 토크나이저 - NOT")
-    public void testNOT() throws IOException {
+    void testNOT() throws IOException {
         String query = "NOT";
 
         assertTokenizerOutput(new Token[] {
@@ -158,7 +158,7 @@ public class TokenizerTest {
 
     @Test
     @DisplayName("GQL 토크나이저 - IN")
-    public void testIN() throws IOException {
+    void testIN() throws IOException {
         String query = "IN";
 
         assertTokenizerOutput(new Token[] {
@@ -169,7 +169,7 @@ public class TokenizerTest {
 
     @Test
     @DisplayName("GQL 토크나이저 - NOT_IN")
-    public void testNOT_IN() throws IOException {
+    void testNOT_IN() throws IOException {
         String query = "NOT IN";
 
         assertTokenizerOutput(new Token[] {
@@ -180,7 +180,7 @@ public class TokenizerTest {
 
     @Test
     @DisplayName("GQL 토크나이저 - AND")
-    public void testAND() throws IOException {
+    void testAND() throws IOException {
         String query = "AND";
 
         assertTokenizerOutput(new Token[] {
@@ -191,7 +191,7 @@ public class TokenizerTest {
 
     @Test
     @DisplayName("GQL 토크나이저 - OR")
-    public void testOR() throws IOException {
+    void testOR() throws IOException {
         String query = "OR";
 
         assertTokenizerOutput(new Token[] {
@@ -202,7 +202,7 @@ public class TokenizerTest {
 
     @Test
     @DisplayName("GQL 토크나이저 - ISSUE_ID")
-    public void testISSUE_ID() throws IOException {
+    void testISSUE_ID() throws IOException {
         String query = "ISSUE_ID";
 
         assertTokenizerOutput(new Token[] {
@@ -213,7 +213,7 @@ public class TokenizerTest {
 
     @Test
     @DisplayName("GQL 토크나이저 - PROJECT_ID")
-    public void testPROJECT_ID() throws IOException {
+    void testPROJECT_ID() throws IOException {
         String query = "PROJECT_ID";
 
         assertTokenizerOutput(new Token[] {
@@ -224,7 +224,7 @@ public class TokenizerTest {
 
     @Test
     @DisplayName("GQL 토크나이저 - ISSUE_TYPE")
-    public void testISSUE_TYPE() throws IOException {
+    void testISSUE_TYPE() throws IOException {
         String query = "ISSUE_TYPE";
 
         assertTokenizerOutput(new Token[] {
@@ -235,7 +235,7 @@ public class TokenizerTest {
 
     @Test
     @DisplayName("GQL 토크나이저 - ISSUE_STATUS")
-    public void testISSUE_STATUS() throws IOException {
+    void testISSUE_STATUS() throws IOException {
         String query = "ISSUE_STATUS";
 
         assertTokenizerOutput(new Token[] {
@@ -246,7 +246,7 @@ public class TokenizerTest {
 
     @Test
     @DisplayName("GQL 토크나이저 - ISSUE_DESCRIPTION")
-    public void testISSUE_DESCRIPTION() throws IOException {
+    void testISSUE_DESCRIPTION() throws IOException {
         String query = "ISSUE_DESCRIPTION";
 
         assertTokenizerOutput(new Token[] {
@@ -257,7 +257,7 @@ public class TokenizerTest {
 
     @Test
     @DisplayName("GQL 토크나이저 - ISSUE_DETAIL")
-    public void testISSUE_DETAIL() throws IOException {
+    void testISSUE_DETAIL() throws IOException {
         String query = "ISSUE_DETAIL";
 
         assertTokenizerOutput(new Token[] {
@@ -268,7 +268,7 @@ public class TokenizerTest {
 
     @Test
     @DisplayName("GQL 토크나이저 - ISSUE_CONTRACT_ID")
-    public void testISSUE_CONTRACT_ID() throws IOException {
+    void testISSUE_CONTRACT_ID() throws IOException {
         String query = "ISSUE_CONTRACT_ID";
 
         assertTokenizerOutput(new Token[] {
@@ -279,7 +279,7 @@ public class TokenizerTest {
 
     @Test
     @DisplayName("GQL 토크나이저 - ISSUE_REPORTER_ID")
-    public void testISSUE_REPORTER_ID() throws IOException {
+    void testISSUE_REPORTER_ID() throws IOException {
         String query = "ISSUE_REPORTER_ID";
 
         assertTokenizerOutput(new Token[] {
@@ -290,7 +290,7 @@ public class TokenizerTest {
 
     @Test
     @DisplayName("GQL 토크나이저 - ISSUE_PRIORITY")
-    public void testISSUE_PRIORITY() throws IOException {
+    void testISSUE_PRIORITY() throws IOException {
         String query = "ISSUE_PRIORITY";
 
         assertTokenizerOutput(new Token[] {
@@ -301,7 +301,7 @@ public class TokenizerTest {
 
     @Test
     @DisplayName("GQL 토크나이저 - CREATE_AT")
-    public void testCREATE_AT() throws IOException {
+    void testCREATE_AT() throws IOException {
         String query = "CREATE_AT";
 
         assertTokenizerOutput(new Token[] {
@@ -312,7 +312,7 @@ public class TokenizerTest {
 
     @Test
     @DisplayName("GQL 토크나이저 - TOP_ISSUE")
-    public void testTOP_ISSUE() throws IOException {
+    void testTOP_ISSUE() throws IOException {
         String query = "TOP_ISSUE";
 
         assertTokenizerOutput(new Token[] {
@@ -323,7 +323,7 @@ public class TokenizerTest {
 
     @Test
     @DisplayName("GQL 토크나이저 - 문자열 리터럴") //
-    public void testSTRING_LITERAL() throws IOException {
+    void testSTRING_LITERAL() throws IOException {
         String query = "\"Test, 123 \t,\b \n \r \"";
         assertTokenizerOutput(new Token[] {
             new Token(TokenClass.STRING_LITERAL, query, 1, 0),
@@ -333,7 +333,7 @@ public class TokenizerTest {
 
     @Test
     @DisplayName("GQL 토크나이저 - 정수 리터럴")
-    public void testINT_LITERAL() throws IOException {
+    void testINT_LITERAL() throws IOException {
         String query = "1234567890";
         assertTokenizerOutput(new Token[] {
             new Token(TokenClass.INT_LITERAL, "1234567890", 1, 0),

@@ -163,7 +163,7 @@ public class Tokenizer {
         acceptChar(currentChar);
     }
 
-    private Token handleIdentifierOrKeyword(String token, int line, int column) throws IOException {
+    private Token handleIdentifierOrKeyword(String token, int line, int column) {
         switch (token) {
             case "IS":
                 return new Token(TokenClass.IS, line, column);

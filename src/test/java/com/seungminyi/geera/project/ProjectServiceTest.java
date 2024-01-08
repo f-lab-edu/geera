@@ -138,7 +138,7 @@ class ProjectServiceTest {
 
     @Test
     @DisplayName("프로젝트 맴버 초대 여부 확인")
-    public void testAcceptProjectInvitation() {
+    void testAcceptProjectInvitation() {
         Long projectId = 1L;
         when(projectMemberRepository.findRoleByMember(any(ProjectMember.class))).thenReturn(ProjectMemberRole.INVITED);
 
@@ -149,7 +149,7 @@ class ProjectServiceTest {
 
     @Test
     @DisplayName("프로젝트 맴버 초대 여부 확인 - 초대받지 않음")
-    public void testAcceptProjectInvitation_Failure() {
+    void testAcceptProjectInvitation_Failure() {
         Long projectId = 1L;
         when(projectMemberRepository.findRoleByMember(any(ProjectMember.class))).thenReturn(null);
 
@@ -161,7 +161,7 @@ class ProjectServiceTest {
 
     @Test
     @DisplayName("프로젝트 맴버 초대 여부 확인 - Invite 상태가 아님")
-    public void testAcceptProjectInvitation_Failure_Not_Invited() {
+    void testAcceptProjectInvitation_Failure_Not_Invited() {
         Long projectId = 1L;
         when(projectMemberRepository.findRoleByMember(any(ProjectMember.class))).thenReturn(ProjectMemberRole.MEMBER);
 

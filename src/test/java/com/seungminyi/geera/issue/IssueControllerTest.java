@@ -152,7 +152,7 @@ class IssueControllerTest {
 	@Test
 	@WithMockUser
 	@DisplayName("이슈 댓글 조회")
-	public void testGetComment() throws Exception {
+	void testGetComment() throws Exception {
 		Long issueId = 1L;
 		List<CommentResponse> mockResponses = Arrays.asList(
 			new CommentResponse(1L, 1L, issueId, "Test Comment 1", LocalDateTime.now(), LocalDateTime.now()),
@@ -173,7 +173,7 @@ class IssueControllerTest {
 	@Test
 	@WithMockUser
 	@DisplayName("댓글 수정")
-	public void testUpdateComment() throws Exception {
+	void testUpdateComment() throws Exception {
 		Long commentId = 1L;
 		CommentRequest commentRequest = new CommentRequest();
 		String jsonRequest = TestUtil.convertToJson(commentRequest);
@@ -188,7 +188,7 @@ class IssueControllerTest {
 	@Test
 	@WithMockUser
 	@DisplayName("댓글 삭제")
-	public void testDeleteComment() throws Exception {
+	void testDeleteComment() throws Exception {
 		Long commentId = 1L;
 
 		mockMvc.perform(delete("/issues/comments/" + commentId)

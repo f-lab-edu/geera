@@ -39,7 +39,7 @@ class ProjectPermissionAspectTest {
     }
     @Test
     @DisplayName("AOP 프로젝트 권한 확인")
-    public void testCheckProjectPermissionAspect() {
+    void testCheckProjectPermissionAspect() {
         ProjectPermissionCheck annotation = mock(ProjectPermissionCheck.class);
         when(projectMemberRepository.findRoleByMember(any(ProjectMember.class))).thenReturn(ProjectMemberRole.CREATOR);
 
@@ -48,7 +48,7 @@ class ProjectPermissionAspectTest {
 
     @Test
     @DisplayName("AOP 프로젝트 권한 없음")
-    public void testCheckProjectPermissionAspect_권한없음() {
+    void testCheckProjectPermissionAspect_권한없음() {
         ProjectPermissionCheck annotation = mock(ProjectPermissionCheck.class);
         when(projectMemberRepository.findRoleByMember(any(ProjectMember.class))).thenReturn(null);
 
@@ -59,7 +59,7 @@ class ProjectPermissionAspectTest {
 
     @Test
     @DisplayName("AOP 이슈 권한 확인")
-    public void testCheckIssuePermissionAspectWithIssueRequest() {
+    void testCheckIssuePermissionAspectWithIssueRequest() {
         IssueRequest issueRequest = new IssueRequest().setProjectId(1L);
         IssuePermissionCheck annotation = mock(IssuePermissionCheck.class);
         when(projectMemberRepository.findRoleByMember(any(ProjectMember.class))).thenReturn(ProjectMemberRole.CREATOR);
@@ -69,7 +69,7 @@ class ProjectPermissionAspectTest {
 
     @Test
     @DisplayName("AOP 이슈 권한 확인")
-    public void testCheckIssuePermissionAspectWithIssueId() {
+    void testCheckIssuePermissionAspectWithIssueId() {
         Long issueId = 1L;
         IssuePermissionCheck annotation = mock(IssuePermissionCheck.class);
         when(issueRepository.getProjectId(issueId)).thenReturn(1L);
@@ -80,7 +80,7 @@ class ProjectPermissionAspectTest {
 
     @Test
     @DisplayName("AOP 이슈 권한 없음")
-    public void testCheckIssuePermissionAspect_권한없음() {
+    void testCheckIssuePermissionAspect_권한없음() {
         IssueRequest issueRequest = new IssueRequest().setProjectId(1L);
         IssuePermissionCheck annotation = mock(IssuePermissionCheck.class);
         when(projectMemberRepository.findRoleByMember(any(ProjectMember.class))).thenReturn(ProjectMemberRole.INVITED);

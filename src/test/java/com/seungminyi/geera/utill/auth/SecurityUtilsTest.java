@@ -13,13 +13,13 @@ class SecurityUtilsTest {
     private SecurityUtils securityUtils;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         securityUtils = new SecurityUtils();
     }
 
     @Test
     @DisplayName("현재 유저정보")
-    public void testGetCurrentUser() {
+    void testGetCurrentUser() {
         TestUtil.setAuthentication(
             TestUtil.createCustomUserDetails(
                 TestUtil.createTestMember()

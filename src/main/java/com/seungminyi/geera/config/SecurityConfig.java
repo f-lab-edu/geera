@@ -2,7 +2,6 @@ package com.seungminyi.geera.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -20,16 +19,14 @@ import com.seungminyi.geera.auth.JwtTokenProvider;
 @EnableWebSecurity
 public class SecurityConfig {
 	private final JwtTokenProvider jwtTokenProvider;
-	private final AuthenticationSuccessHandler authenticationSuccessHandler;
 
 	public SecurityConfig(JwtTokenProvider jwtTokenProvider,
 		AuthenticationSuccessHandler authenticationSuccessHandler) {
 		this.jwtTokenProvider = jwtTokenProvider;
-		this.authenticationSuccessHandler = authenticationSuccessHandler;
 	}
 
 	@Bean
-	public WebSecurityCustomizer webSecurityCustomizer() throws Exception {
+	public WebSecurityCustomizer webSecurityCustomizer() {
 		return (web) -> web.ignoring().requestMatchers(
 			"/api/login",
 			"/members",

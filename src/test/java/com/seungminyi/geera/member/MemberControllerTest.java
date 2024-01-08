@@ -35,12 +35,12 @@ public class MemberControllerTest {
     private SessionManager sessionManager;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         Mockito.reset(sessionManager);
     }
 
     @Test
-    public void testVerifyEmailSuccess() throws Exception {
+    void testVerifyEmailSuccess() throws Exception {
         String emailAddress = "test@example.com";
 
         mockMvc.perform(MockMvcRequestBuilders.post("/members/verify-email")
@@ -52,7 +52,7 @@ public class MemberControllerTest {
     }
 
     @Test
-    public void testRegisterSuccess() throws Exception {
+    void testRegisterSuccess() throws Exception {
         String emailAddress = "test@example.com";
         String securityCode = "123456";
 
@@ -71,7 +71,7 @@ public class MemberControllerTest {
 
     @Test
     @DisplayName("회원가입 실패 바인딩 에러 - name null")
-    public void testRegisterFailure() throws Exception {
+    void testRegisterFailure() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.post("/members")
                 .content("{\n" +
                     "    \"email\" : \"test@example.com\",\n" +
@@ -83,7 +83,7 @@ public class MemberControllerTest {
     }
 
     @Test
-    public void TestRegisterFailure_중복된_이메일() throws Exception {
+    void TestRegisterFailure_중복된_이메일() throws Exception {
         Member testMember = TestUtil.createTestMember();
         String securityCode = "123456";
         JdbcSQLIntegrityConstraintViolationException uniqueConstraintViolation = new JdbcSQLIntegrityConstraintViolationException(
@@ -111,7 +111,7 @@ public class MemberControllerTest {
     }
 
     @Test
-    public void testRegisterFailure_인증코드_불일치() throws Exception {
+    void testRegisterFailure_인증코드_불일치() throws Exception {
         String emailAddress = "test@example.com";
         String incorrectSecurityCode = "123456";
 
@@ -129,7 +129,7 @@ public class MemberControllerTest {
     }
 
     @Test
-    public void testRegisterFailure_인증코드_없음() throws Exception {
+    void testRegisterFailure_인증코드_없음() throws Exception {
         String emailAddress = "test@example.com";
 
         Mockito.when(sessionManager.getAttribute(emailAddress)).thenReturn(null);

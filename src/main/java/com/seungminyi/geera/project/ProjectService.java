@@ -14,7 +14,6 @@ import com.seungminyi.geera.project.dto.ProjectMember;
 import com.seungminyi.geera.project.dto.ProjectQuery;
 import com.seungminyi.geera.project.dto.ProjectRequest;
 import com.seungminyi.geera.project.dto.ProjectTeamMember;
-import com.seungminyi.geera.utill.annotation.IssuePermissionCheck;
 import com.seungminyi.geera.utill.annotation.ProjectPermissionCheck;
 import com.seungminyi.geera.utill.auth.SecurityUtils;
 

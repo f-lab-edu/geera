@@ -15,7 +15,7 @@ class ValidationUtilTest {
 
     @Test
     @DisplayName("바인딩 에러 핸들러")
-    public void testHandleBindingErrors() {
+    void testHandleBindingErrors() {
         BindingResult bindingResult = mock(BindingResult.class);
         when(bindingResult.getFieldErrors()).thenReturn(List.of(
             new FieldError("objectName", "fieldName1", "errorMessage1"),
