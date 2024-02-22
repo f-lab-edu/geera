@@ -99,5 +99,6 @@ jobs:
             -e GEERA_DB_USER=${{ secrets.GEERA_DB_USER }} \
             -e GEERA_DB_PASSWORD=${{ secrets.GEERA_DB_PASSWORD }} \
             -e GEERA_JWT_SECRET=${{ secrets.GEERA_JWT_SECRET }} \
+            -e JAVA_OPTS=${{ secrets.JAVA_OPTS }} \
             --name geera-api \
             seungminyi95/geera-api:latest
