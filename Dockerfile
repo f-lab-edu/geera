@@ -10,4 +10,4 @@ WORKDIR /app
 
 COPY build/libs/geera-0.0.1-SNAPSHOT.jar .
 
-CMD ["java", "-jar", "geera-0.0.1-SNAPSHOT.jar"]
+CMD java $JAVA_OPTS -jar geera-0.0.1-SNAPSHOT.jar
