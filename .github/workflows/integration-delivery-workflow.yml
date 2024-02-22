@@ -64,7 +64,7 @@ jobs:
   docker_build_and_deploy:
     needs: build_and_test
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/load-test'
 
     steps:
       - name: Checkout Repository
