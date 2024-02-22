@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-
 jobs:
   setup:
     runs-on: ubuntu-latest
@@ -91,9 +90,14 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
+            docker ps -q --filter "name=geera-api" | grep -q . && docker stop geera-api && docker rm geera-api || echo "No existing container to remove."
+            
             docker pull seungminyi95/geera-api:latest
-            docker run -d -p 8080:8080 \
+            
+            docker run -d -p 8080:8080 -p 9010:9010 \
             -e GEERA_DB_USER=${{ secrets.GEERA_DB_USER }} \
             -e GEERA_DB_PASSWORD=${{ secrets.GEERA_DB_PASSWORD }} \
             -e GEERA_JWT_SECRET=${{ secrets.GEERA_JWT_SECRET }} \
+            -e JAVA_OPTS=${{ secrets.JAVA_OPTS }} \
+            --name geera-api \
             seungminyi95/geera-api:latest
