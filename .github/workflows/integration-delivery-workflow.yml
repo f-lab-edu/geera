@@ -29,42 +29,8 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
           restore-keys: ${{ runner.os }}-gradle
 
-  build_and_test:
-    needs: setup
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
-
-      - name: Set up JDK
-        uses: actions/setup-java@v3
-        with:
-          java-version: 17
-          distribution: 'zulu'
-
-      - name: Cache Gradle packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.gradle/caches
-          key: ${{ needs.setup.outputs.cache-key-gradle }}
-
-      - name: Grant execute permission for Gradle
-        run: chmod +x ./gradlew
-
-      - name: Build, Test, and Quality Checks
-        run: ./gradlew build test checkstyleMain pmdMain pmdTest jacocoTestCoverageVerification
-
-      - name: Upload JAR file as Artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: geera-jar
-          path: build/libs/geera-0.0.1-SNAPSHOT.jar
-
   docker_build_and_deploy:
-    needs: build_and_test
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/load-test'
 
     steps:
       - name: Checkout Repository
@@ -99,5 +65,4 @@ jobs:
             -e GEERA_DB_USER=${{ secrets.GEERA_DB_USER }} \
             -e GEERA_DB_PASSWORD=${{ secrets.GEERA_DB_PASSWORD }} \
             -e GEERA_JWT_SECRET=${{ secrets.GEERA_JWT_SECRET }} \
-            -e JAVA_OPTS=${{ secrets.JAVA_OPTS }} \
             seungminyi95/geera-api:latest
