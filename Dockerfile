@@ -10,11 +10,8 @@ ENV JAVA_OPTS="-Dcom.sun.management.jmxremote \
               -Dcom.sun.management.jmxremote.ssl=false \
               -Djava.rmi.server.hostname=101.101.216.182"
 
-
-
-
 WORKDIR /app
 
 COPY build/libs/geera-0.0.1-SNAPSHOT.jar .
 
-CMD ["java $JAVA_OPTS",  "-jar", "geera-0.0.1-SNAPSHOT.jar"]
+CMD ["sh", "-c", "java $JAVA_OPTS -jar geera-0.0.1-SNAPSHOT.jar"]
