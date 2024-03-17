@@ -1,7 +1,5 @@
 # Geera 프로젝트
 
-- [Geera DEMO](https://geera-ui.vercel.app)
-
 Geera 프로젝트는 JIRA와 유사한 구조로 이슈 추적 및 프로젝트 관리 기능을 제공하는 목표를 가지고 있으며, 백엔드 개발에 초점을 맞추고 있습니다.
 
 ## 목표
